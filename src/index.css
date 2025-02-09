@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+/* Custom Animations */
+
+/* Zoom In Animation */
+@keyframes zoomIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  .animate-zoomIn {
+    animation: zoomIn 1s ease-in-out forwards;
+  }
+  
+  /* Animated Gradient Text */
+  @keyframes textColorChange {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+  .gradient-text {
+    background: linear-gradient(270deg, #000000, #000000, #DFBF00, #DFBF00);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textColorChange 5s ease-in-out infinite;
+  }
+  
