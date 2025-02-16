@@ -39,3 +39,289 @@
     animation: textColorChange 5s ease-in-out infinite;
   }
   
+  /* ----------------- Offers Card Animations ----------------- */
+.offers-card {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Rotating background pseudo-element */
+.offers-card::before {
+  content: "";
+  position: absolute;
+  width: 120px;
+  height: 140%;
+  background-image: linear-gradient(180deg, rgb(255, 0, 0), rgb(251, 255, 0));
+  animation: rotBGimg 8s linear infinite;
+  top: -40%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 0;
+}
+
+/* Keyframes for the rotation animation */
+@keyframes rotBGimg {
+  from {
+    transform: translateX(-50%) rotate(0deg);
+  }
+  to {
+    transform: translateX(-50%) rotate(360deg);
+  }
+}
+
+/* White overlay pseudo-element */
+.offers-card::after {
+  content: "";
+  position: absolute;
+  background: white;
+  inset: 10px;
+  z-index: 0;
+}
+
+/* ----------------- How It Works ----------------- */
+.steps-section {
+  background-color: #1a1a1a;
+}
+
+.step-item::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -15px;
+  width: 30px;
+  height: 2px;
+  background-color: #dee2e6;
+  transform: translateY(-50%);
+}
+
+.step-item:last-child::after {
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  .step-item::after {
+    display: none;
+  }
+}
+/* ----------------- How It Works ----------------- */
+
+/* ----------------- Library Games ----------------- */
+.layout-creation {
+  background-color: #fff;
+  padding: clamp(2rem, 5vw, 4rem) 0;
+}
+
+.layout-creation .animate {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.layout-creation .animate[data-animation="fadeUp"] {
+  opacity: 1;
+}
+
+.layout-creation .form-row {
+  margin-bottom: clamp(1rem, 3vw, 2rem);}
+
+.layout-creation .img-square {
+  position: relative;
+  padding-bottom: 100%;
+  margin-bottom: 15px;
+}
+
+.layout-creation .img-cover {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+img {
+  vertical-align: middle;
+  border-style: none;
+}
+
+.img-square {
+  position: relative;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.img-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.img-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  font-weight: bold;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  background: linear-gradient(270deg, #eaff00, #00ff1e, #ff75f3, #00ffff);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textColorChange 5s ease-in-out infinite;
+  padding: 0.5rem;
+  width: 90%;
+
+}
+
+@keyframes textColorChange {
+  0% {
+      background-position: 0% 50%;
+  }
+
+  50% {
+      background-position: 100% 50%;
+  }
+
+  100% {
+      background-position: 0% 50%;
+  }
+}
+
+.img-square:hover {
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+}
+
+.img-square:hover .img-cover {
+  transform: scale(1.05);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .img-square:hover {
+      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+      transform: translateY(-5px);
+  }
+  
+  .img-square:hover .img-cover {
+      transform: scale(1.05);
+  }
+}
+
+/* Mobile-first responsive adjustments */
+@media (max-width: 768px) {
+  .img-overlay {
+      font-size: clamp(0.9rem, 4vw, 1.2rem);
+      width: 95%;
+  }
+  
+  .layout-creation {
+      padding: 1.5rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .img-overlay {
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+  }
+  
+  .img-square {
+      margin-bottom: 0.75rem;
+  }
+}
+/* ----------------- Library Games ----------------- */
+
+/* ----------------- Reviews ------------------ */
+.testimonials {
+  position: relative;
+  overflow: hidden;
+}
+
+.testimonial-card {
+  background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
+  border-radius: 20px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  color: #fff;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.testimonial-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
+}
+
+.quote-icon {
+  font-size: 6rem;
+  color: #FFDF00;
+  opacity: 0.1;
+  position: absolute;
+  top: -1rem;
+  left: 1rem;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #FFDF00;
+  transition: transform 0.3s ease;
+}
+
+.avatar:hover {
+  transform: scale(1.1);
+}
+
+.rating {
+  color: #FFDF00;
+  font-size: 1.1rem;
+}
+
+.badge {
+  font-size: 0.9rem;
+  padding: 0.5em 0.8em;
+}
+
+.quote-decoration {
+  position: absolute;
+  bottom: -30px;
+  right: -30px;
+  width: 100px;
+  height: 100px;
+  background: rgba(255, 223, 0, 0.1);
+  border-radius: 50%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .testimonial-card {
+    margin: 1rem 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .testimonial-card {
+    padding: 1.5rem !important;
+  }
+  .avatar {
+    width: 60px;
+    height: 60px;
+  }
+  .quote-icon {
+    font-size: 4rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .testimonial-card {
+    text-align: center;
+  }
+  .ml-4 {
+    margin-left: 0 !important;
+    margin-top: 1rem;
+  }
+}
+/* ----------------- Reviews ------------------ */
