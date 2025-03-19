@@ -14,7 +14,7 @@ const Contact = require('./Contact');
 const Delivery = require('./Delivery');
 const Order_Coupon = require('./Order_Coupon');
 const Coupon = require('./Coupon');
-
+const Review = require('./Review');
 
 //------------------------
 // User-Order Relationship
@@ -134,6 +134,30 @@ Coupon.belongsToMany(Order, {
   through: Order_Coupon,
   foreignKey: 'coupon_id',
   as: 'orders',
+});
+
+//------------------------
+// User-Review Relationship
+//------------------------
+User.hasMany(Review, {
+  foreignKey: 'user_id',
+  as: 'reviews',
+});
+Review.belongsTo(User, {
+  foreignKey: 'user_id',
+  as: 'user',
+});
+
+//------------------------
+// Product-Review Relationship
+//------------------------
+Product.hasMany(Review, {
+  foreignKey: 'product_id',
+  as: 'reviews',
+});
+Review.belongsTo(Product, {
+  foreignKey: 'product_id',
+  as: 'product',
 });
 
 

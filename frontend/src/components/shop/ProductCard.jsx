@@ -1,70 +1,59 @@
 import React from 'react';
 import { FaHeart, FaShoppingCart } from 'react-icons/fa';
-import product from '../../assets/product.jpg'; // default product image
+import { Link } from 'react-router-dom'; 
+import product from '../../assets/product.jpg'; 
 
-/**
- * Props:
- * - title: string — Product title.
- * - price: string — Product price.
- * - discount: string — (Optional) Discounted price.
- * - salePercent: number — (Optional) Sale percentage to show in badge.
- * - productImage: string — (Optional) Image URL; defaults to the imported product image.
- * - productLink: string — (Optional) URL to product details.
- * - onAddToCart: function — (Optional) Callback when "Add to Cart" is clicked.
- */
 const ProductCard = ({
-  title,
+  name,
   price,
-  discount,
-  salePercent,
+  discounted_price,
   productImage,
-  productLink = '#',
+  product_id,
   onAddToCart,
 }) => {
+
+  const finalPrice = discounted_price ? parseFloat(discounted_price) : parseFloat(price);
+
+  const link = `/products/${product_id}`;
+
   return (
     <div className="border border-gray-300 rounded-lg shadow-md transition-transform duration-300 hover:shadow-lg hover:scale-105">
       {/* Card Image */}
       <div className="relative border-b border-gray-300 overflow-hidden rounded-t-lg">
-        {/* Sale Badge */}
-        {salePercent && (
-          <div className="absolute top-2 left-2 z-10 text-xs font-bold uppercase shadow">
-            <span className="bg-red-500 text-white px-2 py-1 rounded">{`Sale ${salePercent}%`}</span>
-          </div>
-        )}
         {/* Product Media */}
         <div className="relative">
-          <a href={productLink}>
+          <Link to={link}> 
             <img
               src={productImage || product}
-              alt={title}
+              alt={name}
               className="w-full object-cover transition-transform duration-300 transform hover:scale-105 filter hover:brightness-110"
             />
-          </a>
+          </Link>
           {/* Favorite Button */}
-          <a
-            href={productLink}
+          <Link
+            to={link}
             title="Add to Favorites"
             className="absolute top-2 right-2 m-2 w-6 h-6 rounded-full text-white text-base flex items-center justify-center transition-all shadow hover:bg-red-300 hover:text-red-600 hover:scale-110"
           >
             <FaHeart />
-          </a>
+          </Link>
         </div>
       </div>
       {/* Card Body */}
       <div className="text-center p-5 bg-gray-100 rounded-b-lg">
         <h6 className="text-base">
-          <a
-            href={productLink}
+          <Link
+            to={link}
             className="no-underline text-gray-600 hover:text-yellow-400 hover:underline"
           >
-            {title}
-          </a>
+            {name}
+          </Link>
         </h6>
         <div className="mt-2 leading-normal text-lg font-bold text-red-500">
-          JD {price}
-          {discount && (
+          JD {finalPrice.toFixed(2)}
+          {discounted_price && (
             <del className="text-sm text-gray-500 ml-2">
-              JD {discount}
+              JD {parseFloat(price).toFixed(2)} 
             </del>
           )}
         </div>

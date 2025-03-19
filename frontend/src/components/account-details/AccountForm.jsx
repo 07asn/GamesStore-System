@@ -1,14 +1,46 @@
-// src/components/AccountForm.jsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-const AccountForm = ({ openModal }) => {
+const AccountForm = ({ openModal, userData, handleSubmit, handleChange, updatedData }) => {
+    const [formData, setFormData] = useState({
+        email: userData?.email || '',
+        firstName: userData?.name.split(' ')[0] || '',
+        lastName: userData?.name.split(' ')[1] || '',
+        phone: userData?.phone || '',
+        country: userData?.country || '',
+        gender: userData?.gender || 'male',
+    });
+
+    // Update form data if userData changes
+    useEffect(() => {
+        if (userData) {
+            setFormData({
+                email: userData?.email || '',
+                firstName: userData?.name.split(' ')[0] || '',
+                lastName: userData?.name.split(' ')[1] || '',
+                phone: userData?.phone || '',
+                country: userData?.country || '',
+                gender: userData?.gender || 'male',
+            });
+        }
+    }, [userData]);  // This will ensure formData updates whenever userData changes
+
+    const handleFormChange = (e) => {
+        e.preventDefault();
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+        handleChange(e);
+    };
+
     return (
         <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
             <div className="bg-gray-100 border-b border-gray-300 px-6 py-4">
                 <h2 className="text-lg font-semibold">Account Details</h2>
             </div>
             <div className="p-6">
-                <form>
+                <form onSubmit={(e) => handleSubmit(e)}>
                     {/* Email Address */}
                     <div className="mb-6">
                         <label
@@ -19,9 +51,11 @@ const AccountForm = ({ openModal }) => {
                         </label>
                         <input
                             id="inputEmailAddress"
+                            name="email"
                             type="email"
                             placeholder="Enter your email address"
-                            defaultValue="name@example.com"
+                            value={formData.email}
+                            onChange={handleFormChange}
                             className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm transition duration-150 focus:outline-none focus:ring-2 focus:ring-yellow-500"
                         />
                     </div>
@@ -37,9 +71,11 @@ const AccountForm = ({ openModal }) => {
                             </label>
                             <input
                                 id="inputFirstName"
+                                name="firstName"
                                 type="text"
                                 placeholder="Enter your first name"
-                                defaultValue="Hasan"
+                                value={formData.firstName}
+                                onChange={handleFormChange}
                                 className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm transition duration-150 focus:outline-none focus:ring-2 focus:ring-yellow-500"
                             />
                         </div>
@@ -52,9 +88,11 @@ const AccountForm = ({ openModal }) => {
                             </label>
                             <input
                                 id="inputLastName"
+                                name="lastName"
                                 type="text"
                                 placeholder="Enter your last name"
-                                defaultValue="Mansour"
+                                value={formData.lastName}
+                                onChange={handleFormChange}
                                 className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm transition duration-150 focus:outline-none focus:ring-2 focus:ring-yellow-500"
                             />
                         </div>
@@ -71,9 +109,11 @@ const AccountForm = ({ openModal }) => {
                             </label>
                             <input
                                 id="inputPhone"
+                                name="phone"
                                 type="tel"
                                 placeholder="Enter your phone number"
-                                defaultValue="00962788862798"
+                                value={formData.phone}
+                                onChange={handleFormChange}
                                 className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm transition duration-150 focus:outline-none focus:ring-2 focus:ring-yellow-500"
                             />
                         </div>
@@ -86,19 +126,17 @@ const AccountForm = ({ openModal }) => {
                             </label>
                             <select
                                 id="country"
-                                required
+                                name="country"
+                                value={formData.country}
+                                onChange={handleFormChange}
                                 className="w-full p-3 text-sm border border-gray-300 rounded-lg shadow-sm transition duration-150 focus:outline-none focus:ring-2 focus:ring-yellow-500"
                             >
-                                <option value="" disabled selected>
-                                    Select Your Country
-                                </option>
-                                <option value="saudi">Saudi Arabia</option>
-                                <option value="jordan">Jordan</option>
-                                <option value="other">Other</option>
+                                <option value="Saudi Arabia">Saudi Arabia</option>
+                                <option value="Jordan">Jordan</option>
+                                <option value="Other">Other</option>
                             </select>
                         </div>
                     </div>
-
                     {/* Password and Change Password */}
                     <div className="mb-8">
                         <label
@@ -123,10 +161,9 @@ const AccountForm = ({ openModal }) => {
                             </button>
                         </div>
                     </div>
-
                     {/* Save Changes Button */}
                     <button
-                        type="button"
+                        type="submit"
                         className="w-full bg-gray-200 py-3 rounded-lg shadow-lg hover:bg-yellow-300 hover:text-black transition-colors text-lg font-semibold"
                     >
                         Save changes
@@ -136,5 +173,4 @@ const AccountForm = ({ openModal }) => {
         </div>
     );
 };
-
 export default AccountForm;

@@ -19,9 +19,7 @@ const Product_Tag = sequelize.define('Product_Tag', {
         type: DataTypes.STRING,
     },
 }, {
-    timestamps: false,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
+tableName:'product_tags'
 });
 
 module.exports = Product_Tag;

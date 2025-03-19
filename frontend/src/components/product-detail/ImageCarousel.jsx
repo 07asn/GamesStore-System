@@ -1,16 +1,13 @@
-// src/components/ImageCarousel.jsx
 import React, { useState } from 'react';
-import product from '../../assets/product.jpg';
-import product5 from '../../assets/product-5.jpg';
 
-const ImageCarousel = () => {
-  const images = [
-    { src: product, alt: 'Product Image 1' },
-    { src: product5, alt: 'Product Image 2' },
-    { src: product, alt: 'Product Image 3' },
-  ];
+const ImageCarousel = ({ images = [] }) => {
+  console.log(images);  // Log images to see if they're passed correctly
 
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(images.length > 0 ? 0 : -1); // Set to -1 if no images
+
+  if (images.length === 0) {
+    return <div>No images available</div>; // Show message if no images are available
+  }
 
   const nextImage = () => {
     setCurrent((prev) => (prev + 1) % images.length);
@@ -23,8 +20,8 @@ const ImageCarousel = () => {
   return (
     <div className="relative mb-4">
       <img
-        src={images[current].src}
-        alt={images[current].alt}
+        src={images[current]}
+        alt={`Product Image ${current + 1}`}
         className="w-full object-cover rounded-lg"
       />
       <button

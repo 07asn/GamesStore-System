@@ -13,7 +13,7 @@ const Product_Tags_Product = sequelize.define('Product_Tags_Product', {
         allowNull: false,
     },
 }, {
-    timestamps: false,
+    tableName:'product_tags_products'
 });
 
 module.exports = Product_Tags_Product;

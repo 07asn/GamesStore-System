@@ -3,7 +3,7 @@ import Navbar from './components/Navbar';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Wishlist from './components/Wishlist';
-import Orders from './components/Orders';
+import Orders from './pages/Orders';
 import AccountDetails from './pages/AccountDetailsPage';
 import Cart from './pages/Cart';
 import PaymentPage from './pages/PaymentPage';
@@ -29,7 +29,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/shop" element={<ShopPage />} />
-        <Route path="/product/:id" element={<ProductDetailPage />} />
+        <Route path="/products/:id" element={<ProductDetailPage />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/orders" element={<Orders />} />
@@ -43,7 +43,6 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPasswordForm />} />
         <Route path="/reset-password" element={<ResetPasswordForm />} />
         <Route path="/order-summary" element={<OrderSummaryPage />} />
-
       </Routes>
 
       <Footer />

@@ -1,8 +1,27 @@
-// src/components/ProfileCard.jsx
-import React from 'react';
-import profilePic from '../../assets/male.png'; // Adjust path as needed
+import React, { useState, useEffect } from 'react';
+import malePic from '../../assets/male.png';
+import femalePic from '../../assets/female.png';
 
-const ProfileCard = () => {
+const ProfileCard = ({ userData, handleGenderChange }) => {
+    // Set the initial gender state based on the userData, or default to 'male'
+    const [gender, setGender] = useState(userData?.gender || 'male');
+    
+    // Set profilePic based on gender
+    const profilePic = (gender === "male") ? malePic : femalePic;
+
+    // Handle the gender change (local state)
+    const handleGenderPhoto = (newGender) => {
+        setGender(newGender);  // Update gender locally
+        handleGenderChange(newGender);  // Pass the change to the parent
+    };
+
+    useEffect(() => {
+        // Sync gender with userData when the component mounts
+        if (userData?.gender) {
+            setGender(userData.gender);
+        }
+    }, [userData?.gender]);  // Update when userData changes
+
     return (
         <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
             <div className="bg-gray-100 border-b border-gray-300 text-center py-4">
@@ -19,6 +38,8 @@ const ProfileCard = () => {
                 <select
                     id="gender-select"
                     className="w-1/2 p-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring focus:ring-yellow-500"
+                    value={gender}  // The selected gender for local state
+                    onChange={(e) => handleGenderPhoto(e.target.value)}  // Update gender on change
                 >
                     <option value="male">Male</option>
                     <option value="female">Female</option>

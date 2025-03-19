@@ -19,6 +19,10 @@ const Product = sequelize.define('Product', {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
     },
+    discounted_price: {
+        type: DataTypes.DECIMAL(10, 2),
+        defaultValue: null,
+    },
     stock: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
@@ -45,6 +49,8 @@ const Product = sequelize.define('Product', {
     timestamps: false,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
+    tableName: 'products'
+
 });
 
 module.exports = Product;
