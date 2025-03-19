@@ -1,0 +1,18 @@
+.particle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: drift infinite ease-in-out;
+  }
+  
+  @keyframes drift {
+    0% {
+      transform: translateY(0) translateX(0);
+    }
+    50% {
+      transform: translateY(-15px) translateX(15px);
+    }
+    100% {
+      transform: translateY(0) translateX(0);
+    }
+  }
