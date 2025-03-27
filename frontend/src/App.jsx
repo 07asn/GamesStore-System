@@ -19,7 +19,11 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ForgotPasswordForm from './pages/ForgotPasswordPage';
 import ResetPasswordForm from './pages/ResetPasswordForm';
 import OrderSummaryPage from './pages/OrderSummaryPage';
- 
+import Admin from './pages/Admin';
+import TopPlayedGamesComponent from './pages/TopPlayedGamesComponent';
+
+import { Toaster } from "react-hot-toast"; // Import Toaster
+
 function App() {
   return (
     <Router>
@@ -42,10 +46,13 @@ function App() {
         <Route path="/support" element={<SupportPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordForm />} />
         <Route path="/reset-password" element={<ResetPasswordForm />} />
-        <Route path="/order-summary" element={<OrderSummaryPage />} />
+        <Route path="/orders/:id" element={<OrderSummaryPage />} />
+        <Route path="/top-played" element={<TopPlayedGamesComponent />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
 
       <Footer />
+      <Toaster position="bottom-left" />
     </Router>
   );
 }

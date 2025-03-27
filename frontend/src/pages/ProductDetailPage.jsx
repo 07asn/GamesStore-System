@@ -59,7 +59,7 @@ const ProductDetailPage = () => {
       {/* Reviews Section */}
       <ReviewsSection productId={id} />
       {/* Suggestion Products Section */}
-      <SuggestionProducts />
+      <SuggestionProducts productId={id} />
     </div>
   );
 };

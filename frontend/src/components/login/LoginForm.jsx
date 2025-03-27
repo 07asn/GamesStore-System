@@ -6,13 +6,15 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import GoogleSignInButton from './GoogleSignInButton';
 import ForgotPasswordLink from './ForgotPasswordLink';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation  } from 'react-router-dom';
 
 const LoginForm = () => {
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [serverError, setServerError] = useState('');
-
+    const navigate = useNavigate();
+    const location = useLocation(); 
+    
     // Define validation schema with Yup
     const validationSchema = Yup.object({
         email: Yup.string()
@@ -38,7 +40,8 @@ const LoginForm = () => {
                 const response = await axios.post('http://localhost:5000/api/users/login', values);
                 
                 Cookie.set('token', response.data.token, { expires: 1 });
-                window.location.href = '/';
+                const previousPage = location.state?.from || '/';
+                navigate(previousPage);
             } catch (error) {
                 setServerError(error.response?.data?.message || 'An error occurred during login');
             } finally {

@@ -1,44 +1,38 @@
-// src/components/SuggestionProducts.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';  // Import axios
 import ProductCard from '../shop/ProductCard';
 
-const SuggestionProducts = () => {
-  // Sample product data for suggestions
-  const products = [
-    {
-      id: 1,
-      title: 'Full Rim Aviator Eyeglasses',
-      price: '2.60',
-      discount: '3.00',
-      salePercent: 10,
-      productLink: '#',
-    },
-    {
-      id: 2,
-      title: 'FC 25 Standard Edition',
-      price: '14.99',
-      discount: '59.50',
-      salePercent: 75,
-      productLink: '#',
-    },
-    {
-      id: 3,
-      title: 'Spiderman Remastered',
-      price: '2.99',
-      discount: '4.99',
-      salePercent: 45,
-      productLink: '#',
-    },
-    {
-      id: 4,
-      title: 'Elden Ring + Shadow DLC',
-      price: '4.50',
-      discount: '5.50',
-      salePercent: 20,
-      productLink: '#',
-    },
-    // Add more products as needed
-  ];
+const SuggestionProducts = ({ productId }) => {
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRelatedProducts = async () => {
+      try {
+        // Axios GET request to fetch related products
+        const response = await axios.get(`http://localhost:5000/api/products/related/${productId}`);
+        
+        // Check if data is returned and set it
+        if (response.status === 200) {
+          setRelatedProducts(response.data);
+        } else {
+          console.error('No related products found:', response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching related products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (productId) {
+      fetchRelatedProducts();
+    }
+  }, [productId]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <section className="mt-20">
@@ -46,9 +40,13 @@ const SuggestionProducts = () => {
         Products you may like
       </h5>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-        {products.map((prod) => (
-          <ProductCard key={prod.id} {...prod} />
-        ))}
+        {relatedProducts.length > 0 ? (
+          relatedProducts.map((prod) => (
+            <ProductCard key={prod.product_id} {...prod} />
+          ))
+        ) : (
+          <p>No related products found</p>
+        )}
       </div>
     </section>
   );

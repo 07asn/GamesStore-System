@@ -1,27 +1,83 @@
-// src/components/CategoryCard.jsx
 import React from 'react';
+import { motion } from 'framer-motion';
+import { ShoppingBag } from 'lucide-react';
 
-const CategoryCard = ({ imageSrc, title, link = 'shop.html' }) => {
+const COLORS = {
+  gold: '#DFBF00',
+  brightGold: '#FFDF00',
+  darkGold: '#C1A811',
+  goldGradient: 'linear-gradient(135deg, #FFDF00, #C1A811)',
+  black: '#000000',
+  lightGray: '#DBDBDB',
+  mediumGray: '#636362',
+  darkGray: '#2A2A2A',
+  offWhite: '#F6F6F6',
+  glowGold: '0 0 15px rgba(223, 191, 0, 0.5)'
+};
+
+const CategoryCard = ({ imageSrc, title, id }) => {
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  };
+
   return (
-    <a href={link} className="block group">
-      <div className="rounded-[20px] overflow-hidden bg-white shadow-[0_10px_30px_rgba(0,0,0,0.1)] transition-transform duration-300 ease hover:scale-105 hover:shadow-[0_20px_50px_rgba(0,0,0,0.2)] hover:rounded-[25px] cursor-pointer">
-        <div className="overflow-hidden rounded-[20px]">
-          <img
-            src={imageSrc}
-            alt={title}
-            className="w-full h-[220px] object-cover transition-transform duration-400 ease-in-out group-hover:scale-110"
-          />
+    <motion.div variants={itemVariants}>
+      <a href={`/shop/${id}`} className="block group h-full">
+        <div 
+          className="rounded-2xl overflow-hidden border transition-all duration-500 h-full transform hover:-translate-y-2"
+          style={{
+            backgroundColor: '#ffffff',
+            borderColor: COLORS.lightGray,
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.boxShadow = COLORS.glowGold;
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.boxShadow = 'none';
+          }}
+        >
+          <div className="relative overflow-hidden h-64">
+            <img
+              src={imageSrc || 'https://via.placeholder.com/800x600'}
+              alt={title}
+              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-white bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+              <div 
+                className="px-6 py-3 rounded-full transform translate-y-8 transition-transform duration-500"
+                style={{
+                  backgroundColor: 'rgba(255,255,255,0.85)',
+                  color: COLORS.darkGray,
+                }}
+              >
+                <span className="flex items-center font-medium">
+                  <ShoppingBag className="w-4 h-4 mr-2" />
+                  Browse Collection
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="p-6 text-center">
+            <h3
+              className="text-xl font-bold mb-4 transition-all duration-300 group-hover:text-darkGold"
+              style={{ color: COLORS.darkGray }}
+            >
+              {title}
+            </h3>
+            <button 
+              className="w-full py-3 px-6 rounded-full text-sm font-semibold uppercase tracking-wide flex items-center justify-center transition-all duration-300 hover:shadow-lg hover:scale-105"
+              style={{
+                background: COLORS.goldGradient,
+                color: COLORS.black,
+              }}
+            >
+              Explore Now
+            </button>
+          </div>
         </div>
-        <div className="p-5 text-center">
-          <h5 className="text-[1.3rem] font-bold uppercase mb-4 transition-all duration-300 group-hover:text-[#C70039] group-hover:-translate-y-1">
-            {title}
-          </h5>
-          <button className="py-[12px] px-[25px] bg-[#FFDF00] text-black rounded-[50px] text-base font-semibold uppercase transition-all duration-300 hover:bg-[#C70039] hover:-translate-y-1 hover:shadow-[0_5px_15px_rgba(0,0,0,0.2)]">
-            Explore
-          </button>
-        </div>
-      </div>
-    </a>
+      </a>
+    </motion.div>
   );
 };
 

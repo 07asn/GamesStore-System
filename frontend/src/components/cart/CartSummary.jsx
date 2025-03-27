@@ -1,47 +1,64 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+// CartSummary.jsx
+import React, { useState } from 'react';
+import { ShoppingBag, ShoppingCart } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
-const CartSummary = ({ subtotal, tax, total, onCheckout }) => {
-    return (
-        <div className="bg-white rounded-lg shadow-md p-6">
-            <h5 className="text-2xl font-bold mb-6">Summary</h5>
-            <div className="flex justify-between mb-4">
-                <span className="text-lg">Subtotal:</span>
-                <span className="text-lg font-semibold">JD {subtotal.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between mb-4">
-                <span className="text-lg">Tax (3%):</span>
-                <span className="text-lg font-semibold">JD {tax.toFixed(2)}</span>
-            </div>
-            <hr className="mb-4" />
-            <div className="flex justify-between font-bold text-xl mb-6">
-                <span>Total:</span>
-                <span>JD {total.toFixed(2)}</span>
-            </div>
-            <button
-                onClick={onCheckout}
-                className="w-full bg-[#1a1a1a] hover:bg-[#DFBF00] text-white py-3 rounded-full transition-colors inline-flex items-center justify-center text-lg font-semibold"
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-                Payment Checkout
-            </button>
+const CartSummary = ({ cartItems, subtotal, discount, total, onCheckout }) => {
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Fallback to 0 if the values are not numbers
+  const validSubtotal = isNaN(subtotal) ? 0 : subtotal;
+  const validDiscount = isNaN(discount) ? 0 : discount;
+  const validTotal = isNaN(total) ? 0 : total;
+
+  const isLoggedIn = Cookies.get('token');
+
+  const handleCheckout = () => {
+    if (!isLoggedIn) {
+      navigate('/login', { state: { from: location.pathname } });
+    } else {
+      onCheckout();
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-xl shadow-sm p-6 sticky top-6">
+      <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+        <ShoppingCart size={20} />
+        Order Summary
+      </h3>
+
+      <div className="space-y-4 mb-6">
+        <div className="flex justify-between pb-4 border-b border-gray-100">
+          <span className="text-gray-600">Subtotal</span>
+          <span className="font-medium">JD {validSubtotal.toFixed(2)}</span>
         </div>
-    );
-};
+        <div className="flex justify-between pb-4 border-b border-gray-100">
+          <span className="text-gray-600">Discount</span>
+          <span className="font-medium">JD {validDiscount.toFixed(2)}</span>
+        </div>
+        <div className="flex justify-between">
+          <span className="text-gray-800 font-bold">Total</span>
+          <span className="text-xl font-bold">JD {validTotal.toFixed(2)}</span>
+        </div>
+      </div>
 
-CartSummary.propTypes = {
-    subtotal: PropTypes.number.isRequired,
-    tax: PropTypes.number.isRequired,
-    total: PropTypes.number.isRequired,
-    onCheckout: PropTypes.func.isRequired,
+      <button
+        onClick={handleCheckout}
+        className="w-full py-4 px-6 bg-[#FFDF00] text-gray-900 hover:bg-[#DFBF00] font-semibold rounded-lg shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
+      >
+        <ShoppingBag size={18} />
+        Proceed to Checkout
+      </button>
+
+      <div className="mt-4 text-center text-sm text-gray-500">
+        <p>Secure payment processing</p>
+      </div>
+    </div>
+  );
 };
 
 export default CartSummary;
