@@ -35,10 +35,13 @@ const Order = sequelize.define('Order', {
     payment_method: {
         type: DataTypes.STRING,
     },
+    created_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW
+      },
 }, {
     timestamps: false,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
+    tableName: "orders"
 });
 
 module.exports = Order;

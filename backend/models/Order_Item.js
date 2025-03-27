@@ -16,6 +16,10 @@ const Order_Item = sequelize.define('Order_Item', {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
+    inventory_id: { 
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    },
     quantity: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -28,6 +32,7 @@ const Order_Item = sequelize.define('Order_Item', {
     timestamps: false,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
+    tableName: 'order_items'
 });
 
 module.exports = Order_Item;

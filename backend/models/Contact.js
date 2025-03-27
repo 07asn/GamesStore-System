@@ -33,6 +33,7 @@ const Contact = sequelize.define('Contact', {
     timestamps: false,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
+    tableName: 'contacts'
 });
 
 module.exports = Contact;

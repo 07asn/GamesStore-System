@@ -10,6 +10,10 @@ const Inventory = sequelize.define(
             autoIncrement: true,
             allowNull: false,
         },
+        product_id: {             
+            type: DataTypes.INTEGER,
+            allowNull: false,
+          },
         asset_code: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -27,6 +31,7 @@ const Inventory = sequelize.define(
         timestamps: false,
         createdAt: "created_at",
         updatedAt: "updated_at",
+        tableName: "inventory"
     }
 );
 

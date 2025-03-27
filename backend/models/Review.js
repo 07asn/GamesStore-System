@@ -1,5 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
+const Product = require('./Product');
+const User = require('./User');
 
 const Review = sequelize.define('Review', {
   review_id: {
@@ -26,7 +28,7 @@ const Review = sequelize.define('Review', {
   },
   review: {
     type: DataTypes.TEXT,
-    allowNull: true,
+    allowNull: false,
   },
   created_at: {
     type: DataTypes.DATE,

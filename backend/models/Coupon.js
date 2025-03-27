@@ -32,10 +32,19 @@ const Coupon = sequelize.define('Coupon', {
     description: {
         type: DataTypes.TEXT,
     },
+    category_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: 'category',      
+            key: 'category_id'        
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
+    },
 }, {
     timestamps: false,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
+    tableName: 'coupons'
 });
 
 module.exports = Coupon;

@@ -14,6 +14,7 @@ const Order_Coupon = sequelize.define('Order_Coupon', {
     },
 }, {
     timestamps: false,
+    tableName: 'order_coupons'
 });
 
 module.exports = Order_Coupon;

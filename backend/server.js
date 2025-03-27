@@ -10,10 +10,14 @@ const PORT = process.env.PORT || 5000;
 const cors = require('cors');
 const cookieParser = require("cookie-parser");
 
-
 const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
+const couponRoutes = require('./routes/couponRoutes');
+const orderRoutes = require('./routes/orderRoutes');
+const adminRoutes = require('./routes/adminRoutes');
+const gamingRoutes = require('./routes/gamingRoute');
 //------------------------
 // Middlewares
 //------------------------
@@ -22,8 +26,16 @@ app.use(morgan('dev'));
 
 app.use(express.json());
 app.use(cookieParser());
-const corsOptions = { origin: 'http://localhost:5174', credentials: true, };
+const corsOptions = { origin: 'http://localhost:5173', credentials: true, };
 app.use(cors(corsOptions));
+
+//------------------------
+// Load Associations
+//------------------------
+// Ensure that associations are set up by requiring the associations file.
+// (This file will automatically register all associations when loaded.)
+require('./models/associations');
+
 //------------------------
 // Routes
 //------------------------
@@ -34,6 +46,11 @@ app.get('/', (req, res) => {
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/coupons', couponRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/admin', adminRoutes)
+app.use('/api/', gamingRoutes);
 //---------------------------
 // ERROR HANDLERS
 //---------------------------

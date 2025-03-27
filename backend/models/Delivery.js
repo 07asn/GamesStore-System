@@ -16,6 +16,10 @@ const Delivery = sequelize.define('Delivery', {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
+    product_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
     quantity: {
         type: DataTypes.INTEGER,
         defaultValue: 1,
@@ -38,6 +42,7 @@ const Delivery = sequelize.define('Delivery', {
     timestamps: false,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
+    tableName: 'deliveries'
 });
 
 module.exports = Delivery;

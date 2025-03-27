@@ -1,3 +1,4 @@
+// models/Product.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
@@ -37,6 +38,10 @@ const Product = sequelize.define('Product', {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
     },
+    featured: { 
+        type: DataTypes.BOOLEAN,
+        defaultValue: false, 
+    },
     created_at: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
@@ -50,7 +55,12 @@ const Product = sequelize.define('Product', {
     createdAt: 'created_at',
     updatedAt: 'updated_at',
     tableName: 'products'
-
 });
 
+const Category = require('./Category');
+const Product_Image = require('./Product_Image');
+
+
+
+  
 module.exports = Product;

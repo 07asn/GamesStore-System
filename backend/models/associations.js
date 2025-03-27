@@ -1,6 +1,6 @@
-//------------------------
-// Imports
-//------------------------
+// models/associations.js
+
+// Import all models
 const User = require('./User');
 const Product = require('./Product');
 const Category = require('./Category');
@@ -11,7 +11,6 @@ const Product_Tag = require('./Product_Tag');
 const Product_Tags_Product = require('./Product_Tags_Product');
 const Product_Image = require('./Product_Image');
 const Contact = require('./Contact');
-const Delivery = require('./Delivery');
 const Order_Coupon = require('./Order_Coupon');
 const Coupon = require('./Coupon');
 const Review = require('./Review');
@@ -28,7 +27,6 @@ Order.belongsTo(User, {
   as: 'user',
 });
 
-
 //------------------------
 // Order-Order_Item Relationship
 //------------------------
@@ -41,7 +39,6 @@ Order_Item.belongsTo(Order, {
   as: 'order',
 });
 
-
 //------------------------
 // Order_Item-Product Relationship
 //------------------------
@@ -53,7 +50,6 @@ Product.hasMany(Order_Item, {
   foreignKey: 'product_id',
   as: 'order_items',
 });
-
 
 //------------------------
 // Product-Product_Tag Relationship
@@ -69,7 +65,6 @@ Product_Tag.belongsToMany(Product, {
   as: 'products',
 });
 
-
 //------------------------
 // Product-Product_Image Relationship
 //------------------------
@@ -82,6 +77,17 @@ Product_Image.belongsTo(Product, {
   as: 'product',
 });
 
+//------------------------
+// Order_Item-Inventory Relationship
+//------------------------
+Order_Item.belongsTo(Inventory, {
+  foreignKey: 'inventory_id',
+  as: 'inventory',
+});
+Inventory.hasMany(Order_Item, {
+  foreignKey: 'inventory_id',
+  as: 'order_items',
+});
 
 //------------------------
 // User-Contact Relationship
@@ -94,33 +100,6 @@ Contact.belongsTo(User, {
   foreignKey: 'user_id',
   as: 'user',
 });
-
-
-//------------------------
-// Order-Delivery Relationship
-//------------------------
-Order.hasMany(Delivery, {
-  foreignKey: 'order_id',
-  as: 'deliveries',
-});
-Delivery.belongsTo(Order, {
-  foreignKey: 'order_id',
-  as: 'order',
-});
-
-
-//------------------------
-// Inventory-Delivery Relationship
-//------------------------
-Inventory.hasMany(Delivery, {
-  foreignKey: 'inventory_id',
-  as: 'deliveries',
-});
-Delivery.belongsTo(Inventory, {
-  foreignKey: 'inventory_id',
-  as: 'inventory',
-});
-
 
 //------------------------
 // Order-Coupon Relationship
@@ -151,15 +130,22 @@ Review.belongsTo(User, {
 //------------------------
 // Product-Review Relationship
 //------------------------
-Product.hasMany(Review, {
-  foreignKey: 'product_id',
-  as: 'reviews',
-});
 Review.belongsTo(Product, {
   foreignKey: 'product_id',
   as: 'product',
 });
 
+//------------------------
+// Product-Category Relationship
+//------------------------
+Category.hasMany(Product, {
+  foreignKey: 'category_id',
+  as: 'products',
+});
+Product.belongsTo(Category, {
+  foreignKey: 'category_id',
+  as: 'category',
+});
 
 //------------------------
 // Exports
@@ -175,7 +161,7 @@ module.exports = {
   Product_Tags_Product,
   Product_Image,
   Contact,
-  Delivery,
   Order_Coupon,
   Coupon,
+  Review
 };

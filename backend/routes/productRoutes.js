@@ -1,9 +1,11 @@
 // routes/productRoutes.js
 const express = require('express');
 const router = express.Router();
-const { getProducts, getProductById } = require('../controllers/productController');
+const { getProducts, getProductById, getRelatedProducts,getFeaturedProducts  } = require('../controllers/productController');
 
-// Define route to fetch products
+router.get('/featured', getFeaturedProducts);
 router.get('/', getProducts);
 router.get('/:id', getProductById);
+router.get('/related/:id', getRelatedProducts);
+
 module.exports = router;
