@@ -8,6 +8,12 @@ import {
   ArchiveIcon,
   ImageIcon,
   XIcon,
+  TagIcon ,
+  InfoIcon ,
+  CheckIcon,
+  ClockIcon,
+  ArrowUpIcon,
+  ArrowDownIcon
 } from 'lucide-react';
 
 const Categories = () => {
@@ -23,6 +29,8 @@ const Categories = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showDeletedCategories, setShowDeletedCategories] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'asc' });
+    const [activeTab, setActiveTab] = useState('active');
 
   // Fetch categories on component mount
   useEffect(() => {
@@ -40,11 +48,31 @@ const Categories = () => {
       setCategories(activeCategories);
       setDeletedCategories(deleted);
     } catch (error) {
-      showError('Fetch Error', 'Unable to load categories.');
+      showError('Fetch Error', error.response?.data?.message || 'Unable to load categories.');
     } finally {
       setIsLoading(false);
     }
   };
+
+  // Handle sorting
+  const requestSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  // Sort categories
+  const sortedCategories = [...categories].sort((a, b) => {
+    if (a[sortConfig.key] < b[sortConfig.key]) {
+      return sortConfig.direction === 'asc' ? -1 : 1;
+    }
+    if (a[sortConfig.key] > b[sortConfig.key]) {
+      return sortConfig.direction === 'asc' ? 1 : -1;
+    }
+    return 0;
+  });
 
   // Handle form change for new category
   const handleInputChange = (e) => {
@@ -59,6 +87,10 @@ const Categories = () => {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        showError('File Too Large', 'Image must be less than 5MB');
+        return;
+      }
       setNewCategory(prev => ({
         ...prev,
         image: file,
@@ -87,6 +119,8 @@ const Categories = () => {
       showConfirmButton: false,
       timer: 3000,
       timerProgressBar: true,
+      background: '#fff',
+      iconColor: '#ef4444',
     });
   };
 
@@ -100,6 +134,8 @@ const Categories = () => {
       showConfirmButton: false,
       timer: 3000,
       timerProgressBar: true,
+      background: '#fff',
+      iconColor: '#10b981',
     });
   };
 
@@ -145,9 +181,9 @@ const Categories = () => {
       
       setCategories((prevCategories) => [response.data.category, ...prevCategories]);
       resetForm();
-      showSuccess('Category Created');
+      showSuccess('Category Created Successfully');
     } catch (error) {
-      showError('Creation Error', 'Unable to create category.');
+      showError('Creation Error', error.response?.data?.message || 'Unable to create category.');
     } finally {
       setIsLoading(false);
     }
@@ -180,9 +216,9 @@ const Categories = () => {
         )
       );
       resetForm();
-      showSuccess('Category Updated');
+      showSuccess('Category Updated Successfully');
     } catch (error) {
-      showError('Update Error', 'Unable to update category.');
+      showError('Update Error', error.response?.data?.message || 'Unable to update category.');
     } finally {
       setIsLoading(false);
     }
@@ -198,19 +234,22 @@ const Categories = () => {
       image: null,
       previewImage: category.image_url || '',
     });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // Soft delete category
   const handleDeleteCategory = async (categoryId) => {
     const result = await Swal.fire({
       title: 'Archive Category?',
-      text: 'This will move the category to the archive.',
-      icon: 'warning',
+      text: 'This will move the category to the archive section.',
+      icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, archive it!',
+      confirmButtonColor: '#3b82f6',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Yes, archive it',
       cancelButtonText: 'Cancel',
+      background: '#fff',
+      backdrop: 'rgba(0,0,0,0.1)',
     });
 
     if (result.isConfirmed) {
@@ -231,7 +270,7 @@ const Categories = () => {
 
         showSuccess('Category Archived');
       } catch (error) {
-        showError('Archive Error', 'Unable to archive category.');
+        showError('Archive Error', error.response?.data?.message || 'Unable to archive category.');
       }
     }
   };
@@ -253,9 +292,9 @@ const Categories = () => {
         ...prev,
       ]);
 
-      showSuccess('Category Restored');
+      showSuccess('Category Restored Successfully');
     } catch (error) {
-      showError('Restore Error', 'Unable to restore category.');
+      showError('Restore Error', error.response?.data?.message || 'Unable to restore category.');
     }
   };
 
@@ -265,297 +304,350 @@ const Categories = () => {
         {/* Header */}
         <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
               Category Management
             </h1>
-            <p className="text-gray-500 mt-1">Organize your product categories</p>
+            <p className="text-gray-600 mt-2">
+              Organize and manage your product categories
+            </p>
           </div>
-          <button 
+          <button
             onClick={() => setShowDeletedCategories(!showDeletedCategories)}
-            className="flex items-center bg-white text-gray-800 px-4 py-2 rounded-full hover:bg-gray-100 transition-all shadow-sm hover:shadow-md border border-gray-200"
+            className={`flex items-center px-4 py-2 rounded-lg transition ${showDeletedCategories ? 'bg-gray-200 text-gray-800' : 'bg-gray-800 text-white hover:bg-gray-700'}`}
           >
             <ArchiveIcon className="mr-2 w-5 h-5" />
             {showDeletedCategories ? 'Hide' : 'Show'} Archived
-            <span className="hidden sm:inline"> Categories</span>
           </button>
         </div>
 
         {/* Create/Edit Category Form */}
-        <div className="bg-white shadow-lg rounded-xl p-6 mb-8 border border-gray-100 transition-all hover:shadow-xl">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl md:text-2xl font-semibold text-gray-800 flex items-center">
-              {isEditing ? (
-                <>
-                  <EditIcon className="mr-3 text-yellow-600 w-6 h-6" />
-                  Edit Category
-                </>
-              ) : (
-                <>
-                  <PlusIcon className="mr-3 text-blue-600 w-6 h-6" />
-                  Create New Category
-                </>
-              )}
-            </h2>
-            {isEditing && (
-              <button
-                onClick={resetForm}
-                className="text-gray-500 hover:text-gray-700 transition"
-                title="Cancel editing"
-              >
-                <XIcon className="w-5 h-5" />
-              </button>
-            )}
-          </div>
-          
-          <form onSubmit={isEditing ? handleUpdateCategory : handleCreateCategory} className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <div className="space-y-1">
-              <label className="block text-sm font-medium text-gray-700">Category Name *</label>
-              <input
-                type="text"
-                name="name"
-                value={newCategory.name}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition shadow-sm"
-                placeholder="e.g. Electronics"
-                required
-              />
-            </div>
-            
-            <div className="space-y-1">
-              <label className="block text-sm font-medium text-gray-700">Description</label>
-              <input
-                type="text"
-                name="description"
-                value={newCategory.description}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition shadow-sm"
-                placeholder="Short description"
-              />
-            </div>
-            
-            <div className="space-y-1">
-              <label className="block text-sm font-medium text-gray-700">Category Image</label>
-              <div className="flex flex-col">
-              {newCategory.previewImage ? (
-    <div className="relative group">
-      <img 
-        src={newCategory.previewImage} 
-        alt="Preview" 
-        className="w-full h-32 object-cover rounded-lg shadow-sm"
-        onError={(e) => {
-          // Fallback if image fails to load
-          e.target.src = '/placeholder-image.jpg';
-        }}
-      />
-      <button
-        type="button"
-        onClick={removeImage}
-        className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition opacity-0 group-hover:opacity-100"
-        title="Remove image"
-      >
-        <XIcon className="w-4 h-4" />
-      </button>
-    </div>
-
+        <div className="bg-white shadow-lg rounded-xl overflow-hidden mb-8 border border-gray-200">
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-semibold text-gray-800 flex items-center">
+                {isEditing ? (
+                  <>
+                    <EditIcon className="mr-3 text-yellow-500" />
+                    Edit Category
+                  </>
                 ) : (
-                  <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-400 transition bg-gray-50 hover:bg-gray-100">
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6 px-4 text-center">
-                      <ImageIcon className="w-8 h-8 text-gray-400 mb-2" />
-                      <p className="text-sm text-gray-500">
-                        <span className="font-semibold text-blue-600">Click to upload</span> or drag and drop
-                      </p>
-                      <p className="text-xs text-gray-400 mt-1">PNG, JPG, GIF (Max. 5MB)</p>
-                    </div>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      className="hidden"
-                    />
-                  </label>
+                  <>
+                    <PlusIcon className="mr-3 text-blue-500" />
+                    Create New Category
+                  </>
                 )}
-              </div>
+              </h2>
+              {isEditing && (
+                <button
+                  onClick={resetForm}
+                  className="text-gray-500 hover:text-gray-700 transition"
+                >
+                  <XIcon className="w-5 h-5" />
+                </button>
+              )}
             </div>
             
-            <div className="md:col-span-3 pt-2">
-              <div className="flex flex-col sm:flex-row gap-3">
+            <form onSubmit={isEditing ? handleUpdateCategory : handleCreateCategory} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* Category Name */}
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700 flex items-center">
+                    <TagIcon className="mr-2 w-4 h-4" />
+                    Category Name *
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={newCategory.name}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                    placeholder="e.g. Electronics"
+                    required
+                  />
+                </div>
+
+                {/* Description */}
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700 flex items-center">
+                    <InfoIcon className="mr-2 w-4 h-4" />
+                    Description
+                  </label>
+                  <input
+                    type="text"
+                    name="description"
+                    value={newCategory.description}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                    placeholder="Short description (optional)"
+                  />
+                </div>
+
+                {/* Image Upload */}
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700 flex items-center">
+                    <ImageIcon className="mr-2 w-4 h-4" />
+                    Category Image
+                  </label>
+                  {newCategory.previewImage ? (
+                    <div className="relative group">
+                      <img 
+                        src={newCategory.previewImage} 
+                        alt="Preview" 
+                        className="w-full h-32 object-cover rounded-lg shadow-sm"
+                        onError={(e) => {
+                          e.target.src = '/placeholder-image.jpg';
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={removeImage}
+                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition opacity-0 group-hover:opacity-100"
+                        title="Remove image"
+                      >
+                        <XIcon className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-400 transition bg-gray-50 hover:bg-gray-100">
+                      <div className="flex flex-col items-center justify-center pt-5 pb-6 px-4 text-center">
+                        <ImageIcon className="w-8 h-8 text-gray-400 mb-2" />
+                        <p className="text-sm text-gray-500">
+                          <span className="font-semibold text-blue-600">Click to upload</span> or drag and drop
+                        </p>
+                        <p className="text-xs text-gray-400 mt-1">PNG, JPG, GIF (Max. 5MB)</p>
+                      </div>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="hidden"
+                      />
+                    </label>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex justify-end pt-4">
+                <button
+                  type="button"
+                  onClick={resetForm}
+                  className="mr-4 px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition"
+                >
+                  Cancel
+                </button>
                 <button
                   type="submit"
+                  className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:opacity-90 transition flex items-center justify-center shadow-md"
                   disabled={isLoading}
-                  className={`flex-1 py-3 rounded-lg transition-all flex items-center justify-center ${
-                    isLoading 
-                      ? 'bg-gray-300 cursor-not-allowed' 
-                      : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:opacity-90 shadow-md hover:shadow-lg'
-                  }`}
                 >
                   {isLoading ? (
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
+                    <>
+                      <ClockIcon className="mr-2 w-4 h-4 animate-spin" />
+                      Processing...
+                    </>
                   ) : isEditing ? (
                     <>
-                      <EditIcon className="mr-2 w-5 h-5" />
+                      <CheckIcon className="mr-2 w-4 h-4" />
                       Update Category
                     </>
                   ) : (
                     <>
-                      <PlusIcon className="mr-2 w-5 h-5" />
+                      <PlusIcon className="mr-2 w-4 h-4" />
                       Create Category
                     </>
                   )}
                 </button>
-                
-                {isEditing && (
-                  <button
-                    type="button"
-                    onClick={resetForm}
-                    className="flex-1 bg-white text-gray-700 py-3 rounded-lg hover:bg-gray-50 transition border border-gray-300 shadow-sm"
-                  >
-                    Cancel
-                  </button>
-                )}
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
 
-        {/* Active Categories */}
-        <div className="mb-12">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl md:text-2xl font-semibold text-gray-800">
-              Active Categories
-            </h2>
-            <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-              {categories.length} active
-            </span>
-          </div>
-          
-          {categories.length === 0 ? (
-            <div className="bg-white shadow-sm rounded-xl p-8 text-center border border-gray-200">
-              <ImageIcon className="mx-auto w-12 h-12 text-gray-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900">No active categories</h3>
-              <p className="text-gray-500 mt-1">Create your first category to get started</p>
+        {/* Categories List */}
+        <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-200">
+          <div className="border-b border-gray-200">
+            <div className="flex overflow-x-auto">
               <button
-                onClick={() => {
-                  resetForm();
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-                className="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                onClick={() => setActiveTab('active')}
+                className={`px-6 py-4 font-medium text-sm border-b-2 transition ${activeTab === 'active' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
               >
-                <PlusIcon className="w-4 h-4 mr-2" />
-                Create Category
+                Active Categories ({categories.length})
+              </button>
+              <button
+                onClick={() => setActiveTab('archived')}
+                className={`px-6 py-4 font-medium text-sm border-b-2 transition ${activeTab === 'archived' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+              >
+                Archived Categories ({deletedCategories.length})
               </button>
             </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-              {categories.map((category) => (
-                <div 
-                  key={category.category_id} 
-                  className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all border border-gray-100 hover:border-blue-100 group"
-                >
-                  <div className="relative aspect-[4/3] overflow-hidden">
-                    {category.image_url ? (
-                      <img 
-                        src={category.image_url} 
-                        alt={category.name} 
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center">
-                        <ImageIcon className="w-16 h-16 text-gray-300" />
-                      </div>
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                      <div className="flex space-x-2 w-full">
-                        <button
-                          onClick={() => handleEditCategory(category)}
-                          className="flex-1 bg-white/90 text-gray-800 py-1.5 rounded-md hover:bg-white transition flex items-center justify-center text-sm font-medium"
-                        >
-                          <EditIcon className="mr-1.5 w-4 h-4" />
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDeleteCategory(category.category_id)}
-                          className="flex-1 bg-red-500/90 text-white py-1.5 rounded-md hover:bg-red-600 transition flex items-center justify-center text-sm font-medium"
-                        >
-                          <TrashIcon className="mr-1.5 w-4 h-4" />
-                          Archive
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-4">
-                    <h3 className="font-bold text-gray-800 line-clamp-1">{category.name}</h3>
-                    {category.description && (
-                      <p className="text-gray-500 text-sm mt-1 line-clamp-2">{category.description}</p>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+          </div>
 
-        {/* Archived Categories */}
-        {showDeletedCategories && (
-          <div className="mt-12 pb-8">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl md:text-2xl font-semibold text-gray-800">
-                Archived Categories
-              </h2>
-              <span className="bg-gray-200 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                {deletedCategories.length} archived
-              </span>
-            </div>
-            
-            {deletedCategories.length === 0 ? (
-              <div className="bg-white shadow-sm rounded-xl p-8 text-center border border-gray-200">
-                <ArchiveIcon className="mx-auto w-12 h-12 text-gray-400 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900">No archived categories</h3>
-                <p className="text-gray-500 mt-1">Archived categories will appear here</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                {deletedCategories.map((category) => (
-                  <div 
-                    key={category.category_id} 
-                    className="bg-gray-100 rounded-xl overflow-hidden shadow-sm border border-gray-200"
-                  >
-                    <div className="relative aspect-[4/3] overflow-hidden">
-                      {category.image_url ? (
-                        <img 
-                          src={category.image_url} 
-                          alt={category.name} 
-                          className="w-full h-full object-cover filter grayscale"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                          <ArchiveIcon className="w-16 h-16 text-gray-400" />
-                        </div>
-                      )}
-                      <div className="absolute inset-0 bg-black/20 flex items-end p-4">
-                        <button
-                          onClick={() => handleRestoreCategory(category.category_id)}
-                          className="w-full bg-green-600 text-white py-1.5 rounded-md hover:bg-green-700 transition flex items-center justify-center text-sm font-medium"
-                        >
-                          <ArchiveIcon className="mr-1.5 w-4 h-4" />
-                          Restore
-                        </button>
-                      </div>
+          <div className="p-6">
+            {activeTab === 'active' ? (
+              <>
+                {categories.length === 0 ? (
+                  <div className="text-center py-12">
+                    <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                      <ImageIcon className="w-10 h-10 text-gray-400" />
                     </div>
-                    <div className="p-4">
-                      <h3 className="font-bold text-gray-700 line-through line-clamp-1">{category.name}</h3>
-                      {category.description && (
-                        <p className="text-gray-500 text-sm mt-1 line-clamp-2">{category.description}</p>
-                      )}
-                    </div>
+                    <h3 className="text-lg font-medium text-gray-900">No active categories</h3>
+                    <p className="mt-2 text-gray-500">
+                      Create your first category to start organizing products
+                    </p>
+                    <button
+                      onClick={() => {
+                        resetForm();
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      className="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                    >
+                      <PlusIcon className="w-4 h-4 mr-2" />
+                      Create Category
+                    </button>
                   </div>
-                ))}
-              </div>
+                ) : (
+                  <>
+                    <div className="overflow-x-auto">
+                      <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Image
+                            </th>
+                            <th 
+                              scope="col" 
+                              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                              onClick={() => requestSort('name')}
+                            >
+                              <div className="flex items-center">
+                                Name
+                                {sortConfig.key === 'name' && (
+                                  sortConfig.direction === 'asc' ? 
+                                    <ArrowUpIcon className="ml-1 w-3 h-3" /> : 
+                                    <ArrowDownIcon className="ml-1 w-3 h-3" />
+                                )}
+                              </div>
+                            </th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Description
+                            </th>
+                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Actions
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                          {sortedCategories.map((category) => (
+                            <tr key={category.category_id} className="hover:bg-gray-50">
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="flex-shrink-0 h-10 w-10">
+                                  {category.image_url ? (
+                                    <img className="h-10 w-10 rounded-full object-cover" src={category.image_url} alt="" />
+                                  ) : (
+                                    <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                      <ImageIcon className="w-5 h-5 text-gray-400" />
+                                    </div>
+                                  )}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="text-sm font-medium text-gray-900">{category.name}</div>
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="text-sm text-gray-500 line-clamp-2">{category.description || 'No description'}</div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <div className="flex justify-end space-x-2">
+                                  <button
+                                    onClick={() => handleEditCategory(category)}
+                                    className="text-blue-600 hover:text-blue-900"
+                                  >
+                                    <EditIcon className="w-5 h-5" />
+                                  </button>
+                                  <button
+                                    onClick={() => handleDeleteCategory(category.category_id)}
+                                    className="text-red-600 hover:text-red-900"
+                                  >
+                                    <TrashIcon className="w-5 h-5" />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </>
+                )}
+              </>
+            ) : (
+              <>
+                {deletedCategories.length === 0 ? (
+                  <div className="text-center py-12">
+                    <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                      <ArchiveIcon className="w-10 h-10 text-gray-400" />
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900">No archived categories</h3>
+                    <p className="mt-2 text-gray-500">
+                      Archived categories will appear here
+                    </p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Image
+                          </th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Name
+                          </th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Description
+                          </th>
+                          <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Actions
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {deletedCategories.map((category) => (
+                          <tr key={category.category_id} className="hover:bg-gray-50">
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="flex-shrink-0 h-10 w-10">
+                                {category.image_url ? (
+                                  <img className="h-10 w-10 rounded-full object-cover filter grayscale" src={category.image_url} alt="" />
+                                ) : (
+                                  <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                    <ArchiveIcon className="w-5 h-5 text-gray-400" />
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm font-medium text-gray-500 line-through">{category.name}</div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="text-sm text-gray-400 line-clamp-2">{category.description || 'No description'}</div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                              <button
+                                onClick={() => handleRestoreCategory(category.category_id)}
+                                className="text-green-600 hover:text-green-900"
+                              >
+                                <ArchiveIcon className="w-5 h-5" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </>
             )}
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

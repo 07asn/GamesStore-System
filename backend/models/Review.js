@@ -30,6 +30,10 @@ const Review = sequelize.define('Review', {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  is_deleted: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
   created_at: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,

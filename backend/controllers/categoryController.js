@@ -1,6 +1,6 @@
 //controller/categoryController.js
 const Category = require('../models/Category');
-const { uploadImage } = require('../services/imgService'); // Include the image upload service
+const { uploadImage } = require('../services/imgService');
 const cloudinary = require('cloudinary').v2;
 
 async function getCategories(req, res) {

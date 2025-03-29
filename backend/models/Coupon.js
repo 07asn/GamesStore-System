@@ -32,6 +32,10 @@ const Coupon = sequelize.define('Coupon', {
     description: {
         type: DataTypes.TEXT,
     },
+    is_deleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
     category_id: {
         type: DataTypes.INTEGER,
         allowNull: true,

@@ -4,6 +4,9 @@ import UsersAdmin from '../components/admin/UsersAdmin';
 import StatisticsAdmin from '../components/admin/StatisticsAdmin';
 import ArticalsAdmin from '../components/admin/ArticalsAdmin';
 import Categories from '../components/admin/Categories';
+import AdminCoupons from '../components/admin/AdminCoupons';
+import AdminReviews from '../components/admin/AdminReviews';
+import AdminProducts from '../components/admin/AdminProducts';
 
 export default function Admin() {
     const [selectedTab, setSelectedTab] = useState('Statistics'); // Default tab
@@ -17,8 +20,14 @@ export default function Admin() {
                 return <UsersAdmin />;
             case 'News':
                 return <ArticalsAdmin />;
-                case 'Categories':
-                    return <Categories />;
+            case 'Categories':
+                return <Categories />;
+            case 'Coupons':
+                return <AdminCoupons />;
+            case 'Comments':
+                return <AdminReviews />;
+            case 'Products':
+                return <AdminProducts />;
             default:
                 return <StatisticsAdmin />;
         }

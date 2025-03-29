@@ -13,6 +13,13 @@ import {
   ArrowDownToLine,
   Phone,
   Globe,
+  Shield,
+  User,
+  Users,
+  Download,
+  Filter,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 
 import UserModal from './UserModal';
@@ -25,27 +32,21 @@ const UsersAdmin = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  // For viewing the orders
   const [selectedUserOrdersId, setSelectedUserOrdersId] = useState(null);
   const [ordersModalOpen, setOrdersModalOpen] = useState(false);
-
-  // Toggle between active/deleted
   const [showDeleted, setShowDeleted] = useState(false);
-
-  // Filter & search
   const [filterOptions, setFilterOptions] = useState({
     verificationStatus: 'all',
     country: 'all',
     gender: 'all',
   });
   const [searchQuery, setSearchQuery] = useState('');
+  const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'asc' });
 
   useEffect(() => {
     fetchUsers();
   }, []);
 
-  // GET active users
   const fetchUsers = async () => {
     setIsLoading(true);
     try {
@@ -56,22 +57,12 @@ const UsersAdmin = () => {
       setFilteredUsers(response.data);
       setShowDeleted(false);
     } catch (error) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Network Error',
-        text: 'Unable to fetch users. Please check your connection.',
-        background: '#ffffff',
-        customClass: {
-          popup: 'rounded-xl shadow-xl border border-gray-100',
-          confirmButton: 'bg-red-500 hover:bg-red-600 rounded-lg px-4 py-2 text-white font-medium',
-        },
-      });
+      showError('Network Error', 'Unable to fetch users. Please check your connection.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  // GET deleted users
   const fetchDeletedUsers = async () => {
     setIsLoading(true);
     try {
@@ -82,28 +73,17 @@ const UsersAdmin = () => {
       setFilteredUsers(response.data);
       setShowDeleted(true);
     } catch (error) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Network Error',
-        text: 'Unable to fetch deleted users.',
-        background: '#ffffff',
-        customClass: {
-          popup: 'rounded-xl shadow-xl border border-gray-100',
-          confirmButton: 'bg-red-500 hover:bg-red-600 rounded-lg px-4 py-2 text-white font-medium',
-        },
-      });
+      showError('Network Error', 'Unable to fetch deleted users.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Show order history for a user when row is clicked
   const handleRowClicked = (row) => {
     setSelectedUserOrdersId(row.user_id);
     setOrdersModalOpen(true);
   };
 
-  // Toggle block/unblock user
   const handleToggleBlockUser = (user) => {
     const currentlyBlocked = user.is_deleted;
 
@@ -129,45 +109,47 @@ const UsersAdmin = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          // Patch request to toggle block/unblock
           await axios.patch(`http://localhost:5000/api/admin/users/${user.user_id}/block`, null, {
             withCredentials: true,
           });
 
-          Swal.fire({
-            icon: 'success',
-            title: currentlyBlocked ? 'User Unblocked' : 'User Blocked',
-            text: currentlyBlocked
+          showSuccess(
+            currentlyBlocked ? 'User Unblocked' : 'User Blocked',
+            currentlyBlocked
               ? 'The user has been successfully unblocked.'
-              : 'The user has been successfully blocked.',
-            background: '#ffffff',
-            customClass: {
-              popup: 'rounded-xl shadow-xl border border-gray-100',
-              confirmButton: 'bg-green-500 hover:bg-green-600 rounded-lg px-4 py-2 text-white font-medium',
-            },
-          });
+              : 'The user has been successfully blocked.'
+          );
 
-          // Refresh correct list
           showDeleted ? fetchDeletedUsers() : fetchUsers();
         } catch (error) {
-          Swal.fire({
-            icon: 'error',
-            title: 'Operation Failed',
-            text: 'Unable to update the user status.',
-            background: '#ffffff',
-            customClass: {
-              popup: 'rounded-xl shadow-xl border border-gray-100',
-              confirmButton: 'bg-red-500 hover:bg-red-600 rounded-lg px-4 py-2 text-white font-medium',
-            },
-          });
+          showError('Operation Failed', 'Unable to update the user status.');
         }
       }
     });
   };
 
-  // Searching & filtering
+  const requestSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedUsers = useMemo(() => {
+    return [...users].sort((a, b) => {
+      if (a[sortConfig.key] < b[sortConfig.key]) {
+        return sortConfig.direction === 'asc' ? -1 : 1;
+      }
+      if (a[sortConfig.key] > b[sortConfig.key]) {
+        return sortConfig.direction === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  }, [users, sortConfig]);
+
   const advancedFilterUsers = useMemo(() => {
-    return users.filter((user) => {
+    return sortedUsers.filter((user) => {
       const searchMatch =
         !searchQuery ||
         user.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -186,9 +168,8 @@ const UsersAdmin = () => {
 
       return searchMatch && verificationMatch && countryMatch && genderMatch;
     });
-  }, [users, searchQuery, filterOptions]);
+  }, [sortedUsers, searchQuery, filterOptions]);
 
-  // CSV export
   const exportUsers = () => {
     const headers = ['Name', 'Email', 'Phone', 'Country', 'Gender', 'Email Verified'];
     const csvData = [
@@ -215,7 +196,32 @@ const UsersAdmin = () => {
     document.body.removeChild(link);
   };
 
-  // Table columns
+  const showError = (title, text) => {
+    Swal.fire({
+      icon: 'error',
+      title,
+      text,
+      background: '#ffffff',
+      customClass: {
+        popup: 'rounded-xl shadow-xl border border-gray-100',
+        confirmButton: 'bg-red-500 hover:bg-red-600 rounded-lg px-4 py-2 text-white font-medium',
+      },
+    });
+  };
+
+  const showSuccess = (title, text) => {
+    Swal.fire({
+      icon: 'success',
+      title,
+      text,
+      background: '#ffffff',
+      customClass: {
+        popup: 'rounded-xl shadow-xl border border-gray-100',
+        confirmButton: 'bg-green-500 hover:bg-green-600 rounded-lg px-4 py-2 text-white font-medium',
+      },
+    });
+  };
+
   const columns = [
     {
       name: 'User',
@@ -272,7 +278,6 @@ const UsersAdmin = () => {
       ),
       width: '150px',
     },
-    // Number of orders
     {
       name: 'Orders',
       selector: (row) => row.orderCount,
@@ -282,7 +287,6 @@ const UsersAdmin = () => {
         <span className="font-medium text-gray-700">{row.orderCount || 0}</span>
       ),
     },
-    // Total spent
     {
       name: 'Spent',
       selector: (row) => row.totalSpent,
@@ -294,8 +298,7 @@ const UsersAdmin = () => {
       },
     },
     {
-      // Show if user is blocked or not by row.is_deleted
-      name: 'Blocked?',
+      name: 'Blocked',
       cell: (row) =>
         row.is_deleted ? (
           <span className="text-red-600 font-medium px-2 py-1 bg-red-50 rounded-md">Yes</span>
@@ -308,7 +311,6 @@ const UsersAdmin = () => {
       name: 'Actions',
       cell: (row) => (
         <div className="flex space-x-2">
-          {/* Edit user */}
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -322,8 +324,6 @@ const UsersAdmin = () => {
           >
             <Edit2 className="w-5 h-5" />
           </button>
-
-          {/* Toggle block/unblock */}
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -343,57 +343,54 @@ const UsersAdmin = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <header className="mb-8 flex flex-col md:flex-row md:justify-between md:items-center gap-6">
+        <header className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-1">User Management</h1>
-            <p className="text-gray-600 text-sm flex items-center gap-2">
-              <Phone className="w-4 h-4 text-blue-500" />
-              Advanced user control and insights
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              User Management
+            </h1>
+            <p className="text-gray-600 flex items-center gap-2">
+              <Shield className="w-5 h-5 text-blue-500" />
+              Manage and monitor all user accounts
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            {/* Filter Dropdown */}
             <FilterDropdown
               filterOptions={filterOptions}
               setFilterOptions={setFilterOptions}
             />
-
-            {/* Export CSV */}
             <button
               onClick={exportUsers}
               className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white 
                          rounded-lg shadow-sm hover:bg-emerald-600 transition-all 
                          focus:outline-none focus:ring-2 focus:ring-emerald-300 focus:ring-offset-2"
             >
-              <ArrowDownToLine className="w-4 h-4" />
+              <Download className="w-4 h-4" />
               <span className="text-sm font-medium">Export CSV</span>
             </button>
-
-            {/* Toggle between Active / Deleted users */}
             {showDeleted ? (
               <button
                 onClick={fetchUsers}
-                className="px-4 py-2 bg-amber-500 text-white rounded-lg shadow-sm 
+                className="flex items-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-lg shadow-sm 
                            hover:bg-amber-600 transition-all focus:outline-none 
                            focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 text-sm font-medium"
               >
-                Show Active Users
+                <User className="w-4 h-4" />
+                <span>Active Users</span>
               </button>
             ) : (
               <button
                 onClick={fetchDeletedUsers}
-                className="px-4 py-2 bg-gray-500 text-white rounded-lg shadow-sm 
+                className="flex items-center gap-2 px-4 py-2 bg-gray-500 text-white rounded-lg shadow-sm 
                            hover:bg-gray-600 transition-all focus:outline-none 
                            focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 text-sm font-medium"
               >
-                Show Deleted Users
+                <UserX className="w-4 h-4" />
+                <span>Blocked Users</span>
               </button>
             )}
-
-            {/* Refresh */}
             <button
               onClick={() => {
                 showDeleted ? fetchDeletedUsers() : fetchUsers();
@@ -407,8 +404,6 @@ const UsersAdmin = () => {
             >
               <RefreshCw className="w-5 h-5" />
             </button>
-
-            {/* Add User */}
             <button
               className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white 
                          rounded-lg shadow-sm hover:bg-blue-600 transition-all 
@@ -424,10 +419,64 @@ const UsersAdmin = () => {
           </div>
         </header>
 
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-500">Total Users</p>
+                <p className="text-2xl font-bold text-gray-800 mt-1">{users.length}</p>
+              </div>
+              <div className="p-3 bg-blue-50 rounded-lg">
+                <Users className="w-6 h-6 text-blue-500" />
+              </div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-500">Verified</p>
+                <p className="text-2xl font-bold text-gray-800 mt-1">
+                  {users.filter(u => u.email_verified).length}
+                </p>
+              </div>
+              <div className="p-3 bg-green-50 rounded-lg">
+                <CheckCircle2 className="w-6 h-6 text-green-500" />
+              </div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-500">Unverified</p>
+                <p className="text-2xl font-bold text-gray-800 mt-1">
+                  {users.filter(u => !u.email_verified).length}
+                </p>
+              </div>
+              <div className="p-3 bg-red-50 rounded-lg">
+                <XCircle className="w-6 h-6 text-red-500" />
+              </div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-500">Blocked</p>
+                <p className="text-2xl font-bold text-gray-800 mt-1">
+                  {users.filter(u => u.is_deleted).length}
+                </p>
+              </div>
+              <div className="p-3 bg-gray-100 rounded-lg">
+                <UserX className="w-6 h-6 text-gray-500" />
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Table */}
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
-          <div className="p-4 border-b border-gray-200 flex items-center gap-4">
-            <div className="relative flex-grow">
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
+          <div className="p-4 border-b border-gray-200 flex flex-col md:flex-row items-center gap-4">
+            <div className="relative w-full md:w-auto md:flex-1">
               <input
                 type="text"
                 placeholder="Search users by name or email..."
@@ -526,7 +575,7 @@ const UsersAdmin = () => {
           userId={selectedUserOrdersId}
         />
 
-        {/* Modal (Create/Update user) */}
+        {/* User Modal */}
         {modalOpen && (
           <UserModal
             isOpen={modalOpen}

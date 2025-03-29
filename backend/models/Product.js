@@ -60,7 +60,4 @@ const Product = sequelize.define('Product', {
 const Category = require('./Category');
 const Product_Image = require('./Product_Image');
 
-
-
-  
 module.exports = Product;

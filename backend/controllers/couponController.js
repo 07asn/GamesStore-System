@@ -1,7 +1,7 @@
 const Coupon = require('../models/Coupon');
 const Product = require('../models/Product');
 
-exports.validateCoupon = async (req, res) => {
+async function validateCoupon (req, res) {
   try {
     const { code, cartItems } = req.body;
 
@@ -68,3 +68,121 @@ exports.validateCoupon = async (req, res) => {
     return res.status(500).json({ message: 'Server error' });
   }
 };
+
+async function getCoupons(req, res) {
+  try {
+    const coupons = await Coupon.findAll();
+    if (!coupons || coupons.length === 0) {
+      return res.status(404).json({ message: 'No coupons found!' });
+    }
+    return res.status(200).json(coupons);
+  } catch (error) {
+    console.error('Error fetching coupons:', error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+}
+
+async function createCoupon(req, res) {
+  try {
+    const { code, discount_value, discount_percentage, valid_from, valid_to, usage_limit, description, category_id } = req.body;
+
+    if (!code || !discount_value) {
+      return res.status(400).json({ message: 'Coupon code and discount value are required!' });
+    }
+
+    const newCoupon = await Coupon.create({
+      code,
+      discount_value,
+      discount_percentage,
+      valid_from,
+      valid_to,
+      usage_limit,
+      description,
+      category_id,
+    });
+
+    return res.status(201).json({
+      message: 'Coupon created successfully',
+      coupon: newCoupon,
+    });
+  } catch (error) {
+    console.error('Error creating coupon:', error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+}
+
+async function updateCoupon(req, res) {
+  try {
+    const couponId = req.params.id;
+    const { code, discount_value, discount_percentage, valid_from, valid_to, usage_limit, description, category_id } = req.body;
+
+    const coupon = await Coupon.findOne({ where: { coupon_id: couponId } });
+    if (!coupon) {
+      return res.status(404).json({ message: 'Coupon not found' });
+    }
+
+    coupon.set({
+      code: code ?? coupon.code,
+      discount_value: discount_value ?? coupon.discount_value,
+      discount_percentage: discount_percentage ?? coupon.discount_percentage,
+      valid_from: valid_from ?? coupon.valid_from,
+      valid_to: valid_to ?? coupon.valid_to,
+      usage_limit: usage_limit ?? coupon.usage_limit,
+      description: description ?? coupon.description,
+      category_id: category_id ?? coupon.category_id,
+    });
+
+    await coupon.save();
+
+    return res.status(200).json({
+      message: 'Coupon updated successfully',
+      coupon,
+    });
+  } catch (error) {
+    console.error('Error updating coupon:', error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+}
+
+async function deleteCoupon(req, res) {
+  try {
+    const couponId = req.params.id;
+
+    const coupon = await Coupon.findOne({ where: { coupon_id: couponId } });
+    if (!coupon) {
+      return res.status(404).json({ message: 'Coupon not found' });
+    }
+
+    coupon.is_deleted = true;
+    await coupon.save();
+
+    return res.status(200).json({
+      message: 'Coupon soft-deleted successfully',
+      coupon,
+    });
+  } catch (error) {
+    console.error('Error deleting coupon:', error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+}
+
+async function restoreCoupon(req, res) {
+  try {
+    const couponId = req.params.id;
+    const coupon = await Coupon.findByPk(couponId);
+    if (!coupon) {
+      return res.status(404).json({ message: 'Coupon not found' });
+    }
+
+    coupon.is_deleted = false;
+    await coupon.save();
+
+    return res.status(200).json({ message: 'Coupon restored successfully', coupon });
+  } catch (error) {
+    console.error('Error restoring coupon:', error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+}
+
+module.exports = { getCoupons, createCoupon, updateCoupon, deleteCoupon, restoreCoupon, validateCoupon };
+
