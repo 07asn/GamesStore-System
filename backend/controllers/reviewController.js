@@ -108,12 +108,10 @@ async function getFiveStarReviews(req, res) {
 
 async function getAllReviews(req, res) {
   try {
-    // Get pagination parameters from query string (default to page 1, 10 items per page)
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const offset = (page - 1) * limit;
 
-    // Get total count of reviews (for pagination metadata)
     const totalCount = await Review.count();
 
     const reviews = await Review.findAll({
@@ -131,7 +129,7 @@ async function getAllReviews(req, res) {
       ],
       limit: limit,
       offset: offset,
-      order: [['created_at', 'DESC']] // Sort by newest first
+      order: [['created_at', 'DESC']] 
     });
 
     if (!reviews.length) {
@@ -258,7 +256,6 @@ async function deleteReview(req, res) {
   }
 }
 
-// Restore review
 async function restoreReview(req, res) {
   try {
     const { review_id } = req.params;

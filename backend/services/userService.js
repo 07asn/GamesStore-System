@@ -9,8 +9,8 @@ async function comparePasswords(plainPassword, hashedPassword) {
   return bcrypt.compare(plainPassword, hashedPassword);
 }
 
-function generateToken(userId) {
-  return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
+function generateToken(userId, role) {
+  return jwt.sign({ userId, role }, process.env.JWT_SECRET, { expiresIn: '1h' });
 }
 
 module.exports = {

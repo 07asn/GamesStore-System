@@ -1,4 +1,4 @@
-const { DataTypes } = require('sequelize');
+const { DataTypes, Sequelize } = require('sequelize');
 const sequelize = require('../config/database');
 
 const Contact = sequelize.define('Contact', {
@@ -8,26 +8,24 @@ const Contact = sequelize.define('Contact', {
         autoIncrement: true,
         allowNull: false,
     },
-    user_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
+    full_name: {
+        type: DataTypes.STRING(255),
+        allowNull: false
+    },
+    email: {
+        type: DataTypes.STRING(255),
+        allowNull: false
     },
     subject: {
         type: DataTypes.STRING,
     },
     message: {
         type: DataTypes.TEXT,
+        allowNull: false
     },
-    contact_date: {
+    created_at: {
         type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-    },
-    response_date: {
-        type: DataTypes.DATE,
-    },
-    status: {
-        type: DataTypes.STRING,
-        defaultValue: 'open',
+        defaultValue: Sequelize.NOW
     },
 }, {
     timestamps: false,

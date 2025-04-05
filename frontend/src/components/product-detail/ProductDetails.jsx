@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaTruck, FaHeart, FaShoppingCart, FaRegStar, FaStar, FaStarHalfAlt, FaCheck } from 'react-icons/fa';
+import { toast } from 'react-hot-toast';
 
 const ProductDetails = ({ product }) => {
   // Check if the product is loaded
@@ -15,7 +16,7 @@ const ProductDetails = ({ product }) => {
     );
   }
 
-  const { name, price, discounted_price, description, delivery_type, stock, platform, reviews_count, tags, avgRating } = product;
+  const { name, price, discounted_price, description, delivery_type, stock, platform, reviews_count, tags, avgRating, productImage, product_id } = product;
 
   const finalPrice = discounted_price ? parseFloat(discounted_price) : parseFloat(price);
   const discount = discounted_price ? ((1 - finalPrice / parseFloat(price)) * 100).toFixed(0) : 0;
@@ -37,6 +38,106 @@ const ProductDetails = ({ product }) => {
       }
     }
     return stars;
+  };
+
+  const addToCart = () => {
+    const productToAdd = {
+      product_id,
+      name,
+      price,
+      discounted_price,
+      productImage,
+      finalPrice,
+      quantity: 1, // Default quantity is now always 1
+    };
+
+    let existingCart = [];
+    try {
+      const cartData = localStorage.getItem('cart');
+      if (cartData) {
+        existingCart = JSON.parse(cartData);
+      }
+    } catch (error) {
+      console.error('Error parsing cart data', error);
+      existingCart = [];
+    }
+
+    const productIndex = existingCart.findIndex(item => item.product_id === productToAdd.product_id);
+
+    if (productIndex >= 0) {
+      existingCart[productIndex].quantity += 1;
+      toast.success(`${name} quantity increased in your cart!`, {
+        position: 'bottom-left',
+        duration: 3000,
+        style: {
+          background: '#4caf50',
+          color: '#fff',
+          fontWeight: 'bold',
+        },
+      });
+    } else {
+      existingCart.push(productToAdd);
+      toast.success(`${name} has been added to your cart!`, {
+        position: 'bottom-left',
+        duration: 3000,
+        style: {
+          background: '#4caf50',
+          color: '#fff',
+          fontWeight: 'bold',
+        },
+      });
+    }
+
+    localStorage.setItem('cart', JSON.stringify(existingCart));
+  };
+
+  const addToWishlist = () => {
+    const productToAdd = {
+      product_id,
+      name,
+      price,
+      discounted_price,
+      productImage,
+      finalPrice,
+    };
+
+    let existingWishlist = [];
+    try {
+      const wishlistData = localStorage.getItem('wishlist');
+      if (wishlistData) {
+        existingWishlist = JSON.parse(wishlistData);
+      }
+    } catch (error) {
+      console.error('Error parsing wishlist data', error);
+      existingWishlist = [];
+    }
+
+    const productIndex = existingWishlist.findIndex(item => item.product_id === productToAdd.product_id);
+
+    if (productIndex >= 0) {
+      toast.error(`${name} is already in your wishlist!`, {
+        position: 'bottom-left',
+        duration: 3000,
+        style: {
+          background: '#ff5252',
+          color: '#fff',
+          fontWeight: 'bold',
+        },
+      });
+    } else {
+      existingWishlist.push(productToAdd);
+      localStorage.setItem('wishlist', JSON.stringify(existingWishlist));
+
+      toast.success(`${name} has been added to your wishlist!`, {
+        position: 'bottom-left',
+        duration: 3000,
+        style: {
+          background: '#4caf50',
+          color: '#fff',
+          fontWeight: 'bold',
+        },
+      });
+    }
   };
 
   return (
@@ -124,36 +225,21 @@ const ProductDetails = ({ product }) => {
         </div>
       )}
 
-      {/* Add to Cart Section */}
+      {/* Add to Cart and Wishlist Buttons */}
       <div className="mt-8">
-        <div className="flex items-center mb-4">
-          <label className="mr-3 font-medium text-gray-700">Quantity:</label>
-          <div className="relative">
-            <select className="appearance-none bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500">
-              {[...Array(Math.min(stock || 1, 10))].map((_, idx) => (
-                <option key={idx} value={idx + 1}>
-                  {idx + 1}
-                </option>
-              ))}
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-              <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-              </svg>
-            </div>
-          </div>
-        </div>
-
-        {/* Call to Action Buttons */}
         <div className="grid grid-cols-3 md:grid-cols-1 gap-3">
           <button 
             className="flex items-center justify-center px-6 py-3 bg-[#DFBF00] text-gray-50 font-bold rounded-lg hover:bg-[#FFDF00] transition-colors"
             disabled={!isInStock}
+            onClick={addToCart}
           >
             <FaShoppingCart className="mr-2" />
             Add to Cart
           </button>
-          <button className="flex items-center justify-center px-6 py-3 border-2 border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors">
+          <button 
+            className="flex items-center justify-center px-6 py-3 border-2 border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
+            onClick={addToWishlist}
+          >
             <FaHeart className="mr-2 text-red-500" />
             Add to Wishlist
           </button>

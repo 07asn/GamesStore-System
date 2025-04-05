@@ -4,7 +4,8 @@ import CartItem from '../components/cart/CartItem';
 import CartSummary from '../components/cart/CartSummary';
 import ContinueShoppingButton from '../components/ui/ContinueShoppingButton';
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie'; // Import js-cookie to handle cookies
+import Cookies from 'js-cookie';
+import axios from 'axios';
 
 const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
@@ -22,7 +23,7 @@ const Cart = () => {
     };
 
     const handleIncrease = (product_id) => {
-        const updatedCart = cartItems.map(item => 
+        const updatedCart = cartItems.map(item =>
             item.product_id === product_id ? { ...item, quantity: item.quantity + 1 } : item
         );
         setCartItems(updatedCart);
@@ -30,7 +31,7 @@ const Cart = () => {
     };
 
     const handleDecrease = (product_id) => {
-        const updatedCart = cartItems.map(item => 
+        const updatedCart = cartItems.map(item =>
             item.product_id === product_id && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
         );
         setCartItems(updatedCart);
@@ -39,18 +40,18 @@ const Cart = () => {
 
     const handleContinueShopping = () => {
         console.log('Continue shopping');
-        // Navigate to shop page
     };
 
     const handleCheckout = () => {
-        // If user is logged in, navigate to payment
-        const isLoggedIn = Cookies.get('token');
-        if (isLoggedIn) {
-            navigate('/payment'); // This will navigate to the payment page
-        } else {
-            // If not logged in, open the login modal
-            alert("Please log in to proceed with checkout");
-        }
+        axios.get('http://localhost:5000/api/users/status', { withCredentials: true })
+            .then(response => {
+                if (response.data.loggedIn) {
+                    navigate('/payment');
+                } else {
+                    alert("Please log in to proceed with checkout");
+                }
+            })
+            .catch(error => console.error(error));
     };
 
     // Calculate subtotal (check for discounted_price if available)
@@ -113,8 +114,8 @@ const Cart = () => {
                         </div>
                         <h3 className="text-xl font-bold mb-2">Your cart is empty</h3>
                         <p className="text-gray-500 mb-6">Looks like you haven't added anything to your cart yet.</p>
-                        <a 
-                            href="/shop" 
+                        <a
+                            href="/shop"
                             className="inline-flex items-center gap-2 px-6 py-3 bg-[#FFDF00] text-gray-700 hover:bg-[#DFBF00]  font-medium rounded-lg transition-colors"
                         >
                             <ShoppingBag size={18} />

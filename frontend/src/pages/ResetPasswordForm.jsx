@@ -1,6 +1,8 @@
+// ResetPasswordForm.jsx
 import React, { useState, useEffect } from 'react';
 import { FaLock, FaEye, FaEyeSlash, FaCheck, FaTimes, FaExclamationTriangle } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 const ResetPasswordForm = () => {
   const [formState, setFormState] = useState({
@@ -13,6 +15,7 @@ const ResetPasswordForm = () => {
   const [submitted, setSubmitted] = useState(false);
   const [tokenValid, setTokenValid] = useState(null);
   const [passwordStrength, setPasswordStrength] = useState(0);
+  const [error, setError] = useState('');
   
   const location = useLocation();
   
@@ -20,19 +23,21 @@ const ResetPasswordForm = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const token = params.get('token');
+    console.log("Token from URL:", token);
     
     if (token) {
-      // Validate token (replace with your actual API call)
+      // Validate token (simulate API validation; replace with your actual API call if available)
       const validateToken = async () => {
         try {
-          // Simulating API validation
+          // Example: If you have an endpoint to validate the token, call it here.
+          // const res = await axios.get(`http://localhost:5000/api/users/validate-reset-token?token=${token}`);
+          // setTokenValid(res.data.valid);
           await new Promise(resolve => setTimeout(resolve, 1000));
           setTokenValid(true);
         } catch (error) {
           setTokenValid(false);
         }
       };
-      
       validateToken();
     } else {
       setTokenValid(false);
@@ -43,12 +48,10 @@ const ResetPasswordForm = () => {
   useEffect(() => {
     const { password } = formState;
     let strength = 0;
-    
     if (password.length >= 8) strength += 1;
     if (/[A-Z]/.test(password)) strength += 1;
     if (/[0-9]/.test(password)) strength += 1;
     if (/[^A-Za-z0-9]/.test(password)) strength += 1;
-    
     setPasswordStrength(strength);
   }, [formState.password]);
   
@@ -59,26 +62,37 @@ const ResetPasswordForm = () => {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     if (formState.password !== formState.confirmPassword) {
       alert("Passwords don't match");
       return;
     }
     
-    setLoading(true);
+    // Retrieve token again (in case needed)
+    const params = new URLSearchParams(location.search);
+    const token = params.get('token');
+    if (!token) {
+      setError("Reset token is missing.");
+      return;
+    }
     
+    setLoading(true);
     try {
-      // Replace with your actual API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const response = await axios.post('http://localhost:5000/api/users/reset-password', {
+        token,
+        newPassword: formState.password,
+      });
+      console.log("API response:", response.data);
       setSubmitted(true);
-    } catch (error) {
-      console.error('Error resetting password:', error);
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || "Failed to reset password.";
+      console.error("Error resetting password:", errorMessage);
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
   };
   
-  // If token is still being validated
+  // While token is being validated
   if (tokenValid === null) {
     return (
       <div className="backdrop-blur-xl bg-white/90 border border-gray-200 rounded-2xl p-8 md:p-10 shadow-lg transition-all duration-300 max-w-lg mx-auto text-center">
@@ -131,7 +145,7 @@ const ResetPasswordForm = () => {
     );
   }
   
-  // Main reset password form
+  // Main reset password form with original style and design
   return (
     <div className="backdrop-blur-xl bg-white/90 border border-gray-200 rounded-2xl p-8 md:p-10 shadow-lg hover:shadow-xl transition-all duration-300 max-w-lg mx-auto">
       <div className="text-center mb-8">

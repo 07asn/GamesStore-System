@@ -3,25 +3,27 @@ const express = require('express');
 const router = express.Router();
 const adminController = require('../controllers/adminController');
 const authenticate = require('../middleware/authMiddleware');
-// If you have an admin authorization middleware, you could include it here:
-// const authorizeAdmin = require('../../middleware/adminMiddleware');
-// GET all Blocked users 
-router.get('/users/deleted', adminController.getDeletedUsers);
+const authorizeAdmin = require('../middleware/adminMiddleware');
+
+// GET all blocked users 
+router.get('/users/deleted', authenticate, authorizeAdmin, adminController.getDeletedUsers);
 
 // POST new user 
-router.post('/users', adminController.createUser);
+router.post('/users', authenticate, authorizeAdmin, adminController.createUser);
 
-router.get('/users/:userId/orders', adminController.getUserOrderHistory);
+// GET user order history
+router.get('/users/:userId/orders', authenticate, authorizeAdmin, adminController.getUserOrderHistory);
 
 // GET all users
-router.get('/users' /*,authenticate*/ /*, authorizeAdmin */, adminController.getAllUsers);
+router.get('/users', authenticate, authorizeAdmin, adminController.getAllUsers);
 
 // PUT update a user (by user_id)
-router.put('/users/:id' /*,authenticate*/ /*, authorizeAdmin */, adminController.updateUser);
+router.put('/users/:id', authenticate, authorizeAdmin, adminController.updateUser);
 
-router.patch('/users/:id/block', adminController.blockUnblockUser);
+// PATCH block/unblock a user
+router.patch('/users/:id/block', authenticate, authorizeAdmin, adminController.blockUnblockUser);
 
 // DELETE a user (by user_id)
-router.delete('/users/:id'/*, authenticate , authorizeAdmin */, adminController.deleteUser);
+router.delete('/users/:id', authenticate, authorizeAdmin, adminController.deleteUser);
 
 module.exports = router;

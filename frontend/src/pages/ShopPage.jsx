@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
+import { useSearchParams } from "react-router-dom";
 import { Search, ShoppingBag, Filter, ChevronDown, Heart, Tag, Star } from 'lucide-react';
 import ProductCard from '../components/shop/ProductCard';
 
@@ -18,7 +19,7 @@ const COLORS = {
 };
 
 // Filter Bar Component
-const FilterBar = ({ onFilterChange, onSortChange, onSearch }) => {
+const FilterBar = ({ categories, onFilterChange, onSortChange, onSearch, activeCategory }) => {
   return (
     <div className="rounded-xl shadow-md p-6 mb-8 border" style={{ 
       backgroundColor: COLORS.offWhite,
@@ -40,7 +41,7 @@ const FilterBar = ({ onFilterChange, onSortChange, onSearch }) => {
             }}
             onFocus={(e) => e.target.style.boxShadow = COLORS.glowGold}
             onBlur={(e) => e.target.style.boxShadow = '0 2px 4px rgba(0,0,0,0.05)'}
-            onChange={(e) => onSearch && onSearch(e.target.value)}
+            onChange={(e) => onSearch(e.target.value)}
           />
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2" 
                   size={18} 
@@ -48,7 +49,7 @@ const FilterBar = ({ onFilterChange, onSortChange, onSearch }) => {
         </div>
         
         <div className="flex flex-wrap items-center gap-4 w-full md:w-auto">
-          {/* Filters */}
+          {/* Category Filter */}
           <div className="relative group w-full sm:w-auto">
             <select
               aria-label="Category"
@@ -62,14 +63,15 @@ const FilterBar = ({ onFilterChange, onSortChange, onSearch }) => {
               }}
               onFocus={(e) => e.target.style.boxShadow = COLORS.glowGold}
               onBlur={(e) => e.target.style.boxShadow = '0 2px 4px rgba(0,0,0,0.05)'}
-              onChange={(e) => onFilterChange && onFilterChange(e.target.value)}
+              onChange={(e) => onFilterChange(e.target.value)}
+              value={activeCategory}
             >
               <option value="all">All Categories</option>
-              <option value="steam-online">Steam Online</option>
-              <option value="steam-offline">Steam Offline</option>
-              <option value="action">Action Games</option>
-              <option value="adventure">Adventure</option>
-              <option value="sports">Sports</option>
+              {categories.map(category => (
+                <option key={category.category_id} value={category.category_id}>
+                  {category.name}
+                </option>
+              ))}
             </select>
             <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2" 
                     size={16} 
@@ -93,7 +95,7 @@ const FilterBar = ({ onFilterChange, onSortChange, onSearch }) => {
               }}
               onFocus={(e) => e.target.style.boxShadow = COLORS.glowGold}
               onBlur={(e) => e.target.style.boxShadow = '0 2px 4px rgba(0,0,0,0.05)'}
-              onChange={(e) => onSortChange && onSortChange(e.target.value)}
+              onChange={(e) => onSortChange(e.target.value)}
             >
               <option value="featured">Featured</option>
               <option value="latest">Latest</option>
@@ -115,44 +117,124 @@ const FilterBar = ({ onFilterChange, onSortChange, onSearch }) => {
 };
 
 const ShopPage = () => {
-  const [products, setProducts] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [activeCategory, setActiveCategory] = useState('all');
+  const [sortOption, setSortOption] = useState('featured');
+  const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch products from backend
+  // Get category query parameter using useSearchParams
+  const [searchParams, setSearchParams] = useSearchParams();
+  const categoryFromQuery = searchParams.get('category') || 'all';
+
+  // Set activeCategory from query parameter on mount or when it changes
   useEffect(() => {
-    const fetchProducts = async () => {
+    setActiveCategory(categoryFromQuery);
+  }, [categoryFromQuery]);
+
+  // Fetch products and categories from backend
+  useEffect(() => {
+    const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get('http://localhost:5000/api/products');
-        console.log("Fetched products:", response.data);  // Log the fetched products
-        setProducts(response.data);
+        // Fetch products
+        const productsResponse = await axios.get('http://localhost:5000/api/products');
+        setAllProducts(productsResponse.data);
+        
+        // Fetch categories
+        const categoriesResponse = await axios.get('http://localhost:5000/api/categories/all');
+        setCategories(categoriesResponse.data);
+        
         setIsLoading(false);
       } catch (error) {
-        console.error('Error fetching products:', error);
-        setError('Failed to load products. Please try again later.');
+        console.error('Error fetching data:', error);
+        setError('Failed to load data. Please try again later.');
         setIsLoading(false);
       }
     };
     
-    fetchProducts();
+    fetchData();
   }, []);
-  
+
+  // Apply filters, search, and sort whenever dependencies change
+  useEffect(() => {
+    if (isLoading) return;
+
+    let result = [...allProducts];
+
+    // Apply category filter (if not "all")
+    if (activeCategory !== 'all') {
+      result = result.filter(product => {
+        // Try both snake_case and camelCase keys for category id
+        const productCategoryId =
+          product.category_id ||
+          product.categoryId ||
+          (product.category && (product.category.category_id || product.category.categoryId));
+        return Number(productCategoryId) === Number(activeCategory);
+      });
+    }
+
+    // Apply search
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(product => 
+        product.name.toLowerCase().includes(query) ||
+        (product.description && product.description.toLowerCase().includes(query))
+      );
+    }
+
+    // Apply sorting
+    switch (sortOption) {
+      case 'latest':
+        result.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        break;
+      case 'low-price':
+        result.sort((a, b) => (a.discounted_price || a.price) - (b.discounted_price || b.price));
+        break;
+      case 'high-price':
+        result.sort((a, b) => (b.discounted_price || b.price) - (a.discounted_price || a.price));
+        break;
+      case 'best-seller':
+        // Assuming you have a sales_count field - adjust as needed
+        result.sort((a, b) => (b.sales_count || 0) - (a.sales_count || 0));
+        break;
+      case 'featured':
+      default:
+        // Default sorting (could be by ID or any other field)
+        result.sort((a, b) => b.product_id - a.product_id);
+    }
+
+    setFilteredProducts(result);
+  }, [allProducts, activeCategory, searchQuery, sortOption, isLoading]);
+
   const handleFilterChange = (value) => {
-    console.log('Filter changed to:', value);
     setActiveCategory(value);
-    // Implement filtering logic here
+    // Update the URL search parameter when category changes
+    const newSearchParams = new URLSearchParams(searchParams);
+    if (value === 'all') {
+      newSearchParams.delete('category');
+    } else {
+      newSearchParams.set('category', value);
+    }
+    setSearchParams(newSearchParams);
   };
 
   const handleSortChange = (value) => {
-    console.log('Sort changed to:', value);
-    // Implement sorting logic here
+    setSortOption(value);
   };
 
   const handleSearch = (value) => {
-    console.log('Search query:', value);
-    // Implement search logic here
+    setSearchQuery(value);
+  };
+
+  // Get category name for display
+  const getCategoryName = () => {
+    if (activeCategory === 'all') return 'All';
+    const category = categories.find(c => Number(c.category_id) === Number(activeCategory));
+    return category ? category.name : 'Selected';
   };
 
   return (
@@ -172,21 +254,23 @@ const ShopPage = () => {
         </div>
         
         <FilterBar 
+          categories={categories}
           onFilterChange={handleFilterChange} 
           onSortChange={handleSortChange}
           onSearch={handleSearch}
+          activeCategory={activeCategory}
         />
 
         <section>
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-semibold" style={{ color: COLORS.darkGray }}>
-              {activeCategory === 'all' ? 'All Games' : `${activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1)} Games`}
+              {getCategoryName()} Games
               <span className="ml-2 text-sm py-1 px-3 rounded-full" 
                     style={{ 
                       backgroundColor: COLORS.gold,
                       color: COLORS.black
                     }}>
-                {products.length}
+                {filteredProducts.length}
               </span>
             </h2>
           </div>
@@ -214,7 +298,7 @@ const ShopPage = () => {
             </div>
           )}
           
-          {!isLoading && !error && products.length === 0 && (
+          {!isLoading && !error && filteredProducts.length === 0 && (
             <div className="text-center py-20 rounded-xl border" style={{
               backgroundColor: COLORS.offWhite,
               borderColor: COLORS.lightGray
@@ -231,16 +315,20 @@ const ShopPage = () => {
                 }}
                 onMouseOver={(e) => e.target.style.boxShadow = COLORS.glowGold}
                 onMouseOut={(e) => e.target.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)'}
-                onClick={() => setActiveCategory('all')}
+                onClick={() => {
+                  setActiveCategory('all');
+                  setSearchQuery('');
+                  setSearchParams({});
+                }}
               >
                 View all games
               </button>
             </div>
           )}
 
-          {!isLoading && !error && products.length > 0 && (
+          {!isLoading && !error && filteredProducts.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {products.map((prod) => (
+              {filteredProducts.map((prod) => (
                 <ProductCard 
                   key={prod.product_id} 
                   product_id={prod.product_id}

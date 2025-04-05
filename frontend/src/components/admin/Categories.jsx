@@ -177,6 +177,7 @@ const Categories = () => {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
+        withCredentials:true
       });
       
       setCategories((prevCategories) => [response.data.category, ...prevCategories]);
@@ -207,6 +208,7 @@ const Categories = () => {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
+          withCredentials:true
         }
       );
 
@@ -254,7 +256,7 @@ const Categories = () => {
 
     if (result.isConfirmed) {
       try {
-        await axios.patch(`http://localhost:5000/api/categories/${categoryId}/delete`);
+        await axios.patch(`http://localhost:5000/api/categories/${categoryId}/delete`,{withCredentials:true});
         
         const categoryToMove = categories.find((cat) => cat.category_id === categoryId);
         
@@ -278,7 +280,7 @@ const Categories = () => {
   // Restore deleted category
   const handleRestoreCategory = async (categoryId) => {
     try {
-      await axios.patch(`http://localhost:5000/api/categories/${categoryId}/restore`);
+      await axios.patch(`http://localhost:5000/api/categories/${categoryId}/restore`,{withCredentials:true});
       
       const categoryToRestore = deletedCategories.find((cat) => cat.category_id === categoryId);
       

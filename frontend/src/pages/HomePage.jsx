@@ -14,9 +14,8 @@ const HomePage = () => {
   return (
     <div>
       <HeroHeader />
-      <QuickSearch />
-      <Categories />
       <Offers />
+      <Categories />
       <HowWork />
       <LibraryGames />
       <WhyUs />

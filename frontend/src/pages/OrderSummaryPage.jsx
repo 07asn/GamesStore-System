@@ -1,4 +1,3 @@
-// src/components/OrderSummaryPage.jsx
 import React, { useEffect, useState } from 'react';
 import { useLocation, useParams, Link } from 'react-router-dom';
 import axios from 'axios';
@@ -44,8 +43,8 @@ const OrderSummaryPage = () => {
               price: item.price_at_purchase,
               amount: item.quantity,
               total: (item.quantity * item.price_at_purchase).toFixed(2),
-              // Use the assigned inventory asset code as the key if available; otherwise, use product keys.
-              keys: item.inventory ? [item.inventory.asset_code] : (item.product?.keys || [])
+              // Use the assigned inventory asset code as the key if available; otherwise, an empty array.
+              keys: item.inventory ? [item.inventory.asset_code] : []
             }));
             setProducts(transformedProducts);
           } else {
@@ -84,6 +83,36 @@ const OrderSummaryPage = () => {
 
   const purchaseDate = new Date(order.order_date).toLocaleString();
   const normalizedStatus = order.order_status?.toLowerCase().trim() || 'pending';
+
+  // Function to submit the review
+  const handleSubmitReview = async () => {
+    try {
+      // For example, review the first product in the order.
+      if (!order.order_items || order.order_items.length === 0) {
+        alert("No product found to review");
+        return;
+      }
+      const product_id = order.order_items[0].product.product_id;
+      const response = await axios.post(
+        'http://localhost:5000/api/reviews/add',
+        {
+          product_id,
+          rating: selectedRating,
+          review: feedback,
+        },
+        { withCredentials: true }
+      );
+      console.log('Review submitted:', response.data);
+      alert("Review submitted successfully");
+      setRatingModalOpen(false);
+      // Optionally, clear rating and feedback:
+      setSelectedRating(0);
+      setFeedback('');
+    } catch (err) {
+      console.error('Error submitting review:', err);
+      alert("Error submitting review. Please try again.");
+    }
+  };
 
   return (
     <section className="max-w-4xl mx-auto p-6 space-y-8">
@@ -134,10 +163,7 @@ const OrderSummaryPage = () => {
         setSelectedRating={setSelectedRating}
         feedback={feedback}
         setFeedback={setFeedback}
-        onSubmit={() => {
-          console.log('Submitted Rating:', selectedRating, feedback);
-          setRatingModalOpen(false);
-        }}
+        onSubmit={handleSubmitReview} // Use our submit function here
       />
     </section>
   );

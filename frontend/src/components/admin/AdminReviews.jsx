@@ -51,7 +51,7 @@ const AdminReviews = () => {
         url += `&rating=${rating}`;
       }
       
-      const response = await axios.get(url);
+      const response = await axios.get(url, { withCredentials: true });
       setReviews(response.data.data);
       setPagination({
         currentPage: response.data.meta.currentPage,
@@ -77,7 +77,7 @@ const AdminReviews = () => {
         url += `&search=${encodeURIComponent(search)}`;
       }
       
-      const response = await axios.get(url);
+      const response = await axios.get(url, { withCredentials: true });
       setDeletedReviews(response.data.data);
       setPagination({
         currentPage: response.data.meta.currentPage,
@@ -136,7 +136,7 @@ const AdminReviews = () => {
 
     if (result.isConfirmed) {
       try {
-        await axios.patch(`http://localhost:5000/api/reviews/${reviewId}/delete`);
+        await axios.patch(`http://localhost:5000/api/reviews/${reviewId}/delete`,{}, { withCredentials: true });
         showSuccess('Review Archived');
         fetchReviews(pagination.currentPage, pagination.perPage, searchQuery, ratingFilter);
       } catch (error) {
@@ -148,7 +148,7 @@ const AdminReviews = () => {
   // Handle review restoration
   const handleRestoreReview = async (reviewId) => {
     try {
-      await axios.patch(`http://localhost:5000/api/reviews/${reviewId}/restore`);
+      await axios.patch(`http://localhost:5000/api/reviews/${reviewId}/restore`,{},{ withCredentials: true });
       showSuccess('Review Restored');
       fetchDeletedReviews(pagination.currentPage, pagination.perPage, searchQuery);
     } catch (error) {

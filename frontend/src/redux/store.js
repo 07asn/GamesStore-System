@@ -2,12 +2,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 import navbarReducer from './navbarSlice';
 import headerReducer from './headerSlice';
+import authReducer from './authSlice';
+
 import accountDetailsReducer from './accountDetailsSlice';
 
 export default configureStore({
   reducer: {
     navbar: navbarReducer,
     header: headerReducer,
+    auth:authReducer,
     accountDetails: accountDetailsReducer
   },
 });

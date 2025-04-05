@@ -15,7 +15,7 @@ async function getProducts(req, res) {
       where: {
         is_deleted: false,
       },
-      attributes: ['product_id', 'name', 'discounted_price', 'description', 'price', 'stock', 'delivery_type', 'platform', 'created_at', 'updated_at'],
+      attributes: ['product_id', 'name', 'discounted_price', 'description', 'price','category_id', 'stock', 'delivery_type', 'platform', 'created_at', 'updated_at'],
       include: [
         {
           model: Product_Image,
@@ -451,6 +451,40 @@ async function restoreProduct(req, res) {
 }
 
 
+const searchProducts = async (req, res) => {
+  try {
+    const { q } = req.query;
+    console.log("Search query:", q);
+    if (!q || q.trim() === '') {
+      return res.status(400).json({ message: 'Query parameter "q" is required.' });
+    }
+    
+    const products = await Product.findAll({
+      where: {
+        name: {
+          [Op.iLike]: `%${q}%`
+        },
+        is_deleted: false,
+      },
+      include: [
+        {
+          model: Product_Image,
+          as: 'images',
+          attributes: ['image_url'],
+          // If you want just the first image, you might later pick product.images[0].image_url in your client.
+          required: false,
+        }
+      ],
+      limit: 10,
+    });
+    
+    res.json(products);
+  } catch (error) {
+    console.error('Error searching products:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
 module.exports = {
   getProducts,
   getProductById,
@@ -460,5 +494,6 @@ module.exports = {
   updateProduct,
   deleteProduct,
   restoreProduct,
-  getDeletedProducts
+  getDeletedProducts,
+  searchProducts,
 };

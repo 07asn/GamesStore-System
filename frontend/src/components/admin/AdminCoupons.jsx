@@ -129,7 +129,7 @@ const AdminCoupons = () => {
 
         setIsLoading(true);
         try {
-            const response = await axios.post('http://localhost:5000/api/coupons', newCoupon);
+            const response = await axios.post('http://localhost:5000/api/coupons', newCoupon, {withCredentials: true});
             setCoupons((prevCoupons) => [response.data.coupon, ...prevCoupons]);
             resetForm();
             showSuccess('Coupon Created Successfully');
@@ -151,7 +151,8 @@ const AdminCoupons = () => {
         try {
             const response = await axios.put(
                 `http://localhost:5000/api/coupons/${selectedCoupon.coupon_id}`,
-                newCoupon
+                newCoupon,
+                { withCredentials: true }
             );
             setCoupons((prevCoupons) =>
                 prevCoupons.map((coupon) =>
@@ -183,7 +184,11 @@ const AdminCoupons = () => {
 
         if (result.isConfirmed) {
             try {
-                await axios.patch(`http://localhost:5000/api/coupons/${couponId}/delete`);
+              await axios.patch(
+                `http://localhost:5000/api/coupons/${couponId}/delete`,
+                {},
+                { withCredentials: true }
+              );
                 const couponToMove = coupons.find((coupon) => coupon.coupon_id === couponId);
                 const updatedCoupons = coupons.filter((coupon) => coupon.coupon_id !== couponId);
                 setCoupons(updatedCoupons);
@@ -197,7 +202,7 @@ const AdminCoupons = () => {
 
     const handleRestoreCoupon = async (couponId) => {
         try {
-            await axios.patch(`http://localhost:5000/api/coupons/${couponId}/restore`);
+            await axios.patch(`http://localhost:5000/api/coupons/${couponId}/restore`,{}, { withCredentials: true });
             const couponToRestore = deletedCoupons.find((coupon) => coupon.coupon_id === couponId);
             const updatedDeletedCoupons = deletedCoupons.filter((coupon) => coupon.coupon_id !== couponId);
             setDeletedCoupons(updatedDeletedCoupons);

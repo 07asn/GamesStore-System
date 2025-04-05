@@ -7,47 +7,73 @@ import * as Yup from 'yup';
 import GoogleSignInButton from './GoogleSignInButton';
 import ForgotPasswordLink from './ForgotPasswordLink';
 import { Link, useNavigate, useLocation  } from 'react-router-dom';
-
+import swal from 'sweetalert';
 const LoginForm = () => {
     const [loading, setLoading] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
     const [serverError, setServerError] = useState('');
-    const navigate = useNavigate();
-    const location = useLocation(); 
-    
-    // Define validation schema with Yup
-    const validationSchema = Yup.object({
-        email: Yup.string()
-            .email('Invalid email address')
-            .required('Email is required'),
-        password: Yup.string()
-            .min(6, 'Password must be at least 6 characters')
-            .required('Password is required')
-    });
+    const [showPassword, setShowPassword] = useState(false);
 
-    // Initialize Formik
+    const navigate = useNavigate();
+    const location = useLocation();
+  
+    const validationSchema = Yup.object({
+      email: Yup.string()
+        .email('Invalid email address')
+        .required('Email is required'),
+      password: Yup.string()
+        .min(6, 'Password must be at least 6 characters')
+        .required('Password is required')
+    });
+  
     const formik = useFormik({
-        initialValues: {
-            email: '',
-            password: ''
-        },
-        validationSchema,
-        onSubmit: async (values) => {
-            setLoading(true);
-            setServerError('');
-            
-            try {
-                const response = await axios.post('http://localhost:5000/api/users/login', values);
-                
-                Cookie.set('token', response.data.token, { expires: 1 });
-                const previousPage = location.state?.from || '/';
-                navigate(previousPage);
-            } catch (error) {
-                setServerError(error.response?.data?.message || 'An error occurred during login');
-            } finally {
-                setLoading(false);
+      initialValues: {
+        email: '',
+        password: ''
+      },
+      validationSchema,
+      onSubmit: async (values) => {
+        setLoading(true);
+        setServerError('');
+        
+        try {
+            const response = await axios.post('http://localhost:5000/api/users/login', values);
+            console.log('Login response:', response);
+            Cookie.set('token', response.data.token, { expires: 1 });
+            localStorage.setItem('isLoggedIn', 'true');
+            window.dispatchEvent(new Event('userLoggedIn'));
+            // Check if email is not verified
+            if (response.data.email_verified === false) {
+              swal({
+                title: "Email Not Verified!",
+                text: "Your email address has not been verified. Click 'Verify Email' to receive a verification email.",
+                icon: "warning",
+                buttons: {
+                  cancel: "Cancel",
+                  confirm: "Verify Email"
+                }
+              }).then((willVerify) => {
+                if (willVerify) {
+                  axios.post('http://localhost:5000/api/users/resend-verification', { email: values.email })
+                    .then(() => {
+                      swal("Verification email sent!", "Please check your inbox.", "success");
+                    })
+                    .catch(() => {
+                      swal("Oops!", "Something went wrong. Please try again later.", "error");
+                    });
+                }
+              });
             }
+            
+            const previousPage = location.state?.from || '/';
+            navigate(previousPage);
+          } catch (error) {
+            console.error('Login error:', error);
+            setServerError(error.response?.data?.message || 'An error occurred during login');
+          }
+           finally {
+          setLoading(false);
         }
+      }
     });
 
     return (

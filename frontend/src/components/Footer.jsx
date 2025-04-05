@@ -1,11 +1,33 @@
 // src/components/Footer.jsx
 import React from 'react';
-import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaLongArrowAltRight } from 'react-icons/fa';
+import { 
+  FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, 
+  FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaLongArrowAltRight 
+} from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   
+  const quickLinks = [
+    { name: 'Home', path: '/' },
+    { name: 'About Us', path: '/about-us' },
+    { name: 'Services', path: '/services' },
+
+    { name: 'Games', path: '/shop' },
+    { name: 'Contact', path: '/contact' },
+  ];
+
+
+  const serviceLinks = [
+    { name: 'Games Top Played', path: '/top-played' },
+    { name: 'eSports Games', path: '/shop?category=5' },
+    { name: 'Gaming Accounts', path: '/shop?category=2' },
+    { name: 'Subscriptions', path: '/shop?category=1' },
+    { name: 'Support', path: '/contact' },
+    { name: 'Join Us', path: '/register' },
+  ];
+
   return (
     <footer className="bg-gradient-to-b from-[#1a1a1a] to-[#121212] text-white relative">
       {/* Decorative Top Border */}
@@ -30,15 +52,15 @@ const Footer = () => {
             <div className="space-y-4 pt-2">
               <div className="flex items-center text-gray-400 hover:text-[#FFDF00] transition duration-300">
                 <FaMapMarkerAlt className="mr-3 text-[#FFDF00]" />
-                <p>123 Gaming Street, Digital City</p>
+                <p>Amman, Jordan</p>
               </div>
               <div className="flex items-center text-gray-400 hover:text-[#FFDF00] transition duration-300">
                 <FaPhoneAlt className="mr-3 text-[#FFDF00]" />
-                <p>+1 (555) 123-4567</p>
+                <p>+962 7 888 62 798</p>
               </div>
               <div className="flex items-center text-gray-400 hover:text-[#FFDF00] transition duration-300">
                 <FaEnvelope className="mr-3 text-[#FFDF00]" />
-                <p>contact@07asn.com</p>
+                <p>07asn.m@gmail.com</p>
               </div>
             </div>
           </div>
@@ -50,14 +72,14 @@ const Footer = () => {
               <span className="absolute bottom-0 left-0 w-2/3 h-1 bg-[#FFDF00] rounded-full -mb-2"></span>
             </h3>
             <ul className="space-y-3">
-              {['Home', 'About Us', 'Services', 'Games', 'Tournaments', 'Contact'].map((item) => (
-                <li key={item} className="group">
+              {quickLinks.map((item) => (
+                <li key={item.name} className="group">
                   <Link 
-                    to={`/${item.toLowerCase().replace(/\s+/g, '-')}`} 
+                    to={item.path} 
                     className="flex items-center text-gray-400 group-hover:text-[#FFDF00] transition-all duration-300 group-hover:translate-x-2"
                   >
                     <FaLongArrowAltRight className="mr-2 opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                    {item}
+                    {item.name}
                   </Link>
                 </li>
               ))}
@@ -71,14 +93,14 @@ const Footer = () => {
               <span className="absolute bottom-0 left-0 w-2/3 h-1 bg-[#FFDF00] rounded-full -mb-2"></span>
             </h3>
             <ul className="space-y-3">
-              {['Game Development', 'eSports Events', 'Gaming Community', 'Merchandise', 'Support', 'Partnerships'].map((item) => (
-                <li key={item} className="group">
+              {serviceLinks.map((item) => (
+                <li key={item.name} className="group">
                   <Link 
-                    to={`/services/${item.toLowerCase().replace(/\s+/g, '-')}`} 
+                    to={item.path} 
                     className="flex items-center text-gray-400 group-hover:text-[#FFDF00] transition-all duration-300 group-hover:translate-x-2"
                   >
                     <FaLongArrowAltRight className="mr-2 opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                    {item}
+                    {item.name}
                   </Link>
                 </li>
               ))}
@@ -112,10 +134,10 @@ const Footer = () => {
               <h4 className="text-lg font-medium mb-4">Follow Us</h4>
               <div className="flex space-x-3">
                 {[
-                  { icon: <FaFacebookF className="text-[#1a1a1a]" />, color: '#3b5998', url: 'https://facebook.com' },
-                  { icon: <FaTwitter className="text-[#1a1a1a]" />, color: '#1DA1F2', url: 'https://twitter.com' },
-                  { icon: <FaInstagram className="text-[#1a1a1a]" />, color: '#E4405F', url: 'https://instagram.com' },
-                  { icon: <FaLinkedinIn className="text-[#1a1a1a]" />, color: '#0077B5', url: 'https://linkedin.com' }
+                  { icon: <FaFacebookF className="text-[#1a1a1a]" />, url: 'https://www.facebook.com/profile.php?id=100004036249506' },
+                  { icon: <FaTwitter className="text-[#1a1a1a]" />, url: 'https://x.com/O7asn' },
+                  { icon: <FaInstagram className="text-[#1a1a1a]" />, url: 'https://www.instagram.com/07asn/' },
+                  { icon: <FaLinkedinIn className="text-[#1a1a1a]" />, url: 'https://www.linkedin.com/in/07asn/' }
                 ].map((social, index) => (
                   <a
                     key={index}
@@ -144,6 +166,7 @@ const Footer = () => {
               &copy; {currentYear} <span className="text-[#FFDF00]">07ASN</span>. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
+              {/* Make sure these pages exist or update the paths accordingly */}
               <Link to="/privacy-policy" className="text-gray-500 hover:text-[#FFDF00] text-sm transition duration-300">
                 Privacy Policy
               </Link>

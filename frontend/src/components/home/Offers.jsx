@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+import { FaHeart, FaShoppingCart } from 'react-icons/fa';
 
 const COLORS = {
   gold: '#DFBF00',
@@ -66,6 +69,56 @@ const Offers = () => {
     sliderRef.current.scrollLeft = scrollLeft - x;
   };
 
+  const formatPrice = (price) => {
+    if (!price) return "0.00";
+    const number = typeof price === 'number' ? price : parseFloat(price);
+    return number.toFixed(2);
+  };
+
+  const addToCart = (product) => {
+    const finalPrice = product.discounted_price ? parseFloat(product.discounted_price) : parseFloat(product.price);
+    const cartProduct = {
+      product_id: product.product_id,
+      name: product.name,
+      price: product.price,
+      discounted_price: product.discounted_price,
+      productImage: product.images[0]?.image_url || '/img/fallback-product.jpg',
+      finalPrice,
+      quantity: 1,
+    };
+
+    let existingCart = [];
+    try {
+      const cartData = localStorage.getItem('cart');
+      if (cartData) {
+        existingCart = JSON.parse(cartData);
+      }
+    } catch (error) {
+      console.error('Error parsing cart data', error);
+      existingCart = [];
+    }
+
+    const productIndex = existingCart.findIndex(item => item.product_id === cartProduct.product_id);
+
+    if (productIndex >= 0) {
+      existingCart[productIndex].quantity += 1;
+    } else {
+      existingCart.push(cartProduct);
+    }
+
+    localStorage.setItem('cart', JSON.stringify(existingCart));
+
+    toast.success(`${product.name} has been added to the cart!`, {
+      position: 'bottom-left',
+      duration: 3000,
+      style: {
+        background: '#4caf50',
+        color: '#fff',
+        fontWeight: 'bold',
+      },
+    });
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -76,12 +129,6 @@ const Offers = () => {
       </div>
     );
   }
-
-  const formatPrice = (price) => {
-    if (!price) return "0.00";
-    const number = typeof price === 'number' ? price : parseFloat(price);
-    return number.toFixed(2);
-  };
 
   return (
     <div>
@@ -120,14 +167,16 @@ const Offers = () => {
                     <span className="relative z-10">75% OFF</span>
                   </div>
 
-                  <div className="w-full h-64 relative overflow-hidden rounded-xl mb-6 border-4 border-gray-100 bg-gray-50 z-5">
+                  <Link to={`/products/${product.product_id}`} className="w-full h-64 relative overflow-hidden rounded-xl mb-6 border-4 border-gray-100 bg-gray-50 z-5">
                     <img src={product.images[0]?.image_url || '/img/fallback-product.jpg'} alt={product.name} className="w-full h-full object-contain transition-transform duration-500 ease-in-out hover:scale-110" onError={(e) => { e.target.src = '/img/fallback-product.jpg'; }} loading="lazy" />
-                  </div>
+                  </Link>
 
                   <div className="w-full flex-1 flex flex-col justify-between z-5">
                     <div>
                       <h2 className="text-2xl font-bold text-gray-900 text-center mb-4 line-clamp-2 px-4">
-                        <span className="bg-clip-text text-transparent" style={{ backgroundImage: COLORS.goldGradient }}>{product.name}</span>
+                        <Link to={`/products/${product.product_id}`} className="no-underline hover:underline">
+                          <span className="bg-clip-text text-transparent" style={{ backgroundImage: COLORS.goldGradient }}>{product.name}</span>
+                        </Link>
                       </h2>
                       {product.description && (
                         <div className="relative group/desc mb-6">
@@ -144,11 +193,17 @@ const Offers = () => {
                       <span className="text-red-600 font-bold text-2xl bg-red-50 px-3 py-1 rounded-full">JD {formatPrice(product.discounted_price || product.price)}</span>
                     </div>
 
-                    <button className="relative w-full h-12 rounded-xl bg-gradient-to-r from-[#DFBF00] to-[#C1A811] flex items-center justify-center overflow-hidden transition-all duration-300 hover:from-[#C1A811] hover:to-[#C1A811] group/button shadow-md hover:shadow-lg" type="button">
+                    <button 
+                      className="relative w-full h-12 rounded-xl bg-gradient-to-r from-[#DFBF00] to-[#C1A811] flex items-center justify-center overflow-hidden transition-all duration-300 hover:from-[#C1A811] hover:to-[#C1A811] group/button shadow-md hover:shadow-lg" 
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        addToCart(product);
+                      }}
+                    >
                       <span className="absolute right-0 w-12 h-full bg-gray-50 flex items-center justify-center transition-all duration-300 group-hover/button:w-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#DFBF00]" viewBox="0 0 576 512">
-                          <path fill="currentColor" d="M0 24C0 10.7 10.7 0 24 0..." />
-                        </svg>
+                        <FaShoppingCart className="h-5 w-5 text-[#DFBF00]" />
                       </span>
                       <span className="text-white font-semibold tracking-wide transition-all duration-300 group-hover/button:pr-8">Add to Cart</span>
                     </button>

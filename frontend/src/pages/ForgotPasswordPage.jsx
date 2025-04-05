@@ -1,23 +1,28 @@
+// ForgotPasswordPage.jsx
 import React, { useState } from 'react';
 import { FaEnvelope, FaArrowLeft } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
-    // Simulate API call
+    setError('');
     try {
-      // Replace with your actual API call to send password reset email
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Call the backend forgot-password endpoint
+      const response = await axios.post('http://localhost:5000/api/users/forgot-password', { email });
+      console.log(response.data.message);
       setSubmitted(true);
-    } catch (error) {
-      console.error('Error sending reset email:', error);
+    } catch (err) {
+      console.error('Error sending reset email:', err);
+      const errorMessage = err.response?.data?.message || 'An error occurred. Please try again.';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -33,6 +38,12 @@ const ForgotPasswordPage = () => {
             : "Check your email for a password reset link"}
         </p>
       </div>
+
+      {error && (
+        <p className="text-center text-red-500 mb-4">
+          {error}
+        </p>
+      )}
 
       {!submitted ? (
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -72,17 +83,14 @@ const ForgotPasswordPage = () => {
               <FaEnvelope className="text-[#2A2A2A] text-xl" />
             </div>
           </div>
-          
           <p className="text-[#2A2A2A]">
             We've sent a password reset link to<br />
             <span className="font-medium">{email}</span>
           </p>
-          
           <p className="text-sm text-[#818181]">
             Check your inbox and click on the link to reset your password.
             If you don't see it, please check your spam folder.
           </p>
-          
           <button
             onClick={() => setSubmitted(false)}
             className="text-[#DFBF00] hover:text-[#FFDF00] transition-colors duration-200 text-sm"

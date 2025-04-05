@@ -17,5 +17,68 @@
     }
   }
 
+  {/* Modern Animation CSS */}
+@keyframes subtleGlow {
+  0%, 100% {
+    color: #111827;
+    text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+  50% {
+    color: #4f46e5;
+    text-shadow: 0 0 15px rgba(79, 70, 229, 0.15);
+  }
+}
+
+@keyframes borderFlash {
+  0%, 100% {
+    border-color: transparent;
+  }
+  50% {
+    border-color: rgba(79, 70, 229, 0.3);
+  }
+}
+
+.modern-text {
+  position: relative;
+  letter-spacing: -0.02em;
+  font-feature-settings: "salt" on, "ss01" on;
+  transition: all 0.25s ease;
+}
+
+/* Clean, modern approach with subtle interactions */
+.logo-container:hover .modern-text {
+  animation: subtleGlow 2s ease-in-out infinite;
+  letter-spacing: 0;
+}
+
+/* Responsive behaviors */
+@media (min-width: 768px) {
+  .logo-container {
+    padding: 0.75rem 0;
+  }
+  
+  .modern-text {
+    font-size: 1.5rem;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .modern-text {
+    color: #f3f4f6;
+  }
+  
+  @keyframes subtleGlow {
+    0%, 100% {
+      color: #f3f4f6;
+      text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    }
+    50% {
+      color: #818cf8;
+      text-shadow: 0 0 15px rgba(129, 140, 248, 0.3);
+    }
+  }
+}
+  
 
   

@@ -48,11 +48,101 @@ const OrdersHistory = () => {
 
   if (!orders || orders.length === 0) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center">
-        <p className="text-gray-700 text-lg">No orders found.</p>
-        <Link to="/shop" className="mt-4 text-blue-500 underline hover:text-blue-700">
-          Back to shop
-        </Link>
+      <div className="min-h-screen flex flex-col items-center justify-center" style={{
+        color: '#F5E6B3'
+      }}>
+        <div className="p-10 rounded-xl relative overflow-hidden" style={{
+          background: 'linear-gradient(145deg, rgba(34, 34, 34, 0.7) 0%, rgba(14, 14, 14, 0.8) 100%)',
+          boxShadow: '0 6px 30px rgba(0, 0, 0, 0.7), 0 0 10px rgba(212, 175, 55, 0.25)',
+          border: '1px solid rgba(212, 175, 55, 0.3)',
+          backdropFilter: 'blur(5px)'
+        }}>
+          {/* Gold decorative corner */}
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            width: '40px',
+            height: '40px',
+            background: 'linear-gradient(135deg, #E5C96D 0%, #A17C17 100%)',
+            clipPath: 'polygon(100% 0, 0 0, 100% 100%)',
+            opacity: 0.9
+          }}></div>
+          
+          <div style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            width: '30px',
+            height: '30px',
+            background: 'linear-gradient(135deg, #E5C96D 0%, #A17C17 100%)',
+            clipPath: 'polygon(0 100%, 0 40%, 100% 100%)',
+            opacity: 0.6
+          }}></div>
+          
+          <div className="flex flex-col items-center justify-center space-y-6 z-10 relative px-12 py-8">
+            {/* Empty orders icon */}
+            <div className="w-20 h-20 rounded-full flex items-center justify-center mb-2" style={{
+              background: 'rgba(15, 15, 15, 0.7)',
+              border: '1px solid rgba(212, 175, 55, 0.4)'
+            }}>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} 
+                stroke="#D4AF37" className="w-10 h-10">
+                <path strokeLinecap="round" strokeLinejoin="round" 
+                  d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+              </svg>
+            </div>
+            
+            <h3 className="text-2xl font-bold" style={{
+              color: '#FFCC33',
+              fontFamily: "'Cinzel', serif",
+              textShadow: '0 1px 2px rgba(0, 0, 0, 0.8), 0 0 5px rgba(212, 175, 55, 0.3)',
+              letterSpacing: '1px'
+            }}>
+              No Orders Found
+            </h3>
+            
+            <p className="text-lg text-center" style={{
+              color: '#E5E4E2',
+              fontFamily: "'Marcellus', serif"
+            }}>
+              There are currently no orders to display in your inventory.
+            </p>
+            
+            <Link 
+              to="/shop" 
+              className="mt-6 px-6 py-3 rounded-md flex items-center transition-all duration-300 hover:transform hover:translate-y-1"
+              style={{
+                background: 'linear-gradient(145deg, rgba(25, 25, 25, 0.9) 0%, rgba(10, 10, 10, 0.9) 100%)',
+                border: '1px solid rgba(212, 175, 55, 0.3)',
+                color: '#F5E6B3',
+                fontFamily: "'Cinzel', serif",
+                fontWeight: 600,
+                letterSpacing: '0.5px',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(212, 175, 55, 0.8)';
+                e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.5), 0 0 8px rgba(212, 175, 55, 0.3)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(212, 175, 55, 0.3)';
+                e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.3)';
+              }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} 
+                stroke="currentColor" className="w-5 h-5 mr-2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+              </svg>
+              Return to Shop
+            </Link>
+          </div>
+        </div>
+        
+        {/* Decorative line at bottom */}
+        <div className="mt-6 w-1/3 h-1 rounded-full opacity-40" style={{
+          background: 'linear-gradient(to right, rgba(212, 175, 55, 0.05) 0%, rgba(212, 175, 55, 0.2) 50%, rgba(212, 175, 55, 0.05) 100%)'
+        }}></div>
       </div>
     );
   }

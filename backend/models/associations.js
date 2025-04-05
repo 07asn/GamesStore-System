@@ -10,7 +10,6 @@ const Order_Item = require('./Order_Item');
 const Product_Tag = require('./Product_Tag');
 const Product_Tags_Product = require('./Product_Tags_Product');
 const Product_Image = require('./Product_Image');
-const Contact = require('./Contact');
 const Order_Coupon = require('./Order_Coupon');
 const Coupon = require('./Coupon');
 const Review = require('./Review');
@@ -90,18 +89,6 @@ Inventory.hasMany(Order_Item, {
 });
 
 //------------------------
-// User-Contact Relationship
-//------------------------
-User.hasMany(Contact, {
-  foreignKey: 'user_id',
-  as: 'contacts',
-});
-Contact.belongsTo(User, {
-  foreignKey: 'user_id',
-  as: 'user',
-});
-
-//------------------------
 // Order-Coupon Relationship
 //------------------------
 Order.belongsToMany(Coupon, {
@@ -148,6 +135,19 @@ Product.belongsTo(Category, {
 });
 
 //------------------------
+// Product-Invetory Relationship
+//------------------------
+Inventory.belongsTo(Product, {
+  foreignKey: 'product_id',
+  as: 'product',
+});
+
+Product.hasMany(Inventory, {
+  foreignKey: 'product_id',
+  as: 'inventories',
+});
+
+//------------------------
 // Exports
 //------------------------
 module.exports = {
@@ -160,7 +160,6 @@ module.exports = {
   Product_Tag,
   Product_Tags_Product,
   Product_Image,
-  Contact,
   Order_Coupon,
   Coupon,
   Review

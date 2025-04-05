@@ -28,6 +28,10 @@ const Order = sequelize.define('Order', {
         type: DataTypes.STRING,
         defaultValue: 'pending',
     },
+    proof_img: {
+        type: DataTypes.STRING, 
+        allowNull: true,
+    },
     delivery_status: {
         type: DataTypes.STRING,
         defaultValue: 'pending',

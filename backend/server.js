@@ -18,6 +18,8 @@ const couponRoutes = require('./routes/couponRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const gamingRoutes = require('./routes/gamingRoute');
+const inventoryRoutes = require('./routes/inventoryRoutes');
+const contactRoutes = require('./routes/contactRoutes');
 //------------------------
 // Middlewares
 //------------------------
@@ -49,8 +51,17 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/coupons', couponRoutes);
 app.use('/api/orders', orderRoutes);
-app.use('/api/admin', adminRoutes)
+app.use('/api/inventory', inventoryRoutes);
+app.use('/api/contacts', contactRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/', gamingRoutes);
+
+app.use((req, res, next) => {
+  console.log(`Incoming ${req.method} request to ${req.path}`);
+  console.log('Headers:', req.headers);
+  console.log('Body:', req.body);
+  next();
+});
 //---------------------------
 // ERROR HANDLERS
 //---------------------------
