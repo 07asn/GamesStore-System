@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaHeart, FaShoppingCart, FaGamepad, FaFire, FaTrophy, FaCrown } from 'react-icons/fa';
+import { FaHeart, FaShoppingCart, FaGamepad, FaFire, FaTrophy, FaCrown, FaEye } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 
@@ -11,59 +11,25 @@ const ProductCard = ({ name, price, discounted_price, productImage, product_id }
   const [isAnimating, setIsAnimating] = useState(false);
   const cardRef = useRef(null);
   
-  // Royal Gold Color Palette
+  // Enhanced Luxury Color Palette
   const colors = {
     primary: '#D4AF37',       // Royal Gold
-    primaryLight: '#F5D76E',  // Light Gold
-    primaryGlow: 'rgba(212, 175, 55, 0.5)', // Gold Glow
+    primaryLight: '#F5E6B3',  // Light Gold
+    primaryDark: '#996515',   // Dark Gold
     secondary: '#FFD700',     // Bright Gold
-    secondaryGlow: 'rgba(255, 215, 0, 0.5)', // Gold Glow
-    accent: '#8B0000',        // Dark Red
-    accentGlow: 'rgba(139, 0, 0, 0.3)', // Red Glow
-    dark: '#121212',          // Nearly Black
-    darkGrey: '#1E1E1E',      // Dark Grey
+    accent: '#B71C1C',        // Royal Red
     light: '#FFFFFF',         // White
-    lightGrey: '#B8B8B8',     // Light Grey
-    rgbEffect: 'linear-gradient(90deg, #D4AF37, #F5D76E, #FFD700, #FDB931, #D4AF37)',
-    shadow: 'rgba(212, 175, 55, 0.3)', // Shadow Color
-    bronze: '#CD7F32',        // Bronze accent
-    silverGrey: '#C0C0C0',    // Silver accent
+    dark: '#1A1A1A',          // Darker Text for better contrast
+    mediumGray: '#6D6D6D',    // Medium Gray
+    lightGray: '#F5F5F5',     // Light Gray
+    goldGradient: 'linear-gradient(135deg, #FFD700 0%, #D4AF37 100%)',
+    goldGradientHover: 'linear-gradient(135deg, #FFD700 20%, #D4AF37 80%)',
+    subtleGlow: '0 0 20px rgba(212, 175, 55, 0.3)',
+    royalBorder: '1px solid rgba(212, 175, 55, 0.5)'
   };
 
   // Calculate discount percentage
   const discountPercentage = discounted_price ? Math.round((1 - finalPrice/parseFloat(price))*100) : 0;
-  
-  // Gold shimmer animation
-  const [shimmerPosition, setShimmerPosition] = useState(0);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setShimmerPosition(prev => (prev >= 100 ? 0 : prev + 0.5));
-    }, 20);
-    return () => clearInterval(interval);
-  }, []);
-  
-  // 3D tilt effect with enhanced royal feel
-  const handleMouseMove = (e) => {
-    if (!cardRef.current || !isHovered) return;
-    
-    const card = cardRef.current;
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    
-    const rotateX = (y - centerY) / 15; // Reduced for subtler royal movement
-    const rotateY = (centerX - x) / 15;
-    
-    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
-  };
-  
-  const resetTilt = () => {
-    if (!cardRef.current) return;
-    cardRef.current.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
-  };
 
   // Check wishlist status
   useEffect(() => {
@@ -94,27 +60,27 @@ const ProductCard = ({ name, price, discounted_price, productImage, product_id }
     
     if (isWishlisted) {
       existingWishlist = existingWishlist.filter(item => item.product_id !== product_id);
-      toast.success('Removed from Royal Collection', { 
-        icon: '👑',
+      toast.success('Removed from Collection', { 
         style: {
-          borderRadius: '10px',
-          background: colors.dark,
-          color: colors.light,
-          border: `1px solid ${colors.primary}`,
-          boxShadow: `0 0 15px ${colors.primaryGlow}`
-        }
+          background: colors.light,
+          color: colors.dark,
+          border: colors.royalBorder,
+          boxShadow: colors.subtleGlow,
+          fontFamily: "'Cinzel', serif",
+        },
+        icon: '❤️'
       });
     } else {
       existingWishlist.push(product);
-      toast.success('Added to Royal Collection', {
-        icon: '👑',
+      toast.success('Added to Collection', {
         style: {
-          borderRadius: '10px',
-          background: colors.dark,
-          color: colors.light,
-          border: `1px solid ${colors.primary}`,
-          boxShadow: `0 0 15px ${colors.primaryGlow}`
-        }
+          background: colors.light,
+          color: colors.dark,
+          border: colors.royalBorder,
+          boxShadow: colors.subtleGlow,
+          fontFamily: "'Cinzel', serif",
+        },
+        icon: '✨'
       });
     }
 
@@ -137,514 +103,362 @@ const ProductCard = ({ name, price, discounted_price, productImage, product_id }
 
     localStorage.setItem('cart', JSON.stringify(existingCart));
 
-    toast.success('ROYAL ACQUISITION', {
+    toast.success('Added to Cart', {
       position: 'top-center',
       duration: 2000,
-      icon: '👑',
       style: {
-        background: `linear-gradient(135deg, ${colors.dark} 0%, ${colors.darkGrey} 100%)`,
-        color: colors.primary,
-        fontWeight: 'bold',
-        fontSize: '1.2rem',
-        border: `2px solid ${colors.primary}`,
-        boxShadow: `0 0 20px ${colors.primaryGlow}`,
-        textTransform: 'uppercase',
-        fontFamily: 'serif',
-        padding: '16px 24px',
-        borderRadius: '8px'
-      }
+        background: colors.light,
+        color: colors.dark,
+        border: colors.royalBorder,
+        boxShadow: colors.subtleGlow,
+        fontFamily: "'Cinzel', serif",
+        padding: '12px 24px'
+      },
+      icon: '🛒',
     });
   };
 
   return (
     <div 
       ref={cardRef}
-      className="relative transition-all duration-500"
+      className="relative transition-all duration-300 group h-full flex flex-col"
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => {
-        setIsHovered(false);
-        resetTilt();
-      }}
-      onMouseMove={handleMouseMove}
+      onMouseLeave={() => setIsHovered(false)}
       style={{
-        background: `linear-gradient(135deg, ${colors.dark} 0%, ${colors.darkGrey} 100%)`,
-        borderRadius: '12px',
+        background: colors.light,
+        borderRadius: '16px',
         overflow: 'hidden',
-        boxShadow: isHovered 
-          ? `0 0 25px ${colors.primaryGlow}, 0 0 5px ${colors.secondaryGlow}`
-          : `0 8px 20px rgba(0,0,0,0.5)`,
-        transition: 'all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-        transform: isAnimating 
-          ? 'scale(1.05)' 
-          : 'scale(1)',
-        border: `1px solid ${colors.primary}40`
+        boxShadow: isHovered ? `0 15px 30px rgba(0,0,0,0.12), ${colors.subtleGlow}` : '0 5px 15px rgba(0,0,0,0.05)',
+        border: colors.royalBorder,
+        transform: isAnimating ? 'scale(1.03)' : 'scale(1)',
+        transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
       }}
     >
-      {/* Royal Gold Border Effect */}
-      <div 
-        className="absolute inset-0 rounded-xl pointer-events-none z-10"
-        style={{
-          background: 'transparent',
-          borderRadius: '12px',
-          boxShadow: isHovered ? `0 0 10px ${colors.primaryGlow}, 0 0 30px ${colors.secondaryGlow}` : 'none',
-          opacity: isHovered ? 1 : 0,
-          transition: 'opacity 0.5s ease',
-          border: isHovered ? `2px solid ${colors.primary}60` : 'none',
-          zIndex: 0
-        }}
-      ></div>
-      
-      {/* Animated Gold Shimmer Border Top */}
-      <div 
-        className="absolute top-0 left-0 right-0 h-2 z-20"
-        style={{
-          background: colors.rgbEffect,
-          backgroundSize: '500% 100%',
-          backgroundPosition: `${shimmerPosition}% 0`,
-          opacity: isHovered ? 1 : 0.5,
-          transition: 'opacity 0.5s ease'
-        }}
-      ></div>
-
-      {/* Royal Corner Decorations */}
-      {['top-left', 'top-right', 'bottom-left', 'bottom-right'].map(corner => {
-        const [vertical, horizontal] = corner.split('-');
-        return (
-          <div 
-            key={corner}
-            className="absolute z-20 w-6 h-6 pointer-events-none"
-            style={{
-              top: vertical === 'top' ? '-3px' : 'auto',
-              bottom: vertical === 'bottom' ? '-3px' : 'auto',
-              left: horizontal === 'left' ? '-3px' : 'auto',
-              right: horizontal === 'right' ? '-3px' : 'auto',
-              opacity: isHovered ? 1 : 0.5,
-              transition: 'opacity 0.5s ease',
-            }}
-          >
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path 
-                d={
-                  vertical === 'top' && horizontal === 'left' ? 
-                    "M0 0 L12 0 L12 2 L2 2 L2 12 L0 12 Z" : 
-                  vertical === 'top' && horizontal === 'right' ? 
-                    "M24 0 L12 0 L12 2 L22 2 L22 12 L24 12 Z" : 
-                  vertical === 'bottom' && horizontal === 'left' ? 
-                    "M0 24 L12 24 L12 22 L2 22 L2 12 L0 12 Z" : 
-                    "M24 24 L12 24 L12 22 L22 22 L22 12 L24 12 Z"
-                } 
-                fill={colors.primary} 
-              />
-            </svg>
+      {/* Discount Badge - Enhanced with animation */}
+      {discounted_price && (
+        <div 
+          className="absolute top-4 left-4 z-10"
+          style={{
+            transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+            transform: isHovered ? 'scale(1.08) rotate(-2deg)' : 'scale(1)',
+          }}
+        >
+          <div style={{
+            background: colors.goldGradient,
+            borderRadius: '8px',
+            boxShadow: isHovered ? '0 6px 12px rgba(0,0,0,0.15)' : '0 4px 8px rgba(0,0,0,0.1)',
+            padding: '7px 12px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            position: 'relative',
+            overflow: 'hidden'
+          }}>
+            <div 
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: `linear-gradient(135deg, ${colors.primaryLight}60 0%, transparent 70%)`,
+                opacity: isHovered ? 0.8 : 0.4,
+                transition: 'opacity 0.4s ease'
+              }}
+            ></div>
+            <span style={{ 
+              fontSize: '11px', 
+              color: colors.dark,
+              fontWeight: 'bold',
+              textTransform: 'uppercase',
+              letterSpacing: '0.8px',
+              fontFamily: "'Cinzel', serif",
+              lineHeight: 1
+            }}>
+              Royal Deal
+            </span>
+            <span style={{ 
+              fontSize: '20px', 
+              color: colors.dark,
+              fontWeight: 'bold',
+              letterSpacing: '0.5px',
+              fontFamily: "'Cinzel', serif",
+              lineHeight: 1.2,
+              marginTop: '3px'
+            }}>
+              {discountPercentage}% OFF
+            </span>
           </div>
-        );
-      })}
+        </div>
+      )}
 
-      {/* LINK WRAPPER */}
-      <Link to={link} className="block">
-        {/* Product Image Container with Royal Gold Effects */}
-        <div className="relative h-64 overflow-hidden">
+      {/* Product Image Container - Enhanced with deeper hover effect */}
+      <div className="relative h-72 overflow-hidden flex-shrink-0">
+        <Link to={link} className="block h-full">
           <img
-            src={productImage || 'img/product-4.jpg'}
+            src={productImage || '/img/default-game.jpg'}
             alt={name}
             className="w-full h-full object-cover"
             style={{
-              transition: 'all 0.7s ease',
-              transform: isHovered ? 'scale(1.05)' : 'scale(1)',
-              filter: isHovered ? 'brightness(1.1) contrast(1.1) saturate(1.2)' : 'brightness(0.95) contrast(1.05)',
+              transition: 'transform 0.7s ease, filter 0.5s ease',
+              transform: isHovered ? 'scale(1.08)' : 'scale(1)',
+              filter: isHovered ? 'brightness(1.05) contrast(1.05)' : 'brightness(1) contrast(1)'
             }}
           />
           
-          {/* Royal Overlay */}
+          {/* Enhanced Gradient Overlay */}
           <div 
-            className="absolute inset-0"
+            className="absolute inset-0 transition-all duration-500"
             style={{
-              background: `linear-gradient(135deg, ${colors.dark}99 0%, ${colors.dark}60 100%)`,
-              mixBlendMode: 'multiply',
-              opacity: isHovered ? 0.7 : 0.85
-            }}
-          ></div>
-          
-          {/* Golden Vignette Effect */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background: `radial-gradient(circle, transparent 30%, ${colors.dark}90 100%)`,
-              opacity: 0.7,
-              transition: 'opacity 0.3s ease'
-            }}
-          ></div>
-          
-          {/* Royal Gold Frame Effect */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              border: `1px solid ${colors.primary}50`,
-              opacity: isHovered ? 0.9 : 0.4,
-              transition: 'opacity 0.3s ease',
-              background: `
-                linear-gradient(90deg, ${colors.primary}00 40%, ${colors.primary}70 50%, ${colors.primary}00 60%),
-                linear-gradient(180deg, ${colors.primary}00 40%, ${colors.primary}70 50%, ${colors.primary}00 60%)
-              `,
-              backgroundSize: '100% 100%, 100% 100%',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat'
+              background: `linear-gradient(to top, ${colors.light} 0%, transparent 50%)`,
+              opacity: isHovered ? 0.7 : 0.5,
             }}
           ></div>
 
-          {/* Enhanced Royal Discount Badge */}
-          {discounted_price && (
-            <div 
-              className="absolute top-4 left-4 z-10"
-              style={{
-                transition: 'all 0.3s ease',
-                transform: isHovered ? 'scale(1.1) rotate(-2deg)' : 'scale(1) rotate(0)',
-              }}
-            >
-              <div style={{
-                background: `linear-gradient(135deg, ${colors.dark} 0%, ${colors.darkGrey} 100%)`,
-                color: colors.primary,
-                borderRadius: '5px',
-                boxShadow: `0 0 15px ${colors.primaryGlow}`,
-                border: `2px solid ${colors.primary}70`,
-                padding: '8px 12px',
-                position: 'relative',
-                overflow: 'hidden'
-              }}>
-                <div 
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    background: `linear-gradient(135deg, ${colors.primaryGlow} 0%, transparent 70%)`,
-                    opacity: isHovered ? 0.5 : 0.3,
-                    transition: 'opacity 0.3s ease'
-                  }}
-                ></div>
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '2px',
-                    background: colors.primary,
-                    boxShadow: `0 0 10px ${colors.primaryGlow}`,
-                    zIndex: 2
-                  }}
-                ></div>
-                <span style={{ 
-                  fontSize: '12px', 
-                  color: colors.primary,
-                  fontWeight: 'bold',
-                  textTransform: 'uppercase',
-                  letterSpacing: '1px',
-                  fontFamily: 'serif',
-                  lineHeight: 1.2,
-                  display: 'block',
-                  textShadow: `0 0 5px ${colors.primaryGlow}`
-                }}>
-                  ROYAL OFFER
-                </span>
-                <span style={{ 
-                  fontSize: '22px', 
-                  color: colors.light,
-                  fontWeight: 'bold',
-                  letterSpacing: '0.5px',
-                  fontFamily: 'serif',
-                  lineHeight: 1.2,
-                  textShadow: `0 0 5px ${colors.primaryGlow}`
-                }}>
-                  {discountPercentage}%
-                </span>
-              </div>
-            </div>
-          )}
-          
-          {/* Royal Emblem Watermark */}
+          {/* Quick View Button - Appears on hover */}
           <div 
-            className="absolute inset-0 pointer-events-none flex items-center justify-center"
+            className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300"
             style={{
-              opacity: isHovered ? 0.12 : 0.07,
-              transition: 'opacity 0.5s ease',
+              opacity: isHovered ? 1 : 0,
+              transform: isHovered ? 'translate(-50%, -50%) scale(1)' : 'translate(-50%, -50%) scale(0.8)',
             }}
           >
-            <div style={{
-              width: '80px',
-              height: '80px',
-              borderRadius: '50%',
-              border: `2px solid ${colors.primary}`,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+            <Link to={link} className="flex items-center justify-center gap-2 px-4 py-2 rounded-full" style={{
+              background: 'rgba(255, 255, 255, 0.9)',
+              color: colors.dark,
+              border: colors.royalBorder,
+              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+              fontFamily: "'Cinzel', serif",
+              fontWeight: 'bold',
+              fontSize: '14px',
+              backdropFilter: 'blur(3px)'
             }}>
-              <FaCrown size={40} color={colors.primary} />
-            </div>
+              <FaEye size={15} />
+              Quick View
+            </Link>
           </div>
-        </div>
+        </Link>
 
-        {/* Status Bar / Card Footer */}
+        {/* Action Buttons - Enhanced with staggered animation */}
         <div 
-          className="p-5"
+          className="absolute top-4 right-4 flex flex-col space-y-3"
           style={{
-            background: `linear-gradient(to bottom, ${colors.darkGrey} 0%, ${colors.dark} 100%)`,
-            borderTop: `1px solid ${colors.primary}40`,
-            boxShadow: `0 -5px 15px rgba(0,0,0,0.3)`
+            transform: isHovered ? 'translateX(0)' : 'translateX(10px)',
+            opacity: isHovered ? 1 : 0,
+            transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
           }}
         >
-          {/* Product Name with Royal Typography */}
-          <h3 
-            className="font-bold text-lg mb-3 transition-all duration-300"
-            style={{ 
-              color: colors.light,
-              fontFamily: 'serif',
-              letterSpacing: '0.5px',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              textShadow: isHovered ? `0 0 5px ${colors.primaryGlow}` : 'none',
+          <button
+            onClick={addToWishlist}
+            className="flex items-center justify-center transition-all duration-300 transform hover:scale-110"
+            style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              background: isWishlisted ? colors.accent : colors.light,
+              color: isWishlisted ? colors.light : colors.mediumGray,
+              border: `1px solid ${isWishlisted ? colors.accent : colors.lightGray}`,
+              boxShadow: '0 3px 8px rgba(0,0,0,0.12)'
             }}
           >
-            {name}
-          </h3>
-
-          {/* Royal Gold Divider */}
-          <div 
-            className="h-px w-full mb-4 transition-all duration-500 relative overflow-hidden"
-            style={{ 
-              background: colors.dark
+            <FaHeart 
+              className={isWishlisted ? 'animate-pulse' : ''}
+              size={18}
+            />
+          </button>
+          
+          <button 
+            className="flex items-center justify-center transition-all duration-300 transform hover:scale-110"
+            style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              background: colors.light,
+              color: colors.mediumGray,
+              border: `1px solid ${colors.lightGray}`,
+              boxShadow: '0 3px 8px rgba(0,0,0,0.12)'
             }}
           >
-            <div 
-              className="absolute top-0 left-0 h-full transition-all duration-500"
-              style={{ 
-                background: `linear-gradient(90deg, ${colors.bronze}, ${colors.primary}, ${colors.silverGrey})`,
-                width: isHovered ? '100%' : '30%',
-                boxShadow: `0 0 10px ${colors.primaryGlow}`,
-              }}
-            ></div>
-          </div>
+            <FaGamepad size={18} className="hover:rotate-12 transition-transform" />
+          </button>
+        </div>
+      </div>
 
-          {/* Bottom Action Row */}
-          <div className="flex items-center justify-between">
-            {/* Price Display */}
-            <div className="flex items-baseline">
-              {discounted_price ? (
-                <div className="flex flex-col">
-                  <div className="flex items-baseline">
-                    <span 
-                      className="text-xl font-bold"
-                      style={{ 
-                        color: colors.primary,
-                        fontFamily: 'serif',
-                        letterSpacing: '0.5px',
-                        textShadow: `0 0 5px ${colors.primaryGlow}`
-                      }}
-                    >
-                      ${finalPrice.toFixed(2)}
-                    </span>
-                    <span 
-                      className="ml-2 text-sm line-through"
-                      style={{ 
-                        color: colors.lightGrey,
-                        opacity: 0.7 
-                      }}
-                    >
-                      ${parseFloat(price).toFixed(2)}
-                    </span>
-                  </div>
-                </div>
-              ) : (
+      {/* Product Info - Refined with better spacing */}
+      <div className="p-6 flex-1 flex flex-col" style={{ 
+        borderTop: `1px solid ${colors.lightGray}`,
+        transition: 'background-color 0.3s ease',
+        backgroundColor: isHovered ? 'rgba(245, 245, 245, 0.5)' : 'transparent'
+      }}>
+        {/* Product Name */}
+        <h3 
+          className="font-bold text-xl mb-3 transition-all duration-300"
+          style={{ 
+            color: colors.dark,
+            fontFamily: "'Cinzel', serif",
+            letterSpacing: '0.3px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            transform: isHovered ? 'translateY(-2px)' : 'translateY(0)'
+          }}
+        >
+          <Link to={link}>{name}</Link>
+        </h3>
+
+        {/* Animated Divider */}
+        <div 
+          className="h-px w-full mb-5 transition-all duration-700"
+          style={{ 
+            background: isHovered ? colors.goldGradient : `linear-gradient(to right, ${colors.primary}, ${colors.primaryLight}20)`,
+            width: isHovered ? '100%' : '40%',
+            height: isHovered ? '2px' : '1px'
+          }}
+        ></div>
+
+        {/* Price section - Now separate from Add to Cart */}
+        <div className="flex items-baseline mb-4">
+          {discounted_price ? (
+            <div className="flex flex-col">
+              <div className="flex items-baseline">
                 <span 
-                  className="text-xl font-bold"
+                  className="text-2xl font-bold"
                   style={{ 
-                    color: colors.primary,
-                    fontFamily: 'serif',
-                    letterSpacing: '0.5px',
-                    textShadow: `0 0 5px ${colors.primaryGlow}`
+                    color: colors.dark,
+                    fontFamily: "'Cinzel', serif",
+                    transition: 'all 0.3s ease',
+                    transform: isHovered ? 'scale(1.05)' : 'scale(1)'
                   }}
                 >
                   ${finalPrice.toFixed(2)}
                 </span>
-              )}
-            </div>
-
-            {/* Action Buttons Group */}
-            <div className="flex space-x-2">
-              {/* Wishlist Button */}
-              <button
-                onClick={addToWishlist}
-                className="flex items-center justify-center transition-all duration-300"
-                style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '8px',
-                  background: isWishlisted ? colors.accent : colors.darkGrey,
-                  color: colors.light,
-                  border: `1px solid ${isWishlisted ? colors.accent : colors.primary}40`,
-                  boxShadow: isWishlisted 
-                    ? `0 0 15px ${colors.accentGlow}` 
-                    : 'none',
-                  transform: isHovered ? 'translateY(-2px)' : 'translateY(0)',
+                <span 
+                  className="ml-2 text-sm line-through"
+                  style={{ 
+                    color: colors.mediumGray,
+                    opacity: 0.7 
+                  }}
+                >
+                  ${parseFloat(price).toFixed(2)}
+                </span>
+              </div>
+              <span 
+                style={{ 
+                  fontSize: '13px',
+                  color: colors.primaryDark,
+                  marginTop: '3px',
+                  fontWeight: 'medium'
                 }}
               >
-                <FaHeart 
-                  className={isWishlisted ? 'animate-pulse' : ''}
-                  size={16}
-                  color={isWishlisted ? colors.light : colors.primary}
-                />
-              </button>
-              
-              {/* Add to Cart Button */}
-              <button
-                onClick={addToCart}
-                className="flex items-center justify-center transition-all duration-300"
-                style={{
-                  background: isHovered 
-                    ? `linear-gradient(135deg, ${colors.primary} 0%, ${colors.primaryLight} 100%)`
-                    : colors.primary,
-                  color: colors.dark,
-                  padding: '10px 16px',
-                  borderRadius: '8px',
-                  fontWeight: 'bold',
-                  fontFamily: 'serif',
-                  boxShadow: isHovered 
-                    ? `0 0 20px ${colors.primaryGlow}` 
-                    : 'none',
-                  border: `1px solid ${colors.primary}90`,
-                  transform: isHovered ? 'translateY(-2px)' : 'translateY(0)',
-                  letterSpacing: '1px',
-                }}
-              >
-                <FaShoppingCart className="mr-2" size={14} />
-                <span className="text-sm">ACQUIRE</span>
-              </button>
+                You save ${(parseFloat(price) - finalPrice).toFixed(2)}
+              </span>
             </div>
-          </div>
+          ) : (
+            <span 
+              className="text-2xl font-bold"
+              style={{ 
+                color: colors.dark,
+                fontFamily: "'Cinzel', serif",
+                transition: 'all 0.3s ease',
+                transform: isHovered ? 'scale(1.05)' : 'scale(1)'
+              }}
+            >
+              ${finalPrice.toFixed(2)}
+            </span>
+          )}
         </div>
-      </Link>
 
-      {/* Royal Feature Pills */}
-      {isHovered && (
-        <div 
-          className="absolute top-4 right-4 flex flex-col space-y-3 z-20"
+        {/* Add to Cart Button - Now on its own line, full width */}
+        <button
+          onClick={addToCart}
+          className="w-full flex items-center justify-center transition-all duration-400 group overflow-hidden relative mt-auto"
           style={{
-            opacity: isHovered ? 1 : 0,
-            transform: isHovered ? 'translateX(0)' : 'translateX(20px)',
-            transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+            background: isHovered ? colors.goldGradientHover : colors.primaryLight,
+            color: colors.dark,
+            padding: '10px 18px',
+            borderRadius: '10px',
+            fontWeight: 'bold',
+            fontFamily: "'Cinzel', serif",
+            boxShadow: isHovered ? '0 8px 20px rgba(212, 175, 55, 0.4)' : '0 4px 10px rgba(0,0,0,0.08)',
+            border: `1px solid ${isHovered ? colors.primaryDark : colors.primary}`,
+            transform: isHovered ? 'translateY(-3px)' : 'translateY(0)',
+            transition: 'all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
           }}
         >
-          <div
-            style={{
-              background: `linear-gradient(135deg, ${colors.dark} 0%, ${colors.darkGrey} 100%)`,
-              color: colors.primary,
-              padding: '4px 10px',
-              borderRadius: '5px',
-              fontSize: '12px',
-              fontFamily: 'serif',
-              fontWeight: 'bold',
-              boxShadow: `0 0 15px ${colors.primaryGlow}`,
-              border: `1px solid ${colors.primary}50`,
-              display: 'flex',
-              alignItems: 'center',
-              textTransform: 'uppercase',
-              letterSpacing: '1px'
-            }}
-          >
-            <FaCrown size={10} className="mr-1" />
-            <span>Premium</span>
-          </div>
-          
-          <div
-            style={{
-              background: `linear-gradient(135deg, ${colors.dark} 0%, ${colors.darkGrey} 100%)`,
-              color: colors.primary,
-              padding: '4px 10px',
-              borderRadius: '5px',
-              fontSize: '12px',
-              fontFamily: 'serif',
-              fontWeight: 'bold',
-              boxShadow: `0 0 15px ${colors.primaryGlow}`,
-              border: `1px solid ${colors.primary}50`,
-              display: 'flex',
-              alignItems: 'center',
-              textTransform: 'uppercase',
-              letterSpacing: '1px'
-            }}
-          >
-            <FaFire size={10} className="mr-1" />
-            <span>Exclusive</span>
-          </div>
-        </div>
-      )}
-
-      {/* Royal Quality Badge */}
-      {isHovered && (
-        <div 
-          className="absolute bottom-0 left-1/2 transform -translate-x-1/2 mb-20 z-20 bg-opacity-80"
-          style={{
-            background: colors.dark + 'CC',
-            borderRadius: '5px',
-            padding: '5px 12px',
-            border: `1px solid ${colors.primary}50`,
-            boxShadow: `0 0 15px ${colors.primaryGlow}`,
-            opacity: 0,
-            animation: isHovered ? 'fadeIn 0.5s ease forwards 0.2s' : 'none',
-            fontFamily: 'serif',
-            maxWidth: '90%',
-            backdropFilter: 'blur(5px)',
-            transform: 'translate(-50%, 20px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '10px'
-          }}
-        >
-          <div className="flex items-center">
-            <FaTrophy size={12} color={colors.primary} className="mr-1" />
-            <span style={{color: colors.light, fontSize: '11px'}}>ROYAL QUALITY</span>
-          </div>
-          <div style={{width: '1px', height: '12px', background: colors.primary + '50'}}></div>
-          <div className="flex items-center">
-            <FaCrown size={12} color={colors.primary} className="mr-1" />
-            <span style={{color: colors.light, fontSize: '11px'}}>ELITE CLASS</span>
-          </div>
-        </div>
-      )}
-      
-      {/* Gold-leaf corner embellishments */}
-      {isHovered && ['top-left', 'top-right', 'bottom-left', 'bottom-right'].map(corner => {
-        const [vertical, horizontal] = corner.split('-');
-        return (
+          {/* Animated shine effect overlay */}
           <div 
-            key={`embellish-${corner}`}
-            className="absolute z-30 pointer-events-none"
+            className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none"
             style={{
-              width: '30px',
-              height: '30px',
-              top: vertical === 'top' ? '10px' : 'auto',
-              bottom: vertical === 'bottom' ? '10px' : 'auto',
-              left: horizontal === 'left' ? '10px' : 'auto',
-              right: horizontal === 'right' ? '10px' : 'auto',
-              opacity: 0,
-              animation: 'fadeIn 0.5s ease forwards 0.3s',
+              background: 'linear-gradient(45deg, transparent 0%, rgba(255,255,255,0.8) 50%, transparent 100%)',
+              transform: 'translateX(-100%)',
+              animation: isHovered ? 'shine 1.5s ease infinite' : 'none',
+            }}
+          ></div>
+          
+          {/* Cart icon with animation */}
+          <FaShoppingCart 
+            className="mr-2 transition-transform duration-300" 
+            size={17} 
+            style={{
+              transform: isHovered ? 'scale(1.2) translateX(-2px)' : 'scale(1)',
+            }}
+          />
+          
+          {/* Text with expanding effect */}
+          <span 
+            className="text-sm tracking-wider overflow-hidden flex items-center"
+            style={{
+              transition: 'max-width 0.4s ease',
             }}
           >
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path 
-                d="M12 2 L14 6 L18 8 L14 10 L12 14 L10 10 L6 8 L10 6 Z" 
-                fill="none"
-                stroke={colors.primary}
-                strokeWidth="1"
-                transform={
-                  (vertical === 'bottom' && horizontal === 'right') ||
-                  (vertical === 'bottom' && horizontal === 'left') ? 
-                  'rotate(180)' : 'rotate(0)'
-                }
-              />
-            </svg>
-          </div>
-        );
-      })}
+            <span style={{ 
+              display: 'inline-block',
+              transform: isHovered ? 'translateY(0)' : 'translateY(0)',
+              transition: 'transform 0.3s ease',
+              textShadow: isHovered ? '0 0 5px rgba(255,215,0,0.5)' : 'none',
+              letterSpacing: isHovered ? '0.8px' : '0.5px',
+            }}>
+              Add to Cart
+            </span>
+          </span>
+        </button>
+      </div>
+
+      {/* Enhanced Premium Badge - With animation */}
+      {isHovered && (
+        <div 
+          className="absolute bottom-1 right-1 px-4 py-1.1 rounded-full text-xs font-medium flex items-center gap-1.5"
+          style={{
+            background: `linear-gradient(135deg, ${colors.light} 0%, ${colors.primaryLight} 100%)`,
+            color: colors.primaryDark,
+            border: `1px solid ${colors.primary}`,
+            boxShadow: '0 3px 10px rgba(0,0,0,0.1)',
+            fontFamily: "'Cinzel', serif",
+            letterSpacing: '0.5px',
+            opacity: 0,
+            animation: 'fadeIn 0.4s ease 0.1s forwards'
+          }}
+        >
+          <FaCrown size={13} className="text-gold animate-pulse" style={{ color: colors.primary }} />
+          Royal Edition
+        </div>
+      )}
+
+      {/* Global Styles - Enhanced animations */}
+      <style jsx global>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(8px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.1); }
+          100% { transform: scale(1); }
+        }
+
+        @keyframes shine {
+          0% { transform: translateX(-100%); }
+          60% { transform: translateX(100%); }
+          100% { transform: translateX(100%); }
+        }
+      `}</style>
     </div>
   );
 };

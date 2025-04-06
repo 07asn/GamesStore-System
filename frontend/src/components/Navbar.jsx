@@ -14,6 +14,7 @@ import {
 } from '../redux/navbarSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import logo from '../assets/logo.png';
+import { FaShoppingCart, FaCrown, } from 'react-icons/fa';
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -345,44 +346,120 @@ const Navbar = () => {
               <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#514F4F] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
             </Link>
             {cartOpen && (
-              <div className="absolute right-0 mt-2 w-80 bg-white border-2 border-[#514F4F]/30 rounded-xl shadow-2xl z-50 animate-fadeInUp">
-                <h3 className="font-semibold text-lg p-4 border-b border-gray-200 bg-[#FFDF00]/20 rounded-t-xl text-[#514F4F]">
-                  Your Cart ({cartCount} {cartCount === 1 ? 'item' : 'items'})
-                </h3>
-                <ul className="p-4 space-y-3 max-h-64 overflow-y-auto">
-                  {cartItems.length > 0 ? (
-                    cartItems.map((item, index) => (
-                      <li key={index} className="flex justify-between items-center py-2 border-b border-gray-200 last:border-0 hover:bg-[#FFDF00]/10 transition-colors duration-200">
-                        <span className="text-[#514F4F]/90 truncate max-w-[180px]">{item.name}</span>
-                        <span className="text-[#514F4F] font-medium whitespace-nowrap">
-                          ${parseFloat(item.price.replace(/[^\d.]/g, '').trim()).toFixed(2)}
-                        </span>
-                      </li>
-                    ))
-                  ) : (
-                    <li className="text-center py-4 text-[#514F4F]/70">Your cart is empty</li>
+  <div className="absolute right-0 mt-2 w-96 bg-gradient-to-b from-[#FFFDF5] to-[#F8F4E6] border-2 border-[#D4AF37]/50 rounded-xl shadow-xl z-50 animate-fadeInUp overflow-hidden">
+    {/* Header with royal crown */}
+    <div className="relative p-4 border-b border-[#D4AF37]/30 bg-gradient-to-r from-[#FFD700]/10 to-[#D4AF37]/10 rounded-t-xl">
+      <h3 className="font-bold text-xl text-[#1A1A1A] flex items-center gap-2">
+        <FaCrown className="text-[#D4AF37]" />
+        <span>Your Royal Cart ({cartItems.length} {cartItems.length === 1 ? 'Treasure' : 'Treasures'})</span>
+      </h3>
+      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent"></div>
+    </div>
+
+    {/* Cart items with scrollable area */}
+    <div className="max-h-80 overflow-y-auto">
+      {cartItems.length > 0 ? (
+        <ul className="divide-y divide-[#D4AF37]/20">
+          {cartItems.map((item, index) => {
+            // Safely parse prices
+            const price = typeof item.price === 'string' 
+              ? parseFloat(item.price.replace(/[^\d.]/g, '')) 
+              : Number(item.price);
+            const discountedPrice = item.discounted_price 
+              ? typeof item.discounted_price === 'string'
+                ? parseFloat(item.discounted_price.replace(/[^\d.]/g, ''))
+                : Number(item.discounted_price)
+              : null;
+            const displayPrice = discountedPrice || price;
+            const quantity = item.quantity || 1;
+
+            return (
+              <li key={index} className="flex justify-between items-center p-4 hover:bg-[#F5E6B3]/30 transition-colors duration-200 group">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-lg overflow-hidden border border-[#D4AF37]/30">
+                    <img 
+                      src={item.productImage || '/img/default-game.jpg'} 
+                      alt={item.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <span className="text-[#1A1A1A] font-medium block truncate max-w-[180px] group-hover:text-[#996515]">
+                      {item.name}
+                    </span>
+                    <span className="text-xs text-[#6D6D6D]">Qty: {quantity}</span>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <span className="block text-[#1A1A1A] font-bold">
+                    ${displayPrice.toFixed(2)}
+                  </span>
+                  {discountedPrice && (
+                    <span className="text-xs px-1.5 py-0.5 rounded bg-[#D4AF37]/10 text-[#996515]">
+                      -{Math.round((1 - discountedPrice/price)*100)}%
+                    </span>
                   )}
-                </ul>
-                {cartItems.length > 0 && (
-                  <>
-                    <div className="p-4 border-t border-gray-200 flex justify-between font-semibold text-[#514F4F] bg-[#FFDF00]/20">
-                      <span>Total:</span>
-                      <span className="text-[#514F4F]">${cartTotal.toFixed(2)}</span>
-                    </div>
-                    <div className="p-4">
-                      <Link
-                        to="/cart"
-                        className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#514F4F] text-[#FFDF00] font-semibold py-2.5 px-6 shadow-lg hover:bg-[#514F4F]/90 focus:outline-none focus:ring-2 focus:ring-[#514F4F] transition-all duration-300 hover:shadow-[#514F4F]/30"
-                        aria-label="Go to cart"
-                      >
-                        <i className="fas fa-shopping-cart"></i>
-                        <span className="text-base">View Cart</span>
-                      </Link>
-                    </div>
-                  </>
-                )}
-              </div>
-            )}
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <div className="flex flex-col items-center justify-center p-8 text-center">
+          <FaShoppingCart className="text-[#D4AF37]/50 text-4xl mb-3" />
+          <p className="text-[#6D6D6D] font-medium">Your royal cart awaits treasures</p>
+          <p className="text-sm text-[#6D6D6D]/70 mt-1">Add premium games to begin your collection</p>
+        </div>
+      )}
+    </div>
+
+    {/* Footer with total and action buttons */}
+    {cartItems.length > 0 && (
+      <div className="border-t border-[#D4AF37]/30 bg-gradient-to-r from-[#FFD700]/10 to-[#D4AF37]/10">
+        <div className="p-4 flex justify-between items-center">
+          <span className="text-[#1A1A1A] font-bold">Total:</span>
+          <div className="text-right">
+            <span className="block text-xl font-bold text-[#1A1A1A]">
+              ${cartItems.reduce((total, item) => {
+                const price = typeof item.price === 'string' 
+                  ? parseFloat(item.price.replace(/[^\d.]/g, '')) 
+                  : Number(item.price);
+                const discountedPrice = item.discounted_price 
+                  ? typeof item.discounted_price === 'string'
+                    ? parseFloat(item.discounted_price.replace(/[^\d.]/g, ''))
+                    : Number(item.discounted_price)
+                  : price;
+                return total + (discountedPrice * (item.quantity || 1));
+              }, 0).toFixed(2)}
+            </span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 p-4">
+          <Link
+            to="/cart"
+            className="flex items-center justify-center gap-2 rounded-lg bg-[#1A1A1A] text-[#FFD700] font-bold py-3 px-4 hover:bg-[#2A2A2A] transition-all duration-300 hover:shadow-lg"
+          >
+            <FaShoppingCart />
+            <span>View Cart</span>
+          </Link>
+          <Link
+            to="/payment"  
+            className="flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#FFD700] text-[#1A1A1A] font-bold py-3 px-4 hover:shadow-lg transition-all duration-300"
+          >
+            <FaCrown />
+            <span>Checkout</span>
+          </Link>
+        </div>
+      </div>
+    )}
+
+    {/* Decorative elements */}
+    <div className="absolute top-0 right-0 w-8 h-8 overflow-hidden">
+      <div className="absolute -right-4 -top-4 w-8 h-8 bg-[#D4AF37] rotate-45"></div>
+    </div>
+  </div>
+)}
           </div>
 
           {/* Profile */}
