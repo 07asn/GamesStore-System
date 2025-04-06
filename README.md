@@ -67,6 +67,7 @@ The 07ASN platform transitions an active social media-based business into a full
   - React Router
   - CSS
   - Redux Toolkit
+  - Figma
 
 - **Backend**:
   - Node.js with Express.js
