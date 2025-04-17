@@ -20,7 +20,7 @@ const steps = [
   },
   {
     step: "Receive",
-    description: "Your products will arrive at your doorstep in no time.",
+    description: "Instant access to your digital products—available for download right away.",
     icon: Truck,
   },
 ];

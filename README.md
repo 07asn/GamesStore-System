@@ -1,16 +1,3 @@
-# 07ASN Games Store
-
-## Trello Link  
-[Trello](https://trello.com/b/E5s9QTHE/games-store)
-
----
-
-## 🎨 Figma Wireframe and Mockup  
-Explore the wireframes and mockups for the project design on Figma:  
-👉 [Access the Figma Wireframe & Mockup](https://www.figma.com/design/al8FFI2026I6XLYuPi4nyc/Digital-Games-Store?node-id=252-245&p=f&t=opF0kL6Bv9buHfYC-0)
-
----
-
 # 07ASN - Game Store System
 
 07ASN is an innovative online platform designed to support and enhance an already successful gaming business in Jordan. The platform specializes in **digital games, gaming accounts, and related services**, offering instant delivery for digital products and shipping support for physical gaming merchandise. As the first of its kind in Jordan, 07ASN establishes a professional presence for the business, increases customer trust, and opens doors for scalability and higher profitability.
@@ -22,31 +9,37 @@ The 07ASN platform transitions an active social media-based business into a full
 ### Features
 
 - **User Registration & Authentication**:
+
   - Secure JWT-based login system.
   - Account creation via email and password.
   - Admin panel for managing customers and inventory.
 
 - **Digital Game Delivery**:
+
   - Instant delivery system for digital codes.
   - Auto-email integration to send purchased items.
   - Secure management and inventory tracking of digital products.
 
 - **Physical Products Section**:
+
   - Cart and checkout for physical items like consoles, accessories, and merch.
   - Integration with shipping providers for order fulfillment.
   - Order tracking system for users.
 
 - **Gaming Accounts Marketplace**:
+
   - Buy and sell verified gaming accounts.
   - Escrow system for transaction safety.
   - Admin verification before listing accounts.
 
 - **Search & Filtering**:
+
   - Category filters (e.g., PS, Xbox, Steam, PC).
   - Keyword-based search.
   - Price range and popularity filters.
 
 - **User Dashboard**:
+
   - Order history, account management, wishlist.
   - Ticketing system for support requests.
   - Wallet system for balance tracking (optional).
@@ -61,6 +54,7 @@ The 07ASN platform transitions an active social media-based business into a full
 ## Technologies Used
 
 - **Frontend**:
+
   - React.js
   - Tailwind CSS
   - Axios
@@ -70,6 +64,7 @@ The 07ASN platform transitions an active social media-based business into a full
   - Figma
 
 - **Backend**:
+
   - Node.js with Express.js
   - PostgreSQL
   - JWT (for secure authentication)
@@ -86,6 +81,7 @@ The 07ASN platform transitions an active social media-based business into a full
 ## Business Value
 
 This website will support and enhance an already profitable gaming business that has been running through social media platforms. While the business is already generating income, the website will:
+
 - Provide a more professional and official presence.
 - Increase customer trust and reach.
 - Streamline operations (especially instant delivery for digital items).
@@ -93,3 +89,29 @@ This website will support and enhance an already profitable gaming business that
 - Be the **first specialized gaming platform in Jordan**, establishing a competitive edge.
 
 ---
+
+## 🔗 Trello Link
+
+Stay organized with the project tasks on Trello:  
+[**07ASN Trello Board**](https://trello.com/b/E5s9QTHE/games-store)
+
+---
+
+## 🎨 Figma Wireframe & Mockups
+
+Explore the interactive wireframes and mockups for the project's design on Figma:  
+👉 [**07ASN Figma Wireframe & Mockup**](https://www.figma.com/design/al8FFI2026I6XLYuPi4nyc/Digital-Games-Store?node-id=252-245&p=f&t=opF0kL6Bv9buHfYC-0)
+
+---
+
+## 📊 Project Presentation
+
+View the detailed project presentation:  
+[**07ASN Presentation**](https://www.canva.com/design/DAGk4YOTZfI/1bZs1sZAYfJpF4WodaB2eQ/view?utm_content=DAGk4YOTZfI&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hcf52d924b8)
+
+---
+
+## 📄 07ASN Brief
+
+Check out the project brief for an in-depth understanding:  
+[**07ASN Brief**](https://www.canva.com/design/DAGj8Kc231E/iizy9O9AkpgubN52a4Y_Jg/view?utm_content=DAGj8Kc231E&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hcb99187578)

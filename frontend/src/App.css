@@ -4,7 +4,7 @@
     opacity: 0.6;
     animation: drift infinite ease-in-out;
   }
-  
+
   @keyframes drift {
     0% {
       transform: translateY(0) translateX(0);

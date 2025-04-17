@@ -298,7 +298,7 @@ export default function Admin() {
                 
                 /* Custom styling for inputs */
                 input, select, textarea {
-                    background-color: rgba(15, 15, 15, 0.6);
+                    background-color: rgba(255, 242, 169, 0.03);
                     border: 1px solid rgba(212, 175, 55, 0.2);
                     color: ${colors.parchment};
                     border-radius: 4px;
@@ -309,7 +309,7 @@ export default function Admin() {
                 input:focus, select:focus, textarea:focus {
                     border-color: rgba(212, 175, 55, 0.6);
                     box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.2), 0 0 8px rgba(212, 175, 55, 0.1);
-                    background-color: rgba(20, 20, 20, 0.8);
+                    background-color: rgba(254, 255, 181, 0.37);
                 }
                 
                 /* Table styling */

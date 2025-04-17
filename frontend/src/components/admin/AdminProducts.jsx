@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import { PlusIcon } from 'lucide-react';
+import { PlusIcon, ChevronDown, ChevronUp } from 'lucide-react';
 import ProductForm from './products/ProductForm';
 import ProductsTable from './products/ProductsTable';
 
@@ -14,6 +14,7 @@ const AdminProducts = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [activeTab, setActiveTab] = useState('active');
+    const [isFormOpen, setIsFormOpen] = useState(false);
     const [newProduct, setNewProduct] = useState({
         name: '',
         description: '',
@@ -45,6 +46,7 @@ const AdminProducts = () => {
     useEffect(() => {
         if (isEditing && selectedProduct) {
             syncFormWithSelectedProduct();
+            setIsFormOpen(true);
         }
     }, [isEditing, selectedProduct]);
 
@@ -320,6 +322,19 @@ const AdminProducts = () => {
         });
         setIsEditing(false);
         setSelectedProduct(null);
+        setIsFormOpen(false);
+    };
+
+    // Toggle form visibility
+    const toggleForm = () => {
+        if (isEditing) {
+            resetForm();
+        } else {
+            setIsFormOpen(!isFormOpen);
+            if (!isFormOpen) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
     };
 
     // Data filtering and counting
@@ -354,29 +369,39 @@ const AdminProducts = () => {
                         </p>
                     </div>
                     <button 
-                        onClick={() => {
-                            resetForm();
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                        }}
+                        onClick={toggleForm}
                         className="flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors shadow-sm"
                     >
-                        <PlusIcon className="w-5 h-5 mr-2" />
-                        Add New Product
+                        {isFormOpen ? (
+                            <>
+                                <ChevronUp className="w-5 h-5 mr-2" />
+                                Hide Form
+                            </>
+                        ) : (
+                            <>
+                                <PlusIcon className="w-5 h-5 mr-2" />
+                                Add New Product
+                            </>
+                        )}
                     </button>
                 </div>
 
-                {/* Product Form */}
-                <ProductForm
-                    newProduct={newProduct}
-                    categories={categories}
-                    isLoading={isLoading}
-                    isEditing={isEditing}
-                    handleInputChange={handleInputChange}
-                    handleImageUpload={handleImageUpload}
-                    removeImage={removeImage}
-                    handleSubmit={isEditing ? handleUpdateProduct : handleCreateProduct}
-                    resetForm={resetForm}
-                />
+                {/* Product Form - Collapsible Section */}
+                <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isFormOpen ? 'max-h-[2000px] mb-6' : 'max-h-0 mb-0'}`}>
+                    <div className={`${isFormOpen ? 'block' : 'hidden'}`}>
+                        <ProductForm
+                            newProduct={newProduct}
+                            categories={categories}
+                            isLoading={isLoading}
+                            isEditing={isEditing}
+                            handleInputChange={handleInputChange}
+                            handleImageUpload={handleImageUpload}
+                            removeImage={removeImage}
+                            handleSubmit={isEditing ? handleUpdateProduct : handleCreateProduct}
+                            resetForm={resetForm}
+                        />
+                    </div>
+                </div>
 
                 {/* Products Table */}
                 <ProductsTable
