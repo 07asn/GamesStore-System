@@ -2,7 +2,9 @@
 
 <div align="center">
   
-  ![Digital Gaming](https://drive.google.com/uc?export=view&id=17aGEvYbkFDRl3gRtpuVc_A9oE0xsI1jq)
+<div align="center">
+  <img src="https://drive.google.com/uc?export=view&id=17aGEvYbkFDRl3gRtpuVc_A9oE0xsI1jq" alt="07ASN Logo" width="100" height="auto">
+</div>
   
   > *Jordan's Premier Digital Gaming Marketplace*
   
@@ -192,7 +194,7 @@ Built on the **PERN Stack** (PostgreSQL, Express, React, Node.js), 07ASN elevate
 <div align="center">
   <img src="https://drive.google.com/uc?export=view&id=17aGEvYbkFDRl3gRtpuVc_A9oE0xsI1jq" alt="07ASN Logo" width="100" height="auto">
 </div>
-  
+
   ### *Revolutionizing Digital Gaming in Jordan*
   
   <sub>© 2025 07ASN - All rights reserved</sub>
