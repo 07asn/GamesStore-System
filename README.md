@@ -133,77 +133,17 @@ Built on the **PERN Stack** (PostgreSQL, Express, React, Node.js), 07ASN elevate
   
   | 🌟 Value | 📝 Description |
   |:-------:|-------------|
-  | ![Crown](https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/2022_pattern_Tudor_Crown_%283D%29_Sodacan_style.svg/1200px-2022_pattern_Tudor_Crown_%283D%29_Sodacan_style.svg.png) | **Market Leadership**: First dedicated digital gaming platform in Jordan |
-  | ![Trust](https://cdn-icons-png.flaticon.com/512/7179/7179073.png) | **Enhanced Trust**: Professional platform increases customer confidence |
-  | ![Speed](https://cdn-icons-png.flaticon.com/512/6534/6534475.png) | **Instant Delivery**: Automated systems for immediate digital product access |
-  | ![Growth](https://cdn-icons-png.flaticon.com/512/5216/5216842.png) | **Scalability**: Infrastructure designed for business expansion |
-  | ![Revenue](https://cdn-icons-png.flaticon.com/512/4577/4577278.png) | **Increased Revenue**: Higher margins through streamlined operations |
+  | 👑 | **Market Leadership**: First dedicated digital gaming platform in Jordan |
+  | 🤝 | **Enhanced Trust**: Professional platform increases customer confidence |
+  | ⚡ | **Instant Delivery**: Automated systems for immediate digital product access |
+  | 📈 | **Scalability**: Infrastructure designed for business expansion |
+  | 💰 | **Increased Revenue**: Higher margins through streamlined operations |
   
 </div>
 
 ---
 
 ## 🔗 Project Resources
-
-<div align="center">
-  <div style="display: flex; flex-direction: column; gap: 20px; max-width: 600px; margin: 0 auto;">
-    
-    <a href="https://trello.com/b/E5s9QTHE/games-store" target="_blank">
-      <div style="background-color: #0052CC; padding: 15px; border-radius: 8px; display: flex; align-items: center; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s;">
-        <img src="https://cdn.iconscout.com/icon/free/png-256/trello-2752053-2284870.png" width="40" height="40" style="margin-right: 15px;">
-        <div>
-          <h3 style="color: white; margin: 0;">Project Management</h3>
-          <p style="color: #e0e0e0; margin: 5px 0 0 0;">View our Trello board for task organization and progress tracking</p>
-        </div>
-        <div style="margin-left: auto;">
-          <span style="color: white; font-size: 24px;">→</span>
-        </div>
-      </div>
-    </a>
-
-    <a href="https://www.figma.com/design/al8FFI2026I6XLYuPi4nyc/Digital-Games-Store?node-id=252-245&p=f&t=opF0kL6Bv9buHfYC-0" target="_blank">
-      <div style="background-color: #F24E1E; padding: 15px; border-radius: 8px; display: flex; align-items: center; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s;">
-        <img src="https://cdn.iconscout.com/icon/free/png-256/figma-3521426-2944870.png" width="40" height="40" style="margin-right: 15px;">
-        <div>
-          <h3 style="color: white; margin: 0;">UI/UX Design</h3>
-          <p style="color: #e0e0e0; margin: 5px 0 0 0;">Explore our Figma wireframes and interactive design prototypes</p>
-        </div>
-        <div style="margin-left: auto;">
-          <span style="color: white; font-size: 24px;">→</span>
-        </div>
-      </div>
-    </a>
-
-    <a href="https://www.canva.com/design/DAGk4YOTZfI/1bZs1sZAYfJpF4WodaB2eQ/view?utm_content=DAGk4YOTZfI&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hcf52d924b8" target="_blank">
-      <div style="background-color: #00C4CC; padding: 15px; border-radius: 8px; display: flex; align-items: center; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s;">
-        <img src="https://cdn.iconscout.com/icon/free/png-256/canva-3521468-2944912.png" width="40" height="40" style="margin-right: 15px;">
-        <div>
-          <h3 style="color: white; margin: 0;">Project Presentation</h3>
-          <p style="color: #e0e0e0; margin: 5px 0 0 0;">View our comprehensive project slides and visual presentation</p>
-        </div>
-        <div style="margin-left: auto;">
-          <span style="color: white; font-size: 24px;">→</span>
-        </div>
-      </div>
-    </a>
-
-    <a href="https://www.canva.com/design/DAGj8Kc231E/iizy9O9AkpgubN52a4Y_Jg/view?utm_content=DAGj8Kc231E&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hcb99187578" target="_blank">
-      <div style="background-color: #00C4CC; padding: 15px; border-radius: 8px; display: flex; align-items: center; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s;">
-        <img src="https://cdn.iconscout.com/icon/free/png-256/document-1752022-1491539.png" width="40" height="40" style="margin-right: 15px;">
-        <div>
-          <h3 style="color: white; margin: 0;">Project Brief</h3>
-          <p style="color: #e0e0e0; margin: 5px 0 0 0;">Read the detailed project requirements and business objectives</p>
-        </div>
-        <div style="margin-left: auto;">
-          <span style="color: white; font-size: 24px;">→</span>
-        </div>
-      </div>
-    </a>
-    
-  </div>
-</div>
-
-### 📱 Quick Access Links
 
 <div align="center">
   <table>
@@ -231,7 +171,7 @@ Built on the **PERN Stack** (PostgreSQL, Express, React, Node.js), 07ASN elevate
       </td>
       <td align="center" width="25%">
         <a href="https://www.canva.com/design/DAGj8Kc231E/iizy9O9AkpgubN52a4Y_Jg/view?utm_content=DAGj8Kc231E&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hcb99187578" target="_blank">
-          <img src="https://cdn.iconscout.com/icon/free/png-256/document-1752022-1491539.png" width="50" height="50"><br>
+          <img src="https://cdn-icons-png.flaticon.com/512/7046/7046899.png" width="50" height="50"><br>
           <b>Brief</b><br>
           <small>Project Details</small>
         </a>
@@ -243,9 +183,6 @@ Built on the **PERN Stack** (PostgreSQL, Express, React, Node.js), 07ASN elevate
 <div align="center">
   <p style="margin-top: 20px; font-style: italic;">Click any resource above to access project documentation</p>
   
-  <a href="mailto:contact@07asn.com" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 4px; font-weight: bold;">
-    Request Access to Resources
-  </a>
 </div>
 
 ---
