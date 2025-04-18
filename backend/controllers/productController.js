@@ -485,6 +485,63 @@ const searchProducts = async (req, res) => {
   }
 };
 
+
+const searchProductsAdmin = async (req, res) => {
+  try {
+    const { q, tab } = req.query;
+    if (!q || q.trim() === '') {
+      return res.status(400).json({ message: 'Query parameter "q" is required.' });
+    }
+
+    // Base filter: name ilike %q% and not deleted
+    const where = {
+      name: { [Op.iLike]: `%${q}%` },
+      is_deleted: false,
+    };
+
+    // Tab‐specific
+    if (tab === 'active') {
+      where.stock = { [Op.gt]: 0 };
+    } else if (tab === 'outOfStock') {
+      where.stock = 0;
+    }
+
+    const products = await Product.findAll({
+      where,
+      include: [
+        {
+          model: Product_Image,
+          as: 'images',
+          attributes: ['image_url'],
+          required: false,
+        },
+        {
+          model: Category,
+          as: 'category',
+          attributes: ['category_id', 'name'],
+          required: false,
+        }
+      ],
+      limit: 50,
+    });
+
+    // Flatten out the JSON for frontend
+    const formatted = products.map(p => {
+      const plain = p.get({ plain: true });
+      return {
+        ...plain,
+        category_name: plain.category?.name || 'Uncategorized',
+        images: plain.images.map(img => img.image_url),
+      };
+    });
+
+    res.json(formatted);
+  } catch (error) {
+    console.error('searchProductsAdmin error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
 module.exports = {
   getProducts,
   getProductById,
@@ -496,4 +553,5 @@ module.exports = {
   restoreProduct,
   getDeletedProducts,
   searchProducts,
+  searchProductsAdmin
 };

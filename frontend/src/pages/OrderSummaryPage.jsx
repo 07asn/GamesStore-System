@@ -145,7 +145,6 @@ const OrderSummaryPage = () => {
         status={order.order_status}
       />
 
-      {/* Conditional Rendering: if status is pending, show Processing; else show Rating & Products */}
       {normalizedStatus === 'pending' ? (
         <Processing />
       ) : (
@@ -163,7 +162,7 @@ const OrderSummaryPage = () => {
         setSelectedRating={setSelectedRating}
         feedback={feedback}
         setFeedback={setFeedback}
-        onSubmit={handleSubmitReview} // Use our submit function here
+        onSubmit={handleSubmitReview}
       />
     </section>
   );

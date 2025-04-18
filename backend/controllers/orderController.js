@@ -1,6 +1,7 @@
 // controllers/orderController.js
 const Order = require('../models/Order');
 const User = require('../models/User');
+const { Op } = require('sequelize');
 const Order_Item = require('../models/Order_Item');
 const Inventory = require('../models/Inventory');
 const Product = require('../models/Product');
@@ -285,26 +286,48 @@ exports.getUserOrders = async (req, res) => {
 
 exports.getOrders = async (req, res) => {
   try {
-    const { status } = req.query;
+    const {
+      status,
+      orderId,
+      page = 1,
+      pageSize = 10
+    } = req.query;
 
-    const whereClause = status ? { order_status: status } : {};
+    // Build WHERE
+    const whereClause = {};
+    if (status)    whereClause.order_status   = status;
+    if (orderId)   whereClause.order_id       = orderId;
 
-    const orders = await Order.findAll({
+    // Parse pagination
+    const limit  = parseInt(pageSize, 10);
+    const offset = (parseInt(page, 10) - 1) * limit;
+
+    // Fetch with count
+    const { count, rows } = await Order.findAndCountAll({
       where: whereClause,
-      include: [
-        {
-          model: Order_Item,
-          as: 'order_items',
-          include: [
-            { model: Product, as: 'product' },
-            { model: Inventory, as: 'inventory' },
-          ],
-        },
-      ],
+      include: [{
+        model: Order_Item,
+        as: 'order_items',
+        include: [
+          { model: Product,   as: 'product' },
+          { model: Inventory, as: 'inventory' }
+        ],
+      }],
       order: [['order_date', 'DESC']],
+      limit,
+      offset,
     });
 
-    return res.status(200).json({ orders });
+    const totalPages = Math.ceil(count / limit);
+
+    return res.status(200).json({
+      orders: rows,
+      pagination: {
+        totalItems: count,
+        totalPages,
+        currentPage: parseInt(page, 10)
+      }
+    });
   } catch (error) {
     console.error('Error fetching orders:', error);
     return res.status(500).json({ message: 'Server error' });

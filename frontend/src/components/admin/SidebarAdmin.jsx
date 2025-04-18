@@ -171,7 +171,7 @@ const SidebarAdmin = ({ setSelectedTab, selectedTab }) => {
                     fontFamily: "'Cinzel', serif"
                   }}
                 >
-                  Royal Command
+                  07ASN HUB
                 </h1>
               </div>
               <button 

@@ -10,7 +10,8 @@ const {
   addProduct, 
   updateProduct, 
   deleteProduct, 
-  restoreProduct 
+  restoreProduct,
+  searchProductsAdmin 
 } = require('../controllers/productController');
 const upload = require('../middleware/uploadMiddleware'); 
 const authenticate = require('../middleware/authMiddleware');
@@ -25,6 +26,7 @@ router.patch('/:id/restore', restoreProduct);
 
 // Public routes
 router.get('/search', searchProducts);
+router.get('/search-admin', searchProductsAdmin);
 router.get('/featured', getFeaturedProducts);
 router.get('/', getProducts);
 router.get('/deleted', getDeletedProducts); 

@@ -5,32 +5,126 @@ const Category = require('../models/Category');  // Assuming Category model is a
 
 // Get all inventories
 const getInventories = async (req, res) => {
-    try {
-        const inventories = await Inventory.findAll({
-            include: [
-                {
-                    model: Product,
-                    as: 'product',
-                    attributes: ['name', 'product_id'],
-                    include: {
-                        model: Category,
-                        as: 'category',
-                        attributes: ['name'],  // Assuming Category model is connected to Product
-                    },
-                },
-            ],
+  try {
+      const { 
+          page = 1, 
+          pageSize = 10,
+          search = '',
+          status = 'all',
+          category = 'all'
+      } = req.query;
+
+      // Build the base query
+      let whereClause = {};
+      let includeClause = [
+          {
+              model: Product,
+              as: 'product',
+              attributes: ['name', 'product_id'],
+              include: {
+                  model: Category,
+                  as: 'category',
+                  attributes: ['name'],
+              },
+              required: true // Use INNER JOIN to ensure we only get inventories with products
+          }
+      ];
+
+      // Apply search filter
+      if (search) {
+          whereClause = {
+              ...whereClause,
+              [Op.or]: [
+                  { asset_code: { [Op.like]: `%${search}%` } },
+                  { '$product.name$': { [Op.like]: `%${search}%` } },
+                  { '$product.category.name$': { [Op.like]: `%${search}%` } }
+              ]
+          };
+      }
+
+      // Apply status filter
+      if (status !== 'all') {
+          whereClause.status = status;
+      }
+
+      // Apply category filter
+      if (category !== 'all') {
+          includeClause[0].include.where = { name: category };
+      }
+
+      // Parse pagination
+      const limit = parseInt(pageSize, 10);
+      const offset = (parseInt(page, 10) - 1) * limit;
+
+      // Fetch with count
+      const { count, rows } = await Inventory.findAndCountAll({
+          where: whereClause,
+          include: includeClause,
+          limit,
+          offset,
+          order: [['assigned_at', 'DESC']]
         });
 
-        if (!inventories || inventories.length === 0) {
-            return res.status(404).json({ message: 'No inventories found!' });
-        }
+      const totalPages = Math.ceil(count / limit);
 
-        // Return inventories with product details
-        return res.status(200).json(inventories);
-    } catch (error) {
-        console.error('Error fetching inventories:', error);
-        return res.status(500).json({ message: 'Server error' });
-    }
+      return res.status(200).json({
+          inventories: rows,
+          pagination: {
+              totalItems: count,
+              totalPages,
+              currentPage: parseInt(page, 10),
+              pageSize: limit
+          }
+      });
+  } catch (error) {
+      console.error('Error fetching inventories:', error);
+      return res.status(500).json({ message: 'Server error' });
+  }
+};
+
+const exportInventories = async (req, res) => {
+  try {
+      const inventories = await Inventory.findAll({
+          include: [
+              {
+                  model: Product,
+                  as: 'product',
+                  attributes: ['name'],
+                  include: {
+                      model: Category,
+                      as: 'category',
+                      attributes: ['name'],
+                  },
+              },
+          ],
+          order: [['created_at', 'DESC']]
+      });
+
+      if (!inventories || inventories.length === 0) {
+          return res.status(404).json({ message: 'No inventories found to export!' });
+      }
+
+      // Convert to CSV
+      const csvData = [
+          ['Product Name', 'Category', 'Asset Code', 'Status', 'Assigned At'],
+          ...inventories.map(item => [
+              item.product?.name || 'Unknown',
+              item.product?.category?.name || 'Uncategorized',
+              item.asset_code,
+              item.status,
+              item.assigned_at || 'N/A'
+          ])
+      ].map(row => row.join(',')).join('\n');
+
+      // Set headers for CSV download
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', 'attachment; filename=inventories_export.csv');
+      
+      return res.status(200).send(csvData);
+  } catch (error) {
+      console.error('Error exporting inventories:', error);
+      return res.status(500).json({ message: 'Server error during export' });
+  }
 };
 
 // Get inventory by product ID

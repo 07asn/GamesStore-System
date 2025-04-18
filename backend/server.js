@@ -55,13 +55,6 @@ app.use('/api/inventory', inventoryRoutes);
 app.use('/api/contacts', contactRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/', gamingRoutes);
-
-app.use((req, res, next) => {
-  console.log(`Incoming ${req.method} request to ${req.path}`);
-  console.log('Headers:', req.headers);
-  console.log('Body:', req.body);
-  next();
-});
 //---------------------------
 // ERROR HANDLERS
 //---------------------------

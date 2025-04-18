@@ -128,7 +128,7 @@ export default function Admin() {
                             textShadow: colors.goldTextShadow,
                             letterSpacing: '1.5px'
                         }}>
-                            Royal Admin
+                            07ASN Admin
                         </h1>
                     </div>
                     <div className="hidden md:flex items-center space-x-4" style={{
