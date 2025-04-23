@@ -149,36 +149,44 @@ Built on the **PERN Stack** (PostgreSQL, Express, React, Node.js), 07ASN elevate
 
 <div align="center">
   <table>
-    <tr>
-      <td align="center" width="25%">
-        <a href="https://trello.com/b/E5s9QTHE/games-store" target="_blank">
-          <img src="https://cdn.iconscout.com/icon/free/png-256/trello-2752053-2284870.png" width="50" height="50"><br>
-          <b>Trello</b><br>
-          <small>Task Management</small>
-        </a>
-      </td>
-      <td align="center" width="25%">
-        <a href="https://www.figma.com/design/al8FFI2026I6XLYuPi4nyc/Digital-Games-Store?node-id=252-245&p=f&t=opF0kL6Bv9buHfYC-0" target="_blank">
-          <img src="https://cdn.iconscout.com/icon/free/png-256/figma-3521426-2944870.png" width="50" height="50"><br>
-          <b>Figma</b><br>
-          <small>Design Files</small>
-        </a>
-      </td>
-      <td align="center" width="25%">
-        <a href="https://www.canva.com/design/DAGk4YOTZfI/1bZs1sZAYfJpF4WodaB2eQ/view?utm_content=DAGk4YOTZfI&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hcf52d924b8" target="_blank">
-          <img src="https://cdn.iconscout.com/icon/free/png-256/canva-3521468-2944912.png" width="50" height="50"><br>
-          <b>Presentation</b><br>
-          <small>Project Slides</small>
-        </a>
-      </td>
-      <td align="center" width="25%">
-        <a href="https://www.canva.com/design/DAGj8Kc231E/iizy9O9AkpgubN52a4Y_Jg/view?utm_content=DAGj8Kc231E&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hcb99187578" target="_blank">
-          <img src="https://cdn-icons-png.flaticon.com/512/7046/7046899.png" width="50" height="50"><br>
-          <b>Brief</b><br>
-          <small>Project Details</small>
-        </a>
-      </td>
-    </tr>
+<tr>
+  <td align="center" width="20%">
+    <a href="https://trello.com/b/E5s9QTHE/games-store" target="_blank">
+      <img src="https://cdn.iconscout.com/icon/free/png-256/trello-2752053-2284870.png" width="50" height="50"><br>
+      <b>Trello</b><br>
+      <small>Task Management</small>
+    </a>
+  </td>
+  <td align="center" width="20%">
+    <a href="https://www.figma.com/design/al8FFI2026I6XLYuPi4nyc/Digital-Games-Store?node-id=252-245&p=f&t=opF0kL6Bv9buHfYC-0" target="_blank">
+      <img src="https://cdn.iconscout.com/icon/free/png-256/figma-3521426-2944870.png" width="50" height="50"><br>
+      <b>Figma</b><br>
+      <small>Design Files</small>
+    </a>
+  </td>
+  <td align="center" width="20%">
+    <a href="https://www.canva.com/design/DAGk4YOTZfI/1bZs1sZAYfJpF4WodaB2eQ/view?utm_content=DAGk4YOTZfI&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hcf52d924b8" target="_blank">
+      <img src="https://cdn.iconscout.com/icon/free/png-256/canva-3521468-2944912.png" width="50" height="50"><br>
+      <b>Presentation</b><br>
+      <small>Project Slides</small>
+    </a>
+  </td>
+  <td align="center" width="20%">
+    <a href="https://www.canva.com/design/DAGj8Kc231E/iizy9O9AkpgubN52a4Y_Jg/view?utm_content=DAGj8Kc231E&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hcb99187578" target="_blank">
+      <img src="https://cdn-icons-png.flaticon.com/512/7046/7046899.png" width="50" height="50"><br>
+      <b>Brief</b><br>
+      <small>Project Details</small>
+    </a>
+  </td>
+  <td align="center" width="20%">
+    <a href="https://docs.google.com/document/d/1xEbS1xoSkBfytbTccuZ9I2vjFNQx82eZ/edit?usp=drive_link&ouid=104223863874430898544&rtpof=true&sd=true" target="_blank">
+      <img src="https://cdn.iconscout.com/icon/free/png-256/google-docs-1-1175153.png" width="50" height="50"><br>
+      <b>Documentation</b><br>
+      <small>Project Docs</small>
+    </a>
+  </td>
+</tr>
+
   </table>
 </div>
 
