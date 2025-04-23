@@ -180,7 +180,7 @@ Built on the **PERN Stack** (PostgreSQL, Express, React, Node.js), 07ASN elevate
   </td>
   <td align="center" width="20%">
     <a href="https://docs.google.com/document/d/1xEbS1xoSkBfytbTccuZ9I2vjFNQx82eZ/edit?usp=drive_link&ouid=104223863874430898544&rtpof=true&sd=true" target="_blank">
-      <img src="https://cdn.iconscout.com/icon/free/png-256/google-docs-1-1175153.png" width="50" height="50"><br>
+      <img src="https://cdn-icons-png.flaticon.com/512/5064/5064889.png" width="50" height="50"><br>
       <b>Documentation</b><br>
       <small>Project Docs</small>
     </a>
