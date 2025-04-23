@@ -67,7 +67,7 @@ Built on the **PERN Stack** (PostgreSQL, Express, React, Node.js), 07ASN elevate
     </a>
   </td>
   <td align="center" width="20%">
-    <a href="https://docs.google.com/document/d/1xEbS1xoSkBfytbTccuZ9I2vjFNQx82eZ/edit?usp=drive_link&ouid=104223863874430898544&rtpof=true&sd=true" target="_blank">
+    <a href="https://drive.google.com/file/d/1QAJ1L6Pf7S4TTyP1bTnwfCraXzVH3MXt/view?usp=drive_link" target="_blank">
       <img src="https://cdn-icons-png.flaticon.com/512/5064/5064889.png" width="50" height="50"><br>
       <b>Documentation</b><br>
     </a>
@@ -104,52 +104,19 @@ Built on the **PERN Stack** (PostgreSQL, Express, React, Node.js), 07ASN elevate
     C --> C2[Auto-Email Integration]
     
     D --> D1[Account Trading]
-    D --> D2[Escrow System]
+    D --> D2[Guidance Center]
     
-    E --> E1[Advanced Filters]
-    E --> E2[Smart Search]
+    E --> E1[Categories Filters & Games Search]
+    E --> E2[Most played games leaderboard Filters]
     
     F --> F1[Order History]
-    F --> F2[Support System]
+    F --> F2[Profile Settings]
     
     G --> G1[Analytics]
     G --> G2[Inventory Management]
   ```
   
 </div>
-
-### 👤 User Registration & Authentication
-- 🔒 Secure JWT-based login system
-- ✉️ Email-based account creation
-- 🛡️ Two-factor authentication option
-
-### 🎮 Digital Game Delivery
-- ⚡ Instant code delivery system
-- 📧 Automated email integration
-- 🔄 Real-time inventory tracking
-
-### 🔄 Gaming Accounts Marketplace
-- 🤝 Buy and sell verified gaming accounts
-- 💰 Secure escrow transaction system
-- ✅ Admin verification process for all listings
-
-### 🔍 Search & Filtering
-- 🎯 Platform-specific filters (PS, Xbox, Steam, PC)
-- 🔤 Intelligent keyword search
-- 📊 Price range and popularity sorting
-
-### 📊 User Dashboard
-- 📜 Complete digital purchase history
-- 👤 Account management tools
-- 🎫 Support ticketing system
-- 💖 Digital wishlist functionality
-- 💼 Digital wallet integration
-
-### ⚙️ Admin Dashboard
-- 🧰 Digital product management
-- 📈 Sales analytics and projections
-- 👥 Customer engagement metrics
-- 🔔 Notification management system
 
 ---
 
