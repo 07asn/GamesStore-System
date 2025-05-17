@@ -22,7 +22,7 @@ const COLORS = {
 
 const FilterBar = ({ categories, onFilterChange, onSortChange, onSearch, activeCategory }) => {
   return (
-    <div className="rounded-xl p-6 mb-8" style={{ 
+    <div className="rounded-xl p-6 mb-8" style={{
       backgroundColor: COLORS.white,
       border: `1px solid ${COLORS.lightGray}`,
       boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
@@ -34,7 +34,7 @@ const FilterBar = ({ categories, onFilterChange, onSortChange, onSearch, activeC
             type="text"
             placeholder="Search games..."
             className="w-full pl-10 pr-4 py-3 rounded-lg transition-all focus:ring-2 focus:ring-offset-2"
-            style={{ 
+            style={{
               border: `1px solid ${COLORS.lightGray}`,
               backgroundColor: COLORS.white,
               color: COLORS.darkGray,
@@ -51,18 +51,18 @@ const FilterBar = ({ categories, onFilterChange, onSortChange, onSearch, activeC
             }}
             onChange={(e) => onSearch(e.target.value)}
           />
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2" 
-                  size={18} 
-                  style={{ color: COLORS.gold }} />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2"
+            size={18}
+            style={{ color: COLORS.gold }} />
         </div>
-        
+
         <div className="flex flex-wrap items-center gap-4 w-full md:w-auto">
           {/* Category Filter */}
           <div className="relative group w-full sm:w-auto">
             <select
               aria-label="Category"
               className="appearance-none w-full rounded-lg pl-10 pr-10 py-3 cursor-pointer transition-all focus:ring-2 focus:ring-offset-2"
-              style={{ 
+              style={{
                 border: `1px solid ${COLORS.lightGray}`,
                 backgroundColor: COLORS.white,
                 color: COLORS.darkGray,
@@ -86,20 +86,20 @@ const FilterBar = ({ categories, onFilterChange, onSortChange, onSearch, activeC
                 </option>
               ))}
             </select>
-            <Gamepad2 className="absolute left-3 top-1/2 transform -translate-y-1/2" 
-                    size={16} 
-                    style={{ color: COLORS.gold }} />
-            <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none" 
-                         size={16} 
-                         style={{ color: COLORS.gold }} />
+            <Gamepad2 className="absolute left-3 top-1/2 transform -translate-y-1/2"
+              size={16}
+              style={{ color: COLORS.gold }} />
+            <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none"
+              size={16}
+              style={{ color: COLORS.gold }} />
           </div>
-          
+
           {/* Sort */}
           <div className="relative group w-full sm:w-auto">
             <select
               aria-label="Sort products"
               className="appearance-none w-full rounded-lg pl-10 pr-10 py-3 cursor-pointer transition-all focus:ring-2 focus:ring-offset-2"
-              style={{ 
+              style={{
                 border: `1px solid ${COLORS.lightGray}`,
                 backgroundColor: COLORS.white,
                 color: COLORS.darkGray,
@@ -122,12 +122,12 @@ const FilterBar = ({ categories, onFilterChange, onSortChange, onSearch, activeC
               <option value="best-seller">Best Sellers</option>
               <option value="top-rated">Top Rated</option>
             </select>
-            <Star className="absolute left-3 top-1/2 transform -translate-y-1/2" 
-                 size={16} 
-                 style={{ color: COLORS.gold }} />
-            <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none" 
-                         size={16} 
-                         style={{ color: COLORS.gold }} />
+            <Star className="absolute left-3 top-1/2 transform -translate-y-1/2"
+              size={16}
+              style={{ color: COLORS.gold }} />
+            <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none"
+              size={16}
+              style={{ color: COLORS.gold }} />
           </div>
         </div>
       </div>
@@ -158,9 +158,9 @@ const ShopPage = () => {
       try {
         const [productsResponse, categoriesResponse] = await Promise.all([
           axios.get('http://localhost:5000/api/products'),
-          axios.get('http://localhost:5000/api/categories/all')
+          axios.get('http://localhost:5000/api/categories/active')
         ]);
-        
+
         setAllProducts(productsResponse.data);
         setCategories(categoriesResponse.data);
         setIsLoading(false);
@@ -170,7 +170,7 @@ const ShopPage = () => {
         setIsLoading(false);
       }
     };
-    
+
     fetchData();
   }, []);
 
@@ -193,7 +193,7 @@ const ShopPage = () => {
     // Apply search
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      result = result.filter(product => 
+      result = result.filter(product =>
         product.name.toLowerCase().includes(query) ||
         (product.description && product.description.toLowerCase().includes(query))
       );
@@ -242,7 +242,7 @@ const ShopPage = () => {
   };
 
   return (
-    <div style={{ 
+    <div style={{
       backgroundColor: COLORS.offWhite,
       minHeight: '100vh',
       backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 100%)'
@@ -256,28 +256,28 @@ const ShopPage = () => {
               ROYAL GAMING COLLECTION
             </span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{ 
+          <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{
             color: COLORS.black,
             fontFamily: "'Cinzel', serif"
           }}>
-            Discover <span style={{ 
+            Discover <span style={{
               background: COLORS.goldGradient,
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent'
             }}>Premium Games</span>
           </h1>
-          <div className="w-24 h-1 mx-auto mb-6 rounded-full" style={{ 
+          <div className="w-24 h-1 mx-auto mb-6 rounded-full" style={{
             background: COLORS.goldGradient,
-            boxShadow: COLORS.glowGold 
+            boxShadow: COLORS.glowGold
           }}></div>
           <p style={{ color: COLORS.mediumGray }} className="max-w-2xl mx-auto text-lg">
             Curated selection of the finest games worthy of your collection
           </p>
         </div>
-        
-        <FilterBar 
+
+        <FilterBar
           categories={categories}
-          onFilterChange={handleFilterChange} 
+          onFilterChange={handleFilterChange}
           onSortChange={setSortOption}
           onSearch={setSearchQuery}
           activeCategory={activeCategory}
@@ -285,26 +285,26 @@ const ShopPage = () => {
 
         <section>
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-semibold" style={{ 
+            <h2 className="text-2xl font-semibold" style={{
               color: COLORS.black,
               fontFamily: "'Cinzel', serif"
             }}>
               {getCategoryName()}
-              <span className="ml-3 text-sm py-1 px-3 rounded-full" 
-                    style={{ 
-                      backgroundColor: COLORS.lightGold,
-                      color: COLORS.darkGold,
-                      border: `1px solid ${COLORS.gold}`
-                    }}>
+              <span className="ml-3 text-sm py-1 px-3 rounded-full"
+                style={{
+                  backgroundColor: COLORS.lightGold,
+                  color: COLORS.darkGold,
+                  border: `1px solid ${COLORS.gold}`
+                }}>
                 {filteredProducts.length} items
               </span>
             </h2>
           </div>
-          
+
           {isLoading && (
             <div className="flex justify-center items-center py-20">
               <div className="animate-pulse flex flex-col items-center">
-                <div className="h-12 w-12 rounded-full mb-4" style={{ 
+                <div className="h-12 w-12 rounded-full mb-4" style={{
                   backgroundColor: COLORS.lightGold,
                   border: `2px solid ${COLORS.gold}`
                 }}></div>
@@ -312,7 +312,7 @@ const ShopPage = () => {
               </div>
             </div>
           )}
-          
+
           {error && (
             <div className="px-4 py-3 rounded-lg text-center" style={{
               backgroundColor: COLORS.white,
@@ -321,18 +321,18 @@ const ShopPage = () => {
               boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
             }}>
               <div className="flex items-center justify-center gap-2">
-                <div className="w-6 h-6 rounded-full flex items-center justify-center" 
-                     style={{ 
-                       backgroundColor: COLORS.gold,
-                       color: COLORS.white
-                     }}>
+                <div className="w-6 h-6 rounded-full flex items-center justify-center"
+                  style={{
+                    backgroundColor: COLORS.gold,
+                    color: COLORS.white
+                  }}>
                   !
                 </div>
                 {error}
               </div>
             </div>
           )}
-          
+
           {!isLoading && !error && filteredProducts.length === 0 && (
             <div className="text-center py-20 rounded-xl" style={{
               backgroundColor: COLORS.white,
@@ -344,9 +344,9 @@ const ShopPage = () => {
               <p className="mb-6 max-w-md mx-auto" style={{ color: COLORS.mediumGray }}>
                 Your royal search didn't yield any results. Try different filters or search terms.
               </p>
-              <button 
+              <button
                 className="px-6 py-2 rounded-lg font-medium transition-all hover:transform hover:-translate-y-0.5"
-                style={{ 
+                style={{
                   background: COLORS.goldGradient,
                   color: COLORS.black,
                   border: `1px solid ${COLORS.darkGold}`,
@@ -366,8 +366,8 @@ const ShopPage = () => {
           {!isLoading && !error && filteredProducts.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {filteredProducts.map((product) => (
-                <ProductCard 
-                  key={product.product_id} 
+                <ProductCard
+                  key={product.product_id}
                   product_id={product.product_id}
                   name={product.name}
                   price={product.price}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import SidebarAdmin from '../components/admin/SidebarAdmin';
 import UsersAdmin from '../components/admin/UsersAdmin';
 import Categories from '../components/admin/Categories';
@@ -11,28 +12,28 @@ import Messages from '../components/admin/AdminContact';
 
 // Enhanced Royal Gold Color Palette with more sophisticated tones
 const colors = {
-  royalGold: '#D4AF37',
-  brightGold: '#FFCC33',
-  darkGold: '#967117',
-  paleGold: '#F5E6B3',
-  richBlack: '#030303',
-  velvetBlack: '#0E0E0E',
-  parchment: '#000000',
-  lightParchment: '#FFFDF5',
-  charcoal: '#222222',
-  silver: '#C0C0C0',
-  platinum: '#E5E4E2',
-  accentBlue: '#1A2C42',
-  accentRed: '#5A0B0B', 
-  goldGradient: 'linear-gradient(135deg, #E5C96D 0%, #A17C17 100%)',
-  lightGoldGradient: 'linear-gradient(135deg, #FFD700 0%, #D4AF37 100%)',
-  subtleGoldGradient: 'linear-gradient(to right, rgba(212, 175, 55, 0.05) 0%, rgba(212, 175, 55, 0.2) 50%, rgba(212, 175, 55, 0.05) 100%)',
-  deepShadow: '0 6px 30px rgba(0, 0, 0, 0.7)',
-  subtleGlow: '0 0 10px rgba(212, 175, 55, 0.25)',
-  sharpGlow: '0 0 4px rgba(255, 215, 0, 0.7)',
-  royalBorder: '1px solid rgba(212, 175, 55, 0.3)',
-  royalBorderHighlight: '1px solid rgba(212, 175, 55, 0.6)',
-  goldTextShadow: '0 1px 2px rgba(0, 0, 0, 0.8), 0 0 5px rgba(212, 175, 55, 0.3)'
+    royalGold: '#D4AF37',
+    brightGold: '#FFCC33',
+    darkGold: '#967117',
+    paleGold: '#F5E6B3',
+    richBlack: '#0A0A0A',
+    velvetBlack: '#0E0E0E',
+    parchment: '#000000',
+    lightParchment: '#FFFDF5',
+    charcoal: '#222222',
+    silver: '#C0C0C0',
+    platinum: '#E5E4E2',
+    accentBlue: '#1A2C42',
+    accentRed: '#5A0B0B',
+    goldGradient: 'linear-gradient(135deg, #E5C96D 0%, #A17C17 100%)',
+    lightGoldGradient: 'linear-gradient(135deg, #FFD700 0%, #D4AF37 100%)',
+    subtleGoldGradient: 'linear-gradient(to right, rgba(212, 175, 55, 0.05) 0%, rgba(212, 175, 55, 0.2) 50%, rgba(212, 175, 55, 0.05) 100%)',
+    deepShadow: '0 6px 30px rgba(0, 0, 0, 0.7)',
+    subtleGlow: '0 0 10px rgba(212, 175, 55, 0.25)',
+    sharpGlow: '0 0 4px rgba(255, 215, 0, 0.7)',
+    royalBorder: '1px solid rgba(212, 175, 55, 0.3)',
+    royalBorderHighlight: '1px solid rgba(212, 175, 55, 0.6)',
+    goldTextShadow: '0 1px 2px rgba(0, 0, 0, 0.8), 0 0 5px rgba(212, 175, 55, 0.3)'
 };
 
 export default function Admin() {
@@ -40,6 +41,73 @@ export default function Admin() {
     const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
     const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
     const [currentTime, setCurrentTime] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+    const [showSearchResults, setShowSearchResults] = useState(false);
+
+    // Replace static states with dynamic data
+    const [dashboardStats, setDashboardStats] = useState({
+        activeUsers: 0,
+        totalUsers: 11,
+        pendingOrders: 0,
+    });
+
+    // Fetch dashboard statistics
+    const fetchDashboardStats = async () => {
+        try {
+            const [usersResponse, ordersResponse] = await Promise.all([
+                axios.get('http://localhost:5000/api/orders/pending-count', { withCredentials: true })
+            ]);
+
+            setDashboardStats({
+                totalUsers: 25,
+                activeUsers: usersResponse.data.activeUsers || 0,
+                pendingOrders: ordersResponse.data.pendingCount || 0,
+            });
+        } catch (error) {
+            console.error('Error fetching dashboard stats:', error);
+            setDashboardStats(prev => ({
+                ...prev,
+            }));
+        }
+    };
+
+    // Add search functionality
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(() => {
+            if (searchQuery.trim() !== '') {
+                // You can modify this to search across different admin entities
+                axios.get(`http://localhost:5000/api/admin/search?q=${encodeURIComponent(searchQuery)}`, {
+                    withCredentials: true
+                })
+                    .then((response) => {
+                        setSearchResults(response.data);
+                        setShowSearchResults(true);
+                    })
+                    .catch((err) => {
+                        console.error("Error searching:", err);
+                        setSearchResults([]);
+                    });
+            } else {
+                setSearchResults([]);
+                setShowSearchResults(false);
+            }
+        }, 300);
+
+        return () => clearTimeout(delayDebounceFn);
+    }, [searchQuery]);
+
+    // Close search results when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (!event.target.closest('.search-container')) {
+                setShowSearchResults(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     useEffect(() => {
         const handleResize = () => {
@@ -55,16 +123,21 @@ export default function Admin() {
             setCurrentTime(formatTime());
         };
 
+        // Initial fetches
+        fetchDashboardStats();
+        updateClock();
+
+        // Set up intervals for regular updates
+        const clockInterval = setInterval(updateClock, 60000);
+        const statsInterval = setInterval(fetchDashboardStats, 300000); // Update stats every 5 minutes
+
         window.addEventListener('resize', handleResize);
         handleResize();
-        
-        // Update time every minute
-        updateClock();
-        const interval = setInterval(updateClock, 60000);
-        
+
         return () => {
             window.removeEventListener('resize', handleResize);
-            clearInterval(interval);
+            clearInterval(clockInterval);
+            clearInterval(statsInterval);
         };
     }, []);
 
@@ -74,7 +147,7 @@ export default function Admin() {
 
     const renderContent = () => {
         const contentProps = { colors };
-        
+
         switch (selectedTab) {
             case 'Users': return <UsersAdmin {...contentProps} />;
             case 'News': return <ArticalsAdmin {...contentProps} />;
@@ -100,23 +173,23 @@ export default function Admin() {
     };
 
     return (
-        <div className="flex min-h-screen overflow-hidden" style={{ 
+        <div className="flex min-h-screen overflow-hidden" style={{
             background: `radial-gradient(circle at center, ${colors.velvetBlack} 0%, ${colors.richBlack} 100%)`,
             backgroundSize: '200% 200%',
             color: colors.parchment,
             fontFamily: "'Marcellus', serif",
         }}>
             {/* Sidebar */}
-            <SidebarAdmin 
-                setSelectedTab={setSelectedTab} 
+            <SidebarAdmin
+                setSelectedTab={setSelectedTab}
                 selectedTab={selectedTab}
-                onExpansionChange={handleSidebarExpansion} 
+                onExpansionChange={handleSidebarExpansion}
                 colors={colors}
             />
 
             {/* Main Content Area */}
             <div className={`flex-1 p-3 md:p-6 transition-all duration-300 mt-16 md:mt-0 overflow-auto`}>
-                <div className="flex justify-between items-center mb-6">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                     <div className="flex items-center">
                         <div className="w-2 h-10 rounded-full mr-3" style={{
                             background: colors.goldGradient,
@@ -131,10 +204,105 @@ export default function Admin() {
                             07ASN Admin
                         </h1>
                     </div>
+
+                    {/* Global Search Bar */}
+                    <div className="search-container w-full md:w-1/3 relative">
+                        <div className="relative">
+                            <input
+                                type="text"
+                                placeholder="Search across admin panel..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="w-full px-4 py-2 bg-opacity-20 bg-white backdrop-blur-sm rounded-lg border border-gray-600 focus:border-gray-400 focus:ring-2 focus:ring-gray-400 text-gray-200 placeholder-gray-400"
+                                style={{
+                                    boxShadow: colors.subtleGlow
+                                }}
+                            />
+                            <svg
+                                className="absolute right-3 top-2.5 h-5 w-5 text-gray-400"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                />
+                            </svg>
+                        </div>
+
+                        {/* Search Results Dropdown */}
+                        {showSearchResults && searchResults.length > 0 && (
+                            <div className="absolute w-full mt-2 bg-gray-900 border border-gray-700 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
+                                {searchResults.map((result, index) => (
+                                    <div
+                                        key={index}
+                                        className="p-3 hover:bg-gray-800 cursor-pointer border-b border-gray-700 last:border-0"
+                                        onClick={() => {
+                                            setSelectedTab(result.type);
+                                            setShowSearchResults(false);
+                                            setSearchQuery('');
+                                        }}
+                                    >
+                                        <div className="flex items-center">
+                                            <span className="text-xs px-2 py-1 rounded bg-gray-700 text-gray-300 mr-2">
+                                                {result.type}
+                                            </span>
+                                            <span className="text-gray-200">{result.title}</span>
+                                        </div>
+                                        {result.description && (
+                                            <p className="text-sm text-gray-400 mt-1">{result.description}</p>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Stats Section */}
                     <div className="hidden md:flex items-center space-x-4" style={{
                         color: colors.platinum,
                     }}>
-                        <div className="text-sm flex items-center px-4 py-2 rounded-lg" style={{ 
+                        {/* Total Users Indicator */}
+                        <div className="text-sm flex items-center px-4 py-2 rounded-lg" style={{
+                            backgroundColor: 'rgba(15, 15, 15, 0.8)',
+                            border: colors.royalBorder,
+                            boxShadow: colors.deepShadow
+                        }}>
+                            <div className="w-2 h-2 rounded-full mr-2" style={{
+                                background: colors.paleGold,
+                                boxShadow: colors.sharpGlow
+                            }}></div>
+                            <span className="font-medium">{dashboardStats.totalUsers}</span>
+                            <span className="ml-1 text-gray-400">total users</span>
+                        </div>
+
+                        {/* Pending Orders Notifications */}
+                        <div
+                            onClick={() => setSelectedTab('Orders')}
+                            className="text-sm flex items-center px-4 py-2 rounded-lg cursor-pointer hover:bg-opacity-80 transition-all"
+                            style={{
+                                backgroundColor: 'rgba(15, 15, 15, 0.8)',
+                                border: colors.royalBorder,
+                                boxShadow: colors.deepShadow
+                            }}
+                            title="Click to view orders"
+                        >
+                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                            </svg>
+                            {dashboardStats.pendingOrders > 0 && (
+                                <span className="bg-red-500 text-white text-xs rounded-full px-2 py-0.5 mr-1">
+                                    {dashboardStats.pendingOrders}
+                                </span>
+                            )}
+                            <span>Pending Orders</span>
+                        </div>
+
+                        {/* Clock */}
+                        <div className="text-sm flex items-center px-4 py-2 rounded-lg" style={{
                             backgroundColor: 'rgba(15, 15, 15, 0.8)',
                             border: colors.royalBorder,
                             boxShadow: colors.deepShadow
@@ -165,7 +333,7 @@ export default function Admin() {
                         clipPath: 'polygon(100% 0, 0 0, 100% 100%)',
                         opacity: 0.9
                     }}></div>
-                    
+
                     <div style={{
                         position: 'absolute',
                         bottom: 0,
@@ -176,7 +344,7 @@ export default function Admin() {
                         clipPath: 'polygon(0 100%, 0 60%, 100% 100%)',
                         opacity: 0.6
                     }}></div>
-                    
+
                     {/* Content Header with Enhanced Royal Styling */}
                     <div className="flex items-center border-b p-6" style={{
                         borderColor: 'rgba(212, 175, 55, 0.2)',
@@ -197,7 +365,7 @@ export default function Admin() {
                                 {selectedTab}
                             </h2>
                         </div>
-                        <div className="ml-auto text-sm md:hidden flex items-center" style={{ 
+                        <div className="ml-auto text-sm md:hidden flex items-center" style={{
                             color: colors.platinum,
                             backgroundColor: 'rgba(15, 15, 15, 0.8)',
                             padding: '4px 8px',
@@ -211,7 +379,7 @@ export default function Admin() {
                             {currentTime}
                         </div>
                     </div>
-                    
+
                     {/* Content Container */}
                     <div className="p-6" style={{
                         background: 'rgba(10, 10, 10, 0.6)',
@@ -222,7 +390,7 @@ export default function Admin() {
                         {renderContent()}
                     </div>
                 </div>
-                
+
                 {/* Decorative footer element */}
                 <div className="mt-6 mx-auto w-1/2 h-1 rounded-full opacity-40" style={{
                     background: colors.subtleGoldGradient

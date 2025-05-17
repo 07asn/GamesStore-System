@@ -14,7 +14,7 @@ import {
 } from '../redux/navbarSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import logo from '../assets/logo.png';
-import { FaShoppingCart, FaCrown, } from 'react-icons/fa';
+import { FaShoppingCart, FaCrown, FaSearch } from 'react-icons/fa';
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -202,74 +202,72 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="bg-[#FFDF00] text-[#514F4F] shadow-lg w-full sticky top-0 z-40 font-['Rajdhani'] border-b-4 border-[#514F4F]/30">
-      {/* Animated gaming border effect */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#514F4F] to-transparent opacity-70 animate-pulse"></div>
-      
+    <nav className="bg-gradient-to-b from-[#1a1a1a] to-[#121212] text-white sticky top-0 z-40 font-['Rajdhani'] relative shadow-lg">
+      {/* Decorative Top Border */}
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#FFDF00]/30 via-[#FFDF00] to-[#FFDF00]/30"></div>
+
       <div className="container mx-auto flex justify-between items-center h-20 px-4 md:px-8 relative">
-        {/* Gaming Style Logo */}
+        {/* Logo */}
         <div className="logo-container relative py-3 group">
           <Link to="/" className="flex items-center">
             <div className="relative overflow-hidden rounded-lg transform group-hover:rotate-[-5deg] transition-all duration-300">
               <img
                 src={logo}
                 alt="07ASN Logo"
-                className="h-14 w-auto object-contain filter drop-shadow-lg"
+                className="h-14 w-auto object-contain filter drop-shadow-[0_0_8px_rgba(255,223,0,0.3)]"
               />
-              <div className="absolute inset-0 bg-gradient-to-tr from-[#514F4F]/20 to-[#514F4F]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div className="absolute inset-0 border-2 border-[#514F4F]/30 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="absolute inset-0 bg-gradient-to-tr from-[#FFDF00]/20 to-[#FFDF00]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             </div>
-            
-            <div className="ml-4 relative">
-              <span className="font-bold text-2xl tracking-tight md:block text-[#514F4F]">
-                07ASN
+            <div className="ml-6 sm:ml-4 relative">
+              <span className="font-bold text-2xl tracking-tight md:block">
+                <span className="text-white">07</span>
+                <span className="text-[#FFDF00] drop-shadow-[0_0_8px_rgba(255,223,0,0.3)]">
+                  ASN
+                </span>
               </span>
-              <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-[#514F4F] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+              <div className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-[#FFDF00]/30 via-[#FFDF00] to-[#FFDF00]/30 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
             </div>
           </Link>
         </div>
 
+
         {/* Desktop Search */}
         <div className="hidden lg:flex items-center w-1/2 lg:w-1/3 relative mx-4">
-          <div className="relative w-full">
+          <div className="relative w-full group">
             <input
               type="text"
               placeholder="Search games, gear, more..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-white rounded-full border-2 border-[#514F4F]/30 px-5 py-2.5 w-full focus:outline-none focus:ring-2 focus:ring-[#514F4F] focus:border-transparent transition-all duration-300 shadow-lg hover:shadow-[#514F4F]/20 text-[#514F4F] placeholder-[#514F4F]/70"
+              className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg focus:outline-none focus:border-[#FFDF00] text-white placeholder-gray-500 transition-all duration-300 group-hover:border-[#FFDF00]/50"
             />
-            <i className="fas fa-search absolute right-4 top-3.5 text-[#514F4F]"></i>
+            <FaSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 group-hover:text-[#FFDF00] transition-colors duration-300" />
           </div>
           {searchResults.length > 0 && (
-            <div className="absolute top-full left-0 right-0 bg-white border-2 border-[#514F4F]/30 rounded-xl shadow-2xl z-50 mt-1 overflow-hidden animate-fadeIn">
+            <div className="absolute top-full left-0 right-0 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg shadow-[0_4px_20px_rgba(255,223,0,0.1)] z-50 mt-1">
               <ul className="max-h-96 overflow-y-auto">
                 {searchResults.map((product) => (
-                  <li key={product.product_id} className="border-b border-gray-200 last:border-0 hover:bg-[#FFDF00]/10 transition-colors duration-200">
+                  <li key={product.product_id} className="border-b border-[#3a3a3a] last:border-0">
                     <Link
                       to={`/products/${product.product_id}`}
-                      className="flex items-center px-4 py-3"
+                      className="flex items-center p-4 hover:bg-[#1a1a1a] transition-colors duration-200 group"
                       onClick={() => setSearchQuery('')}
                     >
-                      <div className="flex-shrink-0 w-12 h-12 bg-gray-100 rounded-lg overflow-hidden border border-[#514F4F]/20">
+                      <div className="flex-shrink-0 w-12 h-12 bg-[#3a3a3a] rounded-lg overflow-hidden border border-[#FFDF00]/10 group-hover:border-[#FFDF00]/30 transition-colors duration-300">
                         <img
-                          src={
-                            product.images && product.images.length > 0
-                              ? product.images[0].image_url
-                              : 'https://via.placeholder.com/40'
-                          }
+                          src={product.images?.[0]?.image_url || 'https://via.placeholder.com/40'}
                           alt={product.name}
                           className="w-full h-full object-cover"
                         />
                       </div>
-                      <div className="ml-3 flex-1 min-w-0">
-                        <p className="font-medium text-[#514F4F] truncate">{product.name}</p>
+                      <div className="ml-3 flex-1">
+                        <p className="text-white font-medium group-hover:text-[#FFDF00] transition-colors duration-200">{product.name}</p>
                         <div className="flex items-center mt-1">
-                          <span className="text-[#514F4F] font-semibold">
+                          <span className="text-[#FFDF00] font-semibold">
                             ${product.discounted_price || product.price}
                           </span>
                           {product.discounted_price && (
-                            <span className="ml-2 text-sm text-[#514F4F]/70 line-through">
+                            <span className="ml-2 text-sm text-gray-500 line-through">
                               ${product.price}
                             </span>
                           )}
@@ -287,30 +285,29 @@ const Navbar = () => {
         <div className="hidden lg:flex items-center space-x-6">
           {/* Categories Dropdown */}
           <div
-            className="relative"
+            className="relative group"
             onMouseEnter={handleCategoriesMouseEnter}
             onMouseLeave={handleCategoriesMouseLeave}
           >
             <button
               onClick={() => dispatch(toggleCategories())}
-              className="flex items-center space-x-2 p-2.5 rounded-lg hover:bg-[#FFDF00]/80 focus:outline-none transition-all duration-200 group relative overflow-hidden"
+              className="flex items-center space-x-2 p-2.5 rounded-lg hover:text-[#FFDF00] focus:outline-none transition-all duration-200 group relative"
             >
-              <i className="fa-solid fa-list text-[#514F4F] group-hover:text-[#514F4F]/90 transition-colors duration-200"></i>
-              <span className="font-medium group-hover:text-[#514F4F]/90 transition-colors duration-200">Categories</span>
-              <i className={`fas fa-chevron-down text-xs transition-transform duration-200 ${categoriesOpen ? 'transform rotate-180' : ''} text-[#514F4F]`}></i>
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#514F4F] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+              <span className="font-medium">Categories</span>
+              <i className={`fas fa-chevron-down text-xs transition-transform duration-200 ${categoriesOpen ? 'transform rotate-180' : ''}`}></i>
+              <div className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-[#FFDF00]/30 via-[#FFDF00] to-[#FFDF00]/30 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
             </button>
             {categoriesOpen && (
-              <div className="absolute left-0 mt-2 w-56 rounded-xl shadow-2xl bg-white border-2 border-[#514F4F]/30 z-50 animate-fadeInUp">
+              <div className="absolute left-0 mt-2 w-56 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg shadow-[0_4px_20px_rgba(255,223,0,0.1)] z-50">
                 <div className="py-2">
                   {categories.map((cat) => (
                     <Link
                       key={cat.category_id}
                       to={`/shop?category=${cat.category_id}`}
-                      className="flex items-center px-4 py-3 text-[#514F4F] hover:bg-[#FFDF00]/20 hover:text-[#514F4F]/90 transition-colors duration-200"
+                      className="flex items-center px-4 py-3 text-gray-400 hover:text-[#FFDF00] hover:bg-[#1a1a1a] transition-colors duration-200 group"
                       onClick={() => dispatch(setCategoriesOpen(false))}
                     >
-                      <i className="fas fa-gamepad mr-3 text-[#514F4F] text-xs"></i>
+                      <i className="fas fa-gamepad mr-3 text-xs group-hover:text-[#FFDF00] transition-colors duration-200"></i>
                       <span>{cat.name}</span>
                     </Link>
                   ))}
@@ -320,20 +317,18 @@ const Navbar = () => {
           </div>
 
           {/* Top Games Link */}
-          <Link 
-            to="/top-played" 
-            className="flex items-center space-x-2 p-2.5 rounded-lg hover:bg-[#FFDF00]/80 transition-all duration-200 group relative"
+          <Link
+            to="/top-played"
+            className="group relative px-4 py-2 hover:text-[#FFDF00] transition-colors duration-200"
           >
-            <i className="fas fa-trophy text-[#514F4F] group-hover:text-[#514F4F]/90 transition-colors duration-200"></i>
-            <span className="font-medium group-hover:text-[#514F4F]/90 transition-colors duration-200">Top Games</span>
-            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#514F4F] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+            <span>Top Games</span>
+            <div className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-[#FFDF00]/30 via-[#FFDF00] to-[#FFDF00]/30 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
           </Link>
-
 
           {/* Cart */}
           <div className="relative" onMouseEnter={handleCartMouseEnter} onMouseLeave={handleCartMouseLeave}>
-            <Link 
-              to="/cart" 
+            <Link
+              to="/cart"
               className="flex items-center space-x-2 p-2.5 rounded-lg hover:bg-[#FFDF00]/80 transition-all duration-200 group relative"
             >
               <i className="fas fa-shopping-cart text-[#514F4F] text-xl group-hover:text-[#514F4F]/90 transition-colors duration-200"></i>
@@ -346,120 +341,120 @@ const Navbar = () => {
               <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#514F4F] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
             </Link>
             {cartOpen && (
-  <div className="absolute right-0 mt-2 w-96 bg-gradient-to-b from-[#FFFDF5] to-[#F8F4E6] border-2 border-[#D4AF37]/50 rounded-xl shadow-xl z-50 animate-fadeInUp overflow-hidden">
-    {/* Header with royal crown */}
-    <div className="relative p-4 border-b border-[#D4AF37]/30 bg-gradient-to-r from-[#FFD700]/10 to-[#D4AF37]/10 rounded-t-xl">
-      <h3 className="font-bold text-xl text-[#1A1A1A] flex items-center gap-2">
-        <FaCrown className="text-[#D4AF37]" />
-        <span>Your Royal Cart ({cartItems.length} {cartItems.length === 1 ? 'Treasure' : 'Treasures'})</span>
-      </h3>
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent"></div>
-    </div>
-
-    {/* Cart items with scrollable area */}
-    <div className="max-h-80 overflow-y-auto">
-      {cartItems.length > 0 ? (
-        <ul className="divide-y divide-[#D4AF37]/20">
-          {cartItems.map((item, index) => {
-            // Safely parse prices
-            const price = typeof item.price === 'string' 
-              ? parseFloat(item.price.replace(/[^\d.]/g, '')) 
-              : Number(item.price);
-            const discountedPrice = item.discounted_price 
-              ? typeof item.discounted_price === 'string'
-                ? parseFloat(item.discounted_price.replace(/[^\d.]/g, ''))
-                : Number(item.discounted_price)
-              : null;
-            const displayPrice = discountedPrice || price;
-            const quantity = item.quantity || 1;
-
-            return (
-              <li key={index} className="flex justify-between items-center p-4 hover:bg-[#F5E6B3]/30 transition-colors duration-200 group">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-lg overflow-hidden border border-[#D4AF37]/30">
-                    <img 
-                      src={item.productImage || '/img/default-game.jpg'} 
-                      alt={item.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div>
-                    <span className="text-[#1A1A1A] font-medium block truncate max-w-[180px] group-hover:text-[#996515]">
-                      {item.name}
-                    </span>
-                    <span className="text-xs text-[#6D6D6D]">Qty: {quantity}</span>
-                  </div>
+              <div className="absolute right-0 mt-2 w-96 bg-gradient-to-b from-[#FFFDF5] to-[#F8F4E6] border-2 border-[#D4AF37]/50 rounded-xl shadow-xl z-50 animate-fadeInUp overflow-hidden">
+                {/* Header with royal crown */}
+                <div className="relative p-4 border-b border-[#D4AF37]/30 bg-gradient-to-r from-[#FFD700]/10 to-[#D4AF37]/10 rounded-t-xl">
+                  <h3 className="font-bold text-xl text-[#1A1A1A] flex items-center gap-2">
+                    <FaCrown className="text-[#D4AF37]" />
+                    <span>Your Royal Cart ({cartItems.length} {cartItems.length === 1 ? 'Treasure' : 'Treasures'})</span>
+                  </h3>
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent"></div>
                 </div>
-                <div className="text-right">
-                  <span className="block text-[#1A1A1A] font-bold">
-                    ${displayPrice.toFixed(2)}
-                  </span>
-                  {discountedPrice && (
-                    <span className="text-xs px-1.5 py-0.5 rounded bg-[#D4AF37]/10 text-[#996515]">
-                      -{Math.round((1 - discountedPrice/price)*100)}%
-                    </span>
+
+                {/* Cart items with scrollable area */}
+                <div className="max-h-80 overflow-y-auto">
+                  {cartItems.length > 0 ? (
+                    <ul className="divide-y divide-[#D4AF37]/20">
+                      {cartItems.map((item, index) => {
+                        // Safely parse prices
+                        const price = typeof item.price === 'string'
+                          ? parseFloat(item.price.replace(/[^\d.]/g, ''))
+                          : Number(item.price);
+                        const discountedPrice = item.discounted_price
+                          ? typeof item.discounted_price === 'string'
+                            ? parseFloat(item.discounted_price.replace(/[^\d.]/g, ''))
+                            : Number(item.discounted_price)
+                          : null;
+                        const displayPrice = discountedPrice || price;
+                        const quantity = item.quantity || 1;
+
+                        return (
+                          <li key={index} className="flex justify-between items-center p-4 hover:bg-[#F5E6B3]/30 transition-colors duration-200 group">
+                            <div className="flex items-center gap-3">
+                              <div className="w-12 h-12 rounded-lg overflow-hidden border border-[#D4AF37]/30">
+                                <img
+                                  src={item.productImage || '/img/default-game.jpg'}
+                                  alt={item.name}
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                              <div>
+                                <span className="text-[#1A1A1A] font-medium block truncate max-w-[180px] group-hover:text-[#996515]">
+                                  {item.name}
+                                </span>
+                                <span className="text-xs text-[#6D6D6D]">Qty: {quantity}</span>
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <span className="block text-[#1A1A1A] font-bold">
+                                ${displayPrice.toFixed(2)}
+                              </span>
+                              {discountedPrice && (
+                                <span className="text-xs px-1.5 py-0.5 rounded bg-[#D4AF37]/10 text-[#996515]">
+                                  -{Math.round((1 - discountedPrice / price) * 100)}%
+                                </span>
+                              )}
+                            </div>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center p-8 text-center">
+                      <FaShoppingCart className="text-[#D4AF37]/50 text-4xl mb-3" />
+                      <p className="text-[#6D6D6D] font-medium">Your royal cart awaits treasures</p>
+                      <p className="text-sm text-[#6D6D6D]/70 mt-1">Add premium games to begin your collection</p>
+                    </div>
                   )}
                 </div>
-              </li>
-            );
-          })}
-        </ul>
-      ) : (
-        <div className="flex flex-col items-center justify-center p-8 text-center">
-          <FaShoppingCart className="text-[#D4AF37]/50 text-4xl mb-3" />
-          <p className="text-[#6D6D6D] font-medium">Your royal cart awaits treasures</p>
-          <p className="text-sm text-[#6D6D6D]/70 mt-1">Add premium games to begin your collection</p>
-        </div>
-      )}
-    </div>
 
-    {/* Footer with total and action buttons */}
-    {cartItems.length > 0 && (
-      <div className="border-t border-[#D4AF37]/30 bg-gradient-to-r from-[#FFD700]/10 to-[#D4AF37]/10">
-        <div className="p-4 flex justify-between items-center">
-          <span className="text-[#1A1A1A] font-bold">Total:</span>
-          <div className="text-right">
-            <span className="block text-xl font-bold text-[#1A1A1A]">
-              ${cartItems.reduce((total, item) => {
-                const price = typeof item.price === 'string' 
-                  ? parseFloat(item.price.replace(/[^\d.]/g, '')) 
-                  : Number(item.price);
-                const discountedPrice = item.discounted_price 
-                  ? typeof item.discounted_price === 'string'
-                    ? parseFloat(item.discounted_price.replace(/[^\d.]/g, ''))
-                    : Number(item.discounted_price)
-                  : price;
-                return total + (discountedPrice * (item.quantity || 1));
-              }, 0).toFixed(2)}
-            </span>
-          </div>
-        </div>
+                {/* Footer with total and action buttons */}
+                {cartItems.length > 0 && (
+                  <div className="border-t border-[#D4AF37]/30 bg-gradient-to-r from-[#FFD700]/10 to-[#D4AF37]/10">
+                    <div className="p-4 flex justify-between items-center">
+                      <span className="text-[#1A1A1A] font-bold">Total:</span>
+                      <div className="text-right">
+                        <span className="block text-xl font-bold text-[#1A1A1A]">
+                          ${cartItems.reduce((total, item) => {
+                            const price = typeof item.price === 'string'
+                              ? parseFloat(item.price.replace(/[^\d.]/g, ''))
+                              : Number(item.price);
+                            const discountedPrice = item.discounted_price
+                              ? typeof item.discounted_price === 'string'
+                                ? parseFloat(item.discounted_price.replace(/[^\d.]/g, ''))
+                                : Number(item.discounted_price)
+                              : price;
+                            return total + (discountedPrice * (item.quantity || 1));
+                          }, 0).toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
 
-        <div className="grid grid-cols-2 gap-3 p-4">
-          <Link
-            to="/cart"
-            className="flex items-center justify-center gap-2 rounded-lg bg-[#1A1A1A] text-[#FFD700] font-bold py-3 px-4 hover:bg-[#2A2A2A] transition-all duration-300 hover:shadow-lg"
-          >
-            <FaShoppingCart />
-            <span>View Cart</span>
-          </Link>
-          <Link
-            to="/payment"  
-            className="flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#FFD700] text-[#1A1A1A] font-bold py-3 px-4 hover:shadow-lg transition-all duration-300"
-          >
-            <FaCrown />
-            <span>Checkout</span>
-          </Link>
-        </div>
-      </div>
-    )}
+                    <div className="grid grid-cols-2 gap-3 p-4">
+                      <Link
+                        to="/cart"
+                        className="flex items-center justify-center gap-2 rounded-lg bg-[#1A1A1A] text-[#FFD700] font-bold py-3 px-4 hover:bg-[#2A2A2A] transition-all duration-300 hover:shadow-lg"
+                      >
+                        <FaShoppingCart />
+                        <span>View Cart</span>
+                      </Link>
+                      <Link
+                        to="/payment"
+                        className="flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#FFD700] text-[#1A1A1A] font-bold py-3 px-4 hover:shadow-lg transition-all duration-300"
+                      >
+                        <FaCrown />
+                        <span>Checkout</span>
+                      </Link>
+                    </div>
+                  </div>
+                )}
 
-    {/* Decorative elements */}
-    <div className="absolute top-0 right-0 w-8 h-8 overflow-hidden">
-      <div className="absolute -right-4 -top-4 w-8 h-8 bg-[#D4AF37] rotate-45"></div>
-    </div>
-  </div>
-)}
+                {/* Decorative elements */}
+                <div className="absolute top-0 right-0 w-8 h-8 overflow-hidden">
+                  <div className="absolute -right-4 -top-4 w-8 h-8 bg-[#D4AF37] rotate-45"></div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Profile */}
@@ -526,14 +521,14 @@ const Navbar = () => {
             className="p-2 rounded-full hover:bg-[#FFDF00]/80 focus:outline-none transition-all duration-200 relative"
           >
             <div className="w-7 h-7 flex flex-col justify-between items-center">
-              <span 
-                className={`block h-0.5 w-full bg-[#514F4F] transform transition duration-300 ease-out ${mobileSidebarOpen ? 'rotate-45 translate-y-3' : ''}`} 
+              <span
+                className={`block h-0.5 w-full bg-[#514F4F] transform transition duration-300 ease-out ${mobileSidebarOpen ? 'rotate-45 translate-y-3' : ''}`}
               />
-              <span 
-                className={`block h-0.5 w-full bg-[#514F4F] transition duration-200 ease-out ${mobileSidebarOpen ? 'opacity-0' : 'opacity-100'}`} 
+              <span
+                className={`block h-0.5 w-full bg-[#514F4F] transition duration-200 ease-out ${mobileSidebarOpen ? 'opacity-0' : 'opacity-100'}`}
               />
-              <span 
-                className={`block h-0.5 w-full bg-[#514F4F] transform transition duration-300 ease-out ${mobileSidebarOpen ? '-rotate-45 -translate-y-3' : ''}`} 
+              <span
+                className={`block h-0.5 w-full bg-[#514F4F] transform transition duration-300 ease-out ${mobileSidebarOpen ? '-rotate-45 -translate-y-3' : ''}`}
               />
             </div>
             <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#514F4F] transform scale-x-0 hover:scale-x-100 transition-transform duration-300 origin-left"></span>
@@ -596,8 +591,8 @@ const Navbar = () => {
       {/* Mobile Sidebar */}
       {mobileSidebarOpen && (
         <div className="lg:hidden fixed inset-0 z-50">
-          <div 
-            onClick={() => dispatch(setMobileSidebar(false))} 
+          <div
+            onClick={() => dispatch(setMobileSidebar(false))}
             className="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-300"
           ></div>
           <aside className="fixed top-0 right-0 w-4/5 max-w-sm h-full bg-[#FFDF00] shadow-2xl z-50 overflow-y-auto transform transition-transform duration-300 ease-in-out border-l-4 border-[#514F4F]/30">
@@ -618,35 +613,35 @@ const Navbar = () => {
               </button>
             </div>
             <div className="py-5 flex flex-col space-y-1 px-4">
-              <Link 
-                to="/" 
+              <Link
+                to="/"
                 onClick={() => dispatch(setMobileSidebar(false))}
                 className="flex items-center py-3 px-4 text-[#514F4F] hover:bg-[#FFDF00]/80 rounded-lg transition-colors duration-200"
               >
-                <i className="fas fa-home mr-3 text-[#514F4F]"></i> 
+                <i className="fas fa-home mr-3 text-[#514F4F]"></i>
                 <span>Home</span>
               </Link>
-              
-              <Link 
-                to="/top-played" 
+
+              <Link
+                to="/top-played"
                 onClick={() => dispatch(setMobileSidebar(false))}
                 className="flex items-center py-3 px-4 text-[#514F4F] hover:bg-[#FFDF00]/80 rounded-lg transition-colors duration-200"
               >
-                <i className="fas fa-trophy mr-3 text-[#514F4F]"></i> 
+                <i className="fas fa-trophy mr-3 text-[#514F4F]"></i>
                 <span>Top Games</span>
               </Link>
-              
+
               <button
                 onClick={() => dispatch(toggleCategories())}
                 className="flex items-center justify-between py-3 px-4 text-[#514F4F] hover:bg-[#FFDF00]/80 rounded-lg transition-colors duration-200 w-full"
               >
                 <span className="flex items-center">
-                  <i className="fas fa-list mr-3 text-[#514F4F]"></i> 
+                  <i className="fas fa-list mr-3 text-[#514F4F]"></i>
                   <span>Categories</span>
                 </span>
                 <i className={`fas text-sm ${categoriesOpen ? 'fa-chevron-up' : 'fa-chevron-down'} text-[#514F4F]`} />
               </button>
-              
+
               {categoriesOpen && (
                 <div className="bg-black/10 rounded-lg overflow-hidden border border-[#514F4F]/30">
                   {categories.map((cat) => (
@@ -659,24 +654,24 @@ const Navbar = () => {
                       }}
                       className="flex items-center px-6 py-3 text-[#514F4F] hover:bg-[#FFDF00]/60 transition-colors duration-200"
                     >
-                      <i className="fas fa-gamepad mr-3 text-[#514F4F] text-xs"></i> 
+                      <i className="fas fa-gamepad mr-3 text-[#514F4F] text-xs"></i>
                       <span>{cat.name}</span>
                     </Link>
                   ))}
                 </div>
               )}
-              
+
               <div className="border-t border-[#514F4F]/30 pt-4 mt-2">
                 {isLoggedIn ? (
                   <>
                     {navItems.map((item, i) => (
-                      <Link 
+                      <Link
                         key={i}
                         to={item.to}
                         onClick={() => dispatch(setMobileSidebar(false))}
                         className="flex items-center py-3 px-4 text-[#514F4F] hover:bg-[#FFDF00]/80 rounded-lg transition-colors duration-200"
                       >
-                        <i className={`fas fa-${item.icon} mr-3 text-[#514F4F]`}></i> 
+                        <i className={`fas fa-${item.icon} mr-3 text-[#514F4F]`}></i>
                         <span>{item.label}</span>
                       </Link>
                     ))}
@@ -697,7 +692,7 @@ const Navbar = () => {
                     onClick={() => dispatch(setMobileSidebar(false))}
                     className="flex items-center py-3 px-4 text-[#514F4F] hover:bg-[#FFDF00]/80 rounded-lg transition-colors duration-200"
                   >
-                    <i className="fas fa-sign-in-alt mr-3 text-[#514F4F]"></i> 
+                    <i className="fas fa-sign-in-alt mr-3 text-[#514F4F]"></i>
                     <span>Sign In</span>
                   </Link>
                 )}

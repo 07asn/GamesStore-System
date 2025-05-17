@@ -24,7 +24,7 @@ const ProfileCard = ({ userData, handleGenderChange }) => {
 
     return (
         <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
-            <div className="bg-gray-100 border-b border-gray-300 text-center py-4">
+            <div className="bg-gradient-to-b from-[#1a1a1a] to-[#121212] text-white border-b border-gray-300 text-center py-4">
                 <h2 className="text-lg font-semibold">Profile Picture</h2>
             </div>
             <div className="p-6 flex flex-col items-center">

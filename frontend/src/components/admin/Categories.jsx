@@ -8,8 +8,8 @@ import {
   ArchiveIcon,
   ImageIcon,
   XIcon,
-  TagIcon ,
-  InfoIcon ,
+  TagIcon,
+  InfoIcon,
   CheckIcon,
   ClockIcon,
   ArrowUpIcon,
@@ -30,7 +30,7 @@ const Categories = () => {
   const [showDeletedCategories, setShowDeletedCategories] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'asc' });
-    const [activeTab, setActiveTab] = useState('active');
+  const [activeTab, setActiveTab] = useState('active');
 
   // Fetch categories on component mount
   useEffect(() => {
@@ -177,9 +177,9 @@ const Categories = () => {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-        withCredentials:true
+        withCredentials: true
       });
-      
+
       setCategories((prevCategories) => [response.data.category, ...prevCategories]);
       resetForm();
       showSuccess('Category Created Successfully');
@@ -208,7 +208,7 @@ const Categories = () => {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
-          withCredentials:true
+          withCredentials: true
         }
       );
 
@@ -256,15 +256,15 @@ const Categories = () => {
 
     if (result.isConfirmed) {
       try {
-        await axios.patch(`http://localhost:5000/api/categories/${categoryId}/delete`,{withCredentials:true});
-        
+        await axios.patch(`http://localhost:5000/api/categories/${categoryId}/delete`, { withCredentials: true });
+
         const categoryToMove = categories.find((cat) => cat.category_id === categoryId);
-        
+
         const updatedCategories = categories.filter(
           (category) => category.category_id !== categoryId
         );
         setCategories(updatedCategories);
-        
+
         setDeletedCategories((prev) => [
           { ...categoryToMove, is_deleted: true },
           ...prev,
@@ -280,15 +280,15 @@ const Categories = () => {
   // Restore deleted category
   const handleRestoreCategory = async (categoryId) => {
     try {
-      await axios.patch(`http://localhost:5000/api/categories/${categoryId}/restore`,{withCredentials:true});
-      
+      await axios.patch(`http://localhost:5000/api/categories/${categoryId}/restore`, { withCredentials: true });
+
       const categoryToRestore = deletedCategories.find((cat) => cat.category_id === categoryId);
-      
+
       const updatedDeletedCategories = deletedCategories.filter(
         (category) => category.category_id !== categoryId
       );
       setDeletedCategories(updatedDeletedCategories);
-      
+
       setCategories((prev) => [
         { ...categoryToRestore, is_deleted: false },
         ...prev,
@@ -348,7 +348,7 @@ const Categories = () => {
                 </button>
               )}
             </div>
-            
+
             <form onSubmit={isEditing ? handleUpdateCategory : handleCreateCategory} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {/* Category Name */}
@@ -392,9 +392,9 @@ const Categories = () => {
                   </label>
                   {newCategory.previewImage ? (
                     <div className="relative group">
-                      <img 
-                        src={newCategory.previewImage} 
-                        alt="Preview" 
+                      <img
+                        src={newCategory.previewImage}
+                        alt="Preview"
                         className="w-full h-32 object-cover rounded-lg shadow-sm"
                         onError={(e) => {
                           e.target.src = '/placeholder-image.jpg';
@@ -515,16 +515,16 @@ const Categories = () => {
                             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                               Image
                             </th>
-                            <th 
-                              scope="col" 
+                            <th
+                              scope="col"
                               className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                               onClick={() => requestSort('name')}
                             >
                               <div className="flex items-center">
                                 Name
                                 {sortConfig.key === 'name' && (
-                                  sortConfig.direction === 'asc' ? 
-                                    <ArrowUpIcon className="ml-1 w-3 h-3" /> : 
+                                  sortConfig.direction === 'asc' ?
+                                    <ArrowUpIcon className="ml-1 w-3 h-3" /> :
                                     <ArrowDownIcon className="ml-1 w-3 h-3" />
                                 )}
                               </div>

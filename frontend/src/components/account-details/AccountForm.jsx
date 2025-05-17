@@ -36,7 +36,7 @@ const AccountForm = ({ openModal, userData, handleSubmit, handleChange, updatedD
 
     return (
         <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
-            <div className="bg-gray-100 border-b border-gray-300 px-6 py-4">
+            <div className="bg-gradient-to-b from-[#1a1a1a] to-[#121212] text-white border-b border-gray-300 px-6 py-4">
                 <h2 className="text-lg font-semibold">Account Details</h2>
             </div>
             <div className="p-6">

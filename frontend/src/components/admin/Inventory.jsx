@@ -41,6 +41,7 @@ const Inventory = () => {
     const [exportFormat, setExportFormat] = useState('csv');
     const [showExportOptions, setShowExportOptions] = useState(false);
     const [showFilters, setShowFilters] = useState(false);
+    const [dropdownPosition, setDropdownPosition] = useState('bottom');
 
     // Fetch all inventories on component mount
     useEffect(() => {
@@ -373,24 +374,35 @@ const Inventory = () => {
             <ChevronDown className="w-4 h-4 ml-1 inline" />;
     };
 
+    const handleExportClick = (event) => {
+        const button = event.currentTarget;
+        const buttonRect = button.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        const spaceBelow = windowHeight - buttonRect.bottom;
+
+        // If space below is less than 200px, show dropdown above
+        setDropdownPosition(spaceBelow < 200 ? 'top' : 'bottom');
+        setShowExportOptions(!showExportOptions);
+    };
+
     return (
-        <div className="min-h-screen bg-gray-50 p-4 md:p-8">
+        <div className="min-h-screen bg-gray-50 p-2 sm:p-4 md:p-8">
             <div className="max-w-7xl mx-auto">
-                {/* Header Section */}
-                <div className="bg-gradient-to-r from-[#030303] to-[#030303] p-6 rounded-xl shadow-lg mb-8 text-white relative overflow-hidden">
+                {/* Header Section - Made more responsive */}
+                <div className="bg-gradient-to-r from-[#030303] to-[#030303] p-4 sm:p-6 rounded-xl shadow-lg mb-6 sm:mb-8 text-white relative overflow-hidden">
                     <div className="absolute inset-0 opacity-10">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full transform translate-x-16 -translate-y-16"></div>
                         <div className="absolute bottom-0 left-0 w-64 h-64 bg-white rounded-full transform -translate-x-20 translate-y-20"></div>
                     </div>
-                    <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center">
+                    <div className="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div>
-                            <h1 className="text-3xl text-[#D4AF37] font-bold">Inventory Management</h1>
-                            <p className="mt-1 text-[#C0C0C0]">Track and manage your company assets efficiently</p>
+                            <h1 className="text-2xl sm:text-3xl text-[#D4AF37] font-bold">Inventory Management</h1>
+                            <p className="mt-1 text-[#C0C0C0] text-sm sm:text-base">Track and manage your company assets efficiently</p>
                         </div>
-                        <div className="mt-4 md:mt-0 flex items-center gap-3">
+                        <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
                             <button
                                 onClick={() => fetchInventories()}
-                                className={`px-3 py-2 bg-white bg-opacity-20 text-white rounded-lg hover:bg-opacity-30 transition-colors flex items-center ${isRefreshing ? 'opacity-75' : ''}`}
+                                className={`flex-1 sm:flex-none px-3 py-2 bg-white bg-opacity-20 text-white rounded-lg hover:bg-opacity-30 transition-colors flex items-center justify-center ${isRefreshing ? 'opacity-75' : ''}`}
                                 disabled={isRefreshing}
                             >
                                 <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
@@ -401,7 +413,7 @@ const Inventory = () => {
                                     resetForm();
                                     setIsFormOpen(true);
                                 }}
-                                className="px-4 py-2 bg-white text-indigo-700 rounded-lg hover:bg-indigo-50 transition-colors flex items-center shadow-sm font-medium hover:shadow-md"
+                                className="flex-1 sm:flex-none px-4 py-2 bg-white text-indigo-700 rounded-lg hover:bg-indigo-50 transition-colors flex items-center justify-center shadow-sm font-medium hover:shadow-md"
                             >
                                 {isFormOpen ? (
                                     <>
@@ -411,7 +423,7 @@ const Inventory = () => {
                                 ) : (
                                     <>
                                         <PlusIcon className="w-4 h-4 mr-2" />
-                                        Add New Item
+                                        Add New
                                     </>
                                 )}
                             </button>
@@ -419,11 +431,11 @@ const Inventory = () => {
                     </div>
                 </div>
 
-                {/* Inventory Form */}
+                {/* Inventory Form - Made more responsive */}
                 {isFormOpen && (
-                    <form onSubmit={handleSubmit} className="mb-8 bg-white p-6 rounded-xl shadow-lg border border-indigo-100 animate-fadeIn">
+                    <form onSubmit={handleSubmit} className="mb-6 sm:mb-8 bg-white p-4 sm:p-6 rounded-xl shadow-lg border border-indigo-100 animate-fadeIn">
                         <div className="border-b border-indigo-100 pb-4 mb-4">
-                            <h2 className="text-xl font-semibold text-[#0E0E0E]">
+                            <h2 className="text-lg sm:text-xl font-semibold text-[#0E0E0E]">
                                 {isEditing ? 'Edit Inventory Item' : 'Add New Inventory Item'}
                             </h2>
                             <p className="text-sm text-gray-500">
@@ -432,7 +444,7 @@ const Inventory = () => {
                                     : 'Fill out the form below to add a new item to your inventory'}
                             </p>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Product ID</label>
                                 <input
@@ -440,7 +452,7 @@ const Inventory = () => {
                                     name="product_id"
                                     value={inventoryForm.product_id}
                                     onChange={handleInputChange}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                                    className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors text-sm"
                                     required
                                 />
                                 <p className="mt-1 text-xs text-gray-500">Enter the product catalog ID</p>
@@ -453,7 +465,7 @@ const Inventory = () => {
                                     name="asset_code"
                                     value={inventoryForm.asset_code}
                                     onChange={handleInputChange}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                                    className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors text-sm"
                                     required
                                 />
                                 <p className="mt-1 text-xs text-gray-500">Unique identifier for this item</p>
@@ -465,7 +477,7 @@ const Inventory = () => {
                                     name="status"
                                     value={inventoryForm.status}
                                     onChange={handleInputChange}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                                    className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors text-sm"
                                 >
                                     <option value="available">Available</option>
                                     <option value="assigned">Assigned</option>
@@ -480,23 +492,23 @@ const Inventory = () => {
                                     name="assigned_at"
                                     value={inventoryForm.assigned_at}
                                     onChange={handleInputChange}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                                    className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors text-sm"
                                 />
                                 <p className="mt-1 text-xs text-gray-500">Required if status is "Assigned"</p>
                             </div>
                         </div>
 
-                        <div className="mt-6 flex justify-end space-x-3">
+                        <div className="mt-6 flex flex-col sm:flex-row justify-end gap-3 sm:gap-4">
                             <button
                                 type="button"
                                 onClick={resetForm}
-                                className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                                className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors text-sm"
                             >
                                 Cancel
                             </button>
                             <button
                                 type="submit"
-                                className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center shadow-sm hover:shadow-md"
+                                className="w-full sm:w-auto px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center shadow-sm hover:shadow-md text-sm"
                                 disabled={isLoading}
                             >
                                 {isLoading ? (
@@ -512,12 +524,12 @@ const Inventory = () => {
                                         {isEditing ? (
                                             <>
                                                 <Save className="w-4 h-4 mr-2" />
-                                                Update Inventory
+                                                Update Item
                                             </>
                                         ) : (
                                             <>
                                                 <PlusIcon className="w-4 h-4 mr-2" />
-                                                Add Inventory
+                                                Add Item
                                             </>
                                         )}
                                     </>
@@ -527,8 +539,8 @@ const Inventory = () => {
                     </form>
                 )}
 
-                {/* Summary Stats - Always show but with loading state */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                {/* Summary Stats - Made more responsive */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                     <div className={`bg-white p-4 rounded-xl shadow border-l-4 border-green-500 transition-all ${isLoading ? 'opacity-70' : ''}`}>
                         <div className="flex items-center">
                             <div className="p-3 rounded-full bg-green-100 text-green-600">
@@ -536,7 +548,7 @@ const Inventory = () => {
                             </div>
                             <div className="ml-4">
                                 <h3 className="text-sm font-medium text-gray-500">Available Items</h3>
-                                <p className="text-2xl font-semibold text-gray-900">
+                                <p className="text-xl sm:text-2xl font-semibold text-gray-900">
                                     {isLoading ? '...' : filteredInventories.filter(item => item.status === 'available').length}
                                 </p>
                             </div>
@@ -550,7 +562,7 @@ const Inventory = () => {
                             </div>
                             <div className="ml-4">
                                 <h3 className="text-sm font-medium text-gray-500">Assigned Items</h3>
-                                <p className="text-2xl font-semibold text-gray-900">
+                                <p className="text-xl sm:text-2xl font-semibold text-gray-900">
                                     {isLoading ? '...' : filteredInventories.filter(item => item.status === 'assigned').length}
                                 </p>
                             </div>
@@ -564,7 +576,7 @@ const Inventory = () => {
                             </div>
                             <div className="ml-4">
                                 <h3 className="text-sm font-medium text-gray-500">Archived Items</h3>
-                                <p className="text-2xl font-semibold text-gray-900">
+                                <p className="text-xl sm:text-2xl font-semibold text-gray-900">
                                     {isLoading ? '...' : filteredInventories.filter(item => item.status === 'archived').length}
                                 </p>
                             </div>
@@ -572,17 +584,14 @@ const Inventory = () => {
                     </div>
                 </div>
 
-                {/* Filters and Search */}
-                <div className="bg-white p-5 rounded-xl shadow-lg mb-6 border border-gray-100">
+                {/* Filters and Search - Made more responsive */}
+                <div className="bg-white p-4 rounded-xl shadow-lg mb-6 border border-gray-100">
                     <div className="flex flex-col gap-4">
-                        <div className="relative flex-grow max-w-full">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <Search className="h-5 w-5 text-gray-400" />
-                            </div>
+                        <div className="relative flex-grow">
                             <input
                                 type="text"
                                 placeholder="Search by product, asset code or category..."
-                                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition-colors text-sm"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
@@ -620,11 +629,11 @@ const Inventory = () => {
                         </div>
 
                         {showFilters && (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-gray-100">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-gray-100">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
                                     <select
-                                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors text-sm"
                                         value={filters.status}
                                         onChange={(e) => setFilters({ ...filters, status: e.target.value })}
                                     >
@@ -638,7 +647,7 @@ const Inventory = () => {
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
                                     <select
-                                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors text-sm"
                                         value={filters.category}
                                         onChange={(e) => setFilters({ ...filters, category: e.target.value })}
                                     >
@@ -654,8 +663,9 @@ const Inventory = () => {
                     </div>
                 </div>
 
-                {/* Inventory List */}
-                <div className="bg-white shadow-lg rounded-xl overflow-visible border border-gray-100">                    {isLoading && inventories.length === 0 ? (
+                {/* Inventory List - Made more responsive */}
+                <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-100">
+                    {isLoading && inventories.length === 0 ? (
                         <div className="p-12 text-center">
                             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500 mx-auto"></div>
                             <p className="mt-4 text-gray-600">Loading inventory data...</p>
@@ -698,122 +708,112 @@ const Inventory = () => {
                     ) : (
                         <>
                             <div className="overflow-x-auto">
-                                <table className="min-w-full divide-y divide-gray-200">
-                                    <thead className="bg-indigo-50">
-                                        <tr>
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider cursor-pointer hover:bg-indigo-100 transition-colors"
-                                                onClick={() => handleSort('product.name')}
-                                            >
-                                                <div className="flex items-center">
-                                                    Product Name
-                                                    <SortIndicator columnKey="product.name" />
-                                                </div>
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider cursor-pointer hover:bg-indigo-100 transition-colors"
-                                                onClick={() => handleSort('product.category.name')}
-                                            >
-                                                <div className="flex items-center">
-                                                    Category
-                                                    <SortIndicator columnKey="product.category.name" />
-                                                </div>
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider cursor-pointer hover:bg-indigo-100 transition-colors"
-                                                onClick={() => handleSort('asset_code')}
-                                            >
-                                                <div className="flex items-center">
-                                                    Asset Code
-                                                    <SortIndicator columnKey="asset_code" />
-                                                </div>
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider cursor-pointer hover:bg-indigo-100 transition-colors"
-                                                onClick={() => handleSort('status')}
-                                            >
-                                                <div className="flex items-center">
-                                                    Status
-                                                    <SortIndicator columnKey="status" />
-                                                </div>
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider cursor-pointer hover:bg-indigo-100 transition-colors"
-                                                onClick={() => handleSort('assigned_at')}
-                                            >
-                                                <div className="flex items-center">
-                                                    Assigned At
-                                                    <SortIndicator columnKey="assigned_at" />
-                                                </div>
-                                            </th>
-                                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-indigo-600 uppercase tracking-wider">
-                                                Actions
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="bg-white divide-y divide-gray-200">
-                                        {filteredInventories.map((inventory) => (
-                                            <tr key={inventory.inventory_id} className="hover:bg-indigo-50 transition-colors">
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <div className="text-sm font-medium text-gray-900">
-                                                        {inventory.product ? inventory.product.name : 'Unknown Product'}
+                                <div className="inline-block min-w-full align-middle">
+                                    <table className="min-w-full divide-y divide-gray-200">
+                                        <thead className="bg-indigo-50">
+                                            <tr>
+                                                <th scope="col" className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider cursor-pointer hover:bg-indigo-100 transition-colors">
+                                                    <div className="flex items-center">
+                                                        Product Name
+                                                        <SortIndicator columnKey="product.name" />
                                                     </div>
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <div className="text-sm text-gray-600">
-                                                        {inventory.product && inventory.product.category
-                                                            ? inventory.product.category.name
-                                                            : 'Uncategorized'}
+                                                </th>
+                                                <th scope="col" className="hidden sm:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider cursor-pointer hover:bg-indigo-100 transition-colors">
+                                                    <div className="flex items-center">
+                                                        Category
+                                                        <SortIndicator columnKey="product.category.name" />
                                                     </div>
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <div className="text-sm font-mono text-gray-600 bg-gray-50 px-2 py-1 rounded inline-block">
-                                                        {inventory.asset_code}
+                                                </th>
+                                                <th scope="col" className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider cursor-pointer hover:bg-indigo-100 transition-colors">
+                                                    <div className="flex items-center">
+                                                        Asset Code
+                                                        <SortIndicator columnKey="asset_code" />
                                                     </div>
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <StatusBadge status={inventory.status} />
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <div className="text-sm text-gray-600">
-                                                        {inventory.assigned_at
-                                                            ? new Date(inventory.assigned_at).toLocaleString()
-                                                            : '—'}
+                                                </th>
+                                                <th scope="col" className="hidden md:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider cursor-pointer hover:bg-indigo-100 transition-colors">
+                                                    <div className="flex items-center">
+                                                        Status
+                                                        <SortIndicator columnKey="status" />
                                                     </div>
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                    <div className="flex items-center justify-end space-x-2">
-                                                        <button
-                                                            onClick={() => handleEditInventory(inventory)}
-                                                            className="text-indigo-600 hover:text-indigo-900 p-1 hover:bg-indigo-100 rounded transition-colors"
-                                                            title="Edit"
-                                                        >
-                                                            <Edit className="w-4 h-4" />
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleDeleteInventory(inventory.inventory_id)}
-                                                            className="text-red-600 hover:text-red-900 p-1 hover:bg-red-100 rounded transition-colors"
-                                                            title="Delete"
-                                                        >
-                                                            <TrashIcon className="w-4 h-4" />
-                                                        </button>
+                                                </th>
+                                                <th scope="col" className="hidden lg:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider cursor-pointer hover:bg-indigo-100 transition-colors">
+                                                    <div className="flex items-center">
+                                                        Assigned At
+                                                        <SortIndicator columnKey="assigned_at" />
                                                     </div>
-                                                </td>
+                                                </th>
+                                                <th scope="col" className="px-3 sm:px-6 py-3 text-right text-xs font-medium text-indigo-600 uppercase tracking-wider">
+                                                    Actions
+                                                </th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody className="bg-white divide-y divide-gray-200">
+                                            {filteredInventories.map((inventory) => (
+                                                <tr key={inventory.inventory_id} className="hover:bg-indigo-50 transition-colors">
+                                                    <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
+                                                        <div className="text-sm font-medium text-gray-900">
+                                                            {inventory.product ? inventory.product.name : 'Unknown Product'}
+                                                        </div>
+                                                        <div className="text-xs text-gray-500 sm:hidden">
+                                                            {inventory.product && inventory.product.category
+                                                                ? inventory.product.category.name
+                                                                : 'Uncategorized'}
+                                                        </div>
+                                                        <div className="text-xs text-gray-500 md:hidden">
+                                                            <StatusBadge status={inventory.status} />
+                                                        </div>
+                                                    </td>
+                                                    <td className="hidden sm:table-cell px-3 sm:px-6 py-4 whitespace-nowrap">
+                                                        <div className="text-sm text-gray-600">
+                                                            {inventory.product && inventory.product.category
+                                                                ? inventory.product.category.name
+                                                                : 'Uncategorized'}
+                                                        </div>
+                                                    </td>
+                                                    <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
+                                                        <div className="text-sm font-mono text-gray-600 bg-gray-50 px-2 py-1 rounded inline-block">
+                                                            {inventory.asset_code}
+                                                        </div>
+                                                    </td>
+                                                    <td className="hidden md:table-cell px-3 sm:px-6 py-4 whitespace-nowrap">
+                                                        <StatusBadge status={inventory.status} />
+                                                    </td>
+                                                    <td className="hidden lg:table-cell px-3 sm:px-6 py-4 whitespace-nowrap">
+                                                        <div className="text-sm text-gray-600">
+                                                            {inventory.assigned_at
+                                                                ? new Date(inventory.assigned_at).toLocaleString()
+                                                                : '—'}
+                                                        </div>
+                                                    </td>
+                                                    <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                        <div className="flex items-center justify-end space-x-2">
+                                                            <button
+                                                                onClick={() => handleEditInventory(inventory)}
+                                                                className="text-indigo-600 hover:text-indigo-900 p-2 hover:bg-indigo-100 rounded transition-colors"
+                                                                title="Edit"
+                                                            >
+                                                                <Edit className="w-4 h-4" />
+                                                            </button>
+                                                            <button
+                                                                onClick={() => handleDeleteInventory(inventory.inventory_id)}
+                                                                className="text-red-600 hover:text-red-900 p-2 hover:bg-red-100 rounded transition-colors"
+                                                                title="Delete"
+                                                            >
+                                                                <TrashIcon className="w-4 h-4" />
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
 
-                            {/* Pagination and Export Controls */}
-                            <div className="bg-gray-50 px-6 py-4 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center">
-                                <div className="flex items-center text-sm text-gray-700 mb-4 md:mb-0">
-                                    <p>
+                            {/* Pagination and Export Controls - Made more responsive */}
+                            <div className="bg-gray-50 px-3 sm:px-6 py-4 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-4">
+                                <div className="flex items-center text-sm text-gray-700 w-full sm:w-auto">
+                                    <p className="text-center sm:text-left">
                                         Showing <span className="font-medium">{(pagination.currentPage - 1) * pagination.pageSize + 1}</span> to{' '}
                                         <span className="font-medium">
                                             {Math.min(pagination.currentPage * pagination.pageSize, pagination.totalItems)}
@@ -822,12 +822,12 @@ const Inventory = () => {
                                     </p>
                                 </div>
 
-                                <div className="flex items-center gap-x-4">
+                                <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
                                     {/* Export Options */}
-                                    <div className="relative">
+                                    <div className="relative w-full sm:w-auto">
                                         <button
-                                            onClick={() => setShowExportOptions(!showExportOptions)}
-                                            className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center text-sm shadow-sm hover:shadow"
+                                            onClick={handleExportClick}
+                                            className="w-full sm:w-auto px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center text-sm shadow-sm hover:shadow"
                                             disabled={isExporting}
                                         >
                                             {isExporting ? (
@@ -848,33 +848,49 @@ const Inventory = () => {
                                         </button>
 
                                         {showExportOptions && (
-                                            <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-50 animate-fadeIn">                                                <button
-                                                    onClick={() => handleExportData('csv')}
-                                                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 flex items-center"
-                                                >
-                                                    <Download className="w-4 h-4 mr-2" />
-                                                    Export as CSV
-                                                </button>
-                                                <button
-                                                    onClick={() => handleExportData('json')}
-                                                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 flex items-center"
-                                                >
-                                                    <Download className="w-4 h-4 mr-2" />
-                                                    Export as JSON
-                                                </button>
-                                                <button
-                                                    onClick={() => handleExportData('excel')}
-                                                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 flex items-center"
-                                                >
-                                                    <Download className="w-4 h-4 mr-2" />
-                                                    Export as Excel
-                                                </button>
-                                            </div>
+                                            <>
+                                                <div
+                                                    className="fixed inset-0 z-[998]"
+                                                    onClick={() => setShowExportOptions(false)}
+                                                ></div>
+                                                <div className={`absolute ${dropdownPosition === 'top' ? 'bottom-full mb-2' : 'top-full mt-2'} right-0 w-48 bg-white border border-gray-200 rounded-lg shadow-xl py-1 z-[999]`}>
+                                                    <button
+                                                        onClick={() => {
+                                                            handleExportData('csv');
+                                                            setShowExportOptions(false);
+                                                        }}
+                                                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 flex items-center"
+                                                    >
+                                                        <Download className="w-4 h-4 mr-2" />
+                                                        Export as CSV
+                                                    </button>
+                                                    <button
+                                                        onClick={() => {
+                                                            handleExportData('json');
+                                                            setShowExportOptions(false);
+                                                        }}
+                                                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 flex items-center"
+                                                    >
+                                                        <Download className="w-4 h-4 mr-2" />
+                                                        Export as JSON
+                                                    </button>
+                                                    <button
+                                                        onClick={() => {
+                                                            handleExportData('excel');
+                                                            setShowExportOptions(false);
+                                                        }}
+                                                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 flex items-center"
+                                                    >
+                                                        <Download className="w-4 h-4 mr-2" />
+                                                        Export as Excel
+                                                    </button>
+                                                </div>
+                                            </>
                                         )}
                                     </div>
 
                                     {/* Pagination */}
-                                    <div className="flex items-center gap-x-2">
+                                    <div className="flex items-center gap-2 w-full sm:w-auto justify-center">
                                         <button
                                             onClick={() => setPagination({ ...pagination, currentPage: Math.max(1, pagination.currentPage - 1) })}
                                             disabled={pagination.currentPage === 1}
@@ -883,32 +899,30 @@ const Inventory = () => {
                                             Previous
                                         </button>
 
-                                        {[...Array(pagination.totalPages).keys()].map(page => {
-                                            const pageNumber = page + 1;
-                                            // Show pagination links: first, last, current, and numbers around current
-                                            const isVisible =
-                                                pageNumber === 1 ||
-                                                pageNumber === pagination.totalPages ||
-                                                (pageNumber >= pagination.currentPage - 1 && pageNumber <= pagination.currentPage + 1);
-
-                                            if (!isVisible) {
-                                                // Show ellipsis for page gaps
-                                                if (pageNumber === 2 || pageNumber === pagination.totalPages - 1) {
-                                                    return <span key={page} className="px-3 py-1">...</span>;
+                                        <div className="flex gap-1 overflow-x-auto">
+                                            {[...Array(Math.min(3, pagination.totalPages))].map((_, i) => {
+                                                let pageNumber;
+                                                if (pagination.totalPages <= 3) {
+                                                    pageNumber = i + 1;
+                                                } else if (pagination.currentPage <= 2) {
+                                                    pageNumber = i + 1;
+                                                } else if (pagination.currentPage >= pagination.totalPages - 1) {
+                                                    pageNumber = pagination.totalPages - 2 + i;
+                                                } else {
+                                                    pageNumber = pagination.currentPage - 1 + i;
                                                 }
-                                                return null;
-                                            }
 
-                                            return (
-                                                <button
-                                                    key={page}
-                                                    onClick={() => setPagination({ ...pagination, currentPage: pageNumber })}
-                                                    className={`px-3 py-1 rounded-md ${pagination.currentPage === pageNumber ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'}`}
-                                                >
-                                                    {pageNumber}
-                                                </button>
-                                            );
-                                        })}
+                                                return (
+                                                    <button
+                                                        key={i}
+                                                        onClick={() => setPagination({ ...pagination, currentPage: pageNumber })}
+                                                        className={`min-w-[2.5rem] px-3 py-1 rounded-md ${pagination.currentPage === pageNumber ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'}`}
+                                                    >
+                                                        {pageNumber}
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
 
                                         <button
                                             onClick={() => setPagination({ ...pagination, currentPage: Math.min(pagination.totalPages, pagination.currentPage + 1) })}
@@ -919,15 +933,12 @@ const Inventory = () => {
                                         </button>
                                     </div>
                                 </div>
-                            </div></>
+                            </div>
+                        </>
                     )}
-                        </div>
-
-                   
                 </div>
             </div>
-            
-        
+        </div>
     );
 };
 

@@ -1,6 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Star, List, Grid, ArrowUp, Trophy, Search, Download } from "lucide-react";
 
+// Light theme color constants
+const colors = {
+  primary: '#FFDF00',
+  primaryDark: '#DFBF00',
+  background: '#FFFFFF',
+  backgroundAlt: '#F8F9FA',
+  text: {
+    primary: '#1F2937',
+    secondary: '#6B7280',
+    accent: '#DFBF00'
+  },
+  border: '#E5E7EB'
+};
 
 const TopPlayedGamesComponent = () => {
   const [games, setGames] = useState([]);
@@ -18,7 +31,7 @@ const TopPlayedGamesComponent = () => {
     const handleScroll = () => {
       setShowScrollTop(window.scrollY > 300);
     };
-    
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -107,32 +120,32 @@ const TopPlayedGamesComponent = () => {
   const filteredGames = games.filter(game =>
     game.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  
+
   const totalPages = Math.ceil(filteredGames.length / itemsPerPage);
   const paginatedGames = filteredGames.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-  
+
 
   const handleGameSelect = (game) => {
     setSelectedGame(selectedGame && selectedGame.appid === game.appid ? null : game);
   };
 
-  // Loading UI with skeleton loading
+  // Loading UI with updated styling
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <div className="flex justify-center items-center min-h-screen bg-white">
         <div className="flex flex-col items-center w-full max-w-7xl px-4">
-          <div className="w-20 h-20 border-4 border-t-4 border-orange-500 border-t-orange-500 border-opacity-20 rounded-full animate-spin"></div>
+          <div className="w-20 h-20 border-4 border-t-4 border-[#FFDF00] border-t-[#FFDF00] border-opacity-20 rounded-full animate-spin"></div>
           <p className="mt-6 text-xl font-medium text-gray-700">Loading top games...</p>
           <div className="w-full mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {[...Array(12)].map((_, i) => (
               <div key={i} className="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
-                <div className="h-48 bg-gray-300"></div>
+                <div className="h-48 bg-gray-200"></div>
                 <div className="p-4">
-                  <div className="h-6 bg-gray-300 rounded-md mb-3 w-3/4"></div>
-                  <div className="h-4 bg-gray-300 rounded-md w-1/2"></div>
+                  <div className="h-6 bg-gray-200 rounded-md mb-3 w-3/4"></div>
+                  <div className="h-4 bg-gray-200 rounded-md w-1/2"></div>
                 </div>
               </div>
             ))}
@@ -142,20 +155,20 @@ const TopPlayedGamesComponent = () => {
     );
   }
 
-  // Error UI
+  // Error UI with updated styling
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="p-8 bg-white rounded-lg shadow-xl max-w-md w-full">
-          <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-red-100">
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="p-8 bg-white rounded-lg shadow-xl max-w-md w-full border border-gray-200">
+          <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-red-50">
             <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
           </div>
           <p className="text-center text-red-500 font-bold text-xl mb-2">Error</p>
           <p className="text-center text-gray-600">{error}</p>
-          <button 
-            className="mt-6 px-6 py-3 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors duration-300 mx-auto block w-full font-medium"
+          <button
+            className="mt-6 px-6 py-3 bg-[#FFDF00] hover:bg-[#DFBF00] text-gray-900 rounded-md transition-colors duration-300 mx-auto block w-full font-medium"
             onClick={() => window.location.reload()}
           >
             Try Again
@@ -167,29 +180,28 @@ const TopPlayedGamesComponent = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-gray-100 ">
+      <div className="min-h-screen bg-white">
         {/* Hero Header */}
-        <header className="relative py-16 overflow-hidden bg-black/10">
+        <header className="relative py-16 overflow-hidden bg-[#FFDF00]/10">
           <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:32px_32px]"></div>
           <div className="container mx-auto px-4 relative z-10">
             <div className="text-center">
-              <div className="inline-flex items-center justify-center p-2 mb-4 bg-white/10 rounded-full backdrop-blur-sm">
-                <Trophy className="h-5 w-5 text-[#C1A811] mr-2" />
-                <span className="text-black font-medium">Live Rankings</span>
+              <div className="inline-flex items-center justify-center p-2 mb-4 bg-[#FFDF00]/20 rounded-full">
+                <Trophy className="h-5 w-5 text-[#DFBF00] mr-2" />
+                <span className="text-gray-900 font-medium">Live Rankings</span>
               </div>
-              <h1 className="text-5xl font-bold text-black mb-3 tracking-tight">Top Most Played Games</h1>
-              <p className="text-xl text-teal-100 max-w-2xl mx-auto" style={{ color: "#C1A811" }}>
+              <h1 className="text-5xl font-bold text-gray-900 mb-3 tracking-tight">Top Most Played Games</h1>
+              <p className="text-xl text-[#DFBF00] max-w-2xl mx-auto">
                 The definitive list of the most popular games on Steam right now
               </p>
             </div>
           </div>
-          <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-gray-100 to-transparent" style={{ from: "#EFF5F5" }}></div>
         </header>
 
         {/* Main Content */}
-        <div className="container mx-auto px-4 py-8 pt-8 relative z-10 -mt-8">
+        <div className="container mx-auto px-4 py-8 pt-8 relative z-10">
           {/* Search and Filters */}
-          <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
             <div className="flex flex-col lg:flex-row gap-4 justify-between items-center">
               <div className="relative w-full lg:w-1/3">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -197,36 +209,40 @@ const TopPlayedGamesComponent = () => {
                 </div>
                 <input
                   type="text"
-                  className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition-all duration-200"
+                  className="pl-10 pr-4 py-2 w-full border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#FFDF00] focus:border-transparent outline-none transition-all duration-200"
                   placeholder="Search games..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              
+
               <div className="flex items-center justify-between w-full lg:w-auto">
                 <div className="flex items-center">
                   <span className="text-gray-700 font-medium mr-3">Sort by:</span>
                   <div className="inline-flex rounded-lg shadow-sm">
-                    <button 
-                      className={`px-4 py-2 text-sm font-medium rounded-l-lg border border-r-0 ${sortBy === "players" ? "bg-[#C1A811] text-white border-[#C1A811]" : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"} transition-colors duration-200`} 
-                      style={sortBy === "players" ? { backgroundColor: "#C1A811", color: "#FFFFFF" } : {}}
+                    <button
+                      className={`px-4 py-2 text-sm font-medium rounded-l-lg border ${sortBy === "players"
+                        ? "bg-[#FFDF00] text-gray-900 border-[#FFDF00]"
+                        : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
+                        } transition-colors duration-200`}
                       onClick={() => sortGames("players")}
                     >
                       Players
                     </button>
-                    <button 
-                      className={`px-4 py-2 text-sm font-medium rounded-r-lg border ${sortBy === "name" ? "bg-[#C1A811] text-white border-[#C1A811]" : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"} transition-colors duration-200`}
-                      style={sortBy === "name" ? { backgroundColor: "#C1A811", color: "#FFFFFF" } : {}}
+                    <button
+                      className={`px-4 py-2 text-sm font-medium rounded-r-lg border ${sortBy === "name"
+                        ? "bg-[#FFDF00] text-gray-900 border-[#FFDF00]"
+                        : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
+                        } transition-colors duration-200`}
                       onClick={() => sortGames("name")}
                     >
                       Name
                     </button>
                   </div>
                 </div>
-                
-                <button 
-                  className="ml-4 px-4 py-2 bg-white text-gray-700 rounded-lg shadow border border-gray-300 hover:bg-gray-50 flex items-center transition-colors duration-200" 
+
+                <button
+                  className="ml-4 px-4 py-2 bg-white text-gray-700 rounded-lg shadow-sm border border-gray-200 hover:bg-gray-50 flex items-center transition-colors duration-200"
                   onClick={toggleView}
                 >
                   {viewMode === "grid" ? (
@@ -248,7 +264,7 @@ const TopPlayedGamesComponent = () => {
           {/* Results Count */}
           <div className="mb-6">
             <p className="text-gray-600">
-              Showing <span className="font-semibold text-teal-700">{filteredGames.length}</span> games
+              Showing <span className="font-semibold text-[#DFBF00]">{filteredGames.length}</span> games
               {searchTerm && ` matching "${searchTerm}"`}
             </p>
           </div>
@@ -257,10 +273,9 @@ const TopPlayedGamesComponent = () => {
           {viewMode === "grid" ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {paginatedGames.map((game) => (
-                <div 
-                  key={game.appid} 
-                  className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl cursor-pointer group"
-                  style={{ backgroundColor: "#FFFFFF" }}
+                <div
+                  key={game.appid}
+                  className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-[#FFDF00]/50 cursor-pointer group"
                   onClick={() => handleGameSelect(game)}
                 >
                   <div className="relative">
@@ -274,40 +289,38 @@ const TopPlayedGamesComponent = () => {
                       }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div 
-                      className="absolute top-4 left-4 w-8 h-8 flex items-center justify-center text-white font-bold rounded-full"
-                      style={{ backgroundColor: "#EB6440" }}
-                    >
+                    <div className="absolute top-4 left-4 w-8 h-8 flex items-center justify-center text-white font-bold rounded-full bg-[#FFDF00] text-gray-900">
                       {game.rank}
                     </div>
                     <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div className="bg-white/20 backdrop-blur-sm text-white text-sm font-medium px-3 py-1 rounded-full">
+                      <div className="bg-white/90 backdrop-blur-sm text-gray-900 text-sm font-medium px-3 py-1 rounded-full">
                         {game.peak_in_game.toLocaleString()} Players
                       </div>
                     </div>
                   </div>
                   <div className="p-4">
+                    <h3 className="font-medium text-gray-900 mb-1">{game.name}</h3>
                     <div className="flex justify-between items-center">
                       <div className="flex items-center">
-                        <Trophy className="h-4 w-4 text-yellow-500 mr-1" />
-                        <p className="text-sm font-medium" style={{ color: "#497174" }}>Rank #{game.rank}</p>
+                        <Trophy className="h-4 w-4 text-[#DFBF00] mr-1" />
+                        <p className="text-sm text-gray-600">Rank #{game.rank}</p>
                       </div>
-                      <div className="text-sm font-medium" style={{ color: "#497174" }}>
+                      <div className="text-sm text-gray-600">
                         {game.peak_in_game.toLocaleString()} Players
                       </div>
                     </div>
                   </div>
-                  
-{/* Expanded Game Details (conditionally rendered) */}
+
+                  {/* Expanded Game Details */}
                   {selectedGame && selectedGame.appid === game.appid && (
-                    <div className="p-4 border-t border-gray-100 bg-gray-50">
+                    <div className="p-4 border-t border-gray-200 bg-gray-50">
                       <div className="flex justify-between items-center mb-2">
-                        <h4 className="font-medium text-teal-700">Game Details</h4>
-                        <a 
+                        <h4 className="font-medium text-gray-900">Game Details</h4>
+                        <a
                           href={`https://store.steampowered.com/app/${game.appid}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-sm text-teal-600 hover:text-teal-800 flex items-center"
+                          className="text-sm text-[#DFBF00] hover:text-[#FFDF00] flex items-center"
                           onClick={(e) => e.stopPropagation()}
                         >
                           View on Steam
@@ -319,15 +332,15 @@ const TopPlayedGamesComponent = () => {
                       <div className="space-y-2">
                         <div className="flex justify-between text-sm">
                           <span className="text-gray-600">Current Players:</span>
-                          <span className="font-medium">{game.peak_in_game.toLocaleString()}</span>
+                          <span className="font-medium text-gray-900">{game.peak_in_game.toLocaleString()}</span>
                         </div>
                         <div className="flex justify-between text-sm">
                           <span className="text-gray-600">Global Rank:</span>
-                          <span className="font-medium">#{game.rank}</span>
+                          <span className="font-medium text-gray-900">#{game.rank}</span>
                         </div>
                         <div className="flex justify-between text-sm">
                           <span className="text-gray-600">App ID:</span>
-                          <span className="font-medium">{game.appid}</span>
+                          <span className="font-medium text-gray-900">{game.appid}</span>
                         </div>
                       </div>
                     </div>
@@ -336,7 +349,7 @@ const TopPlayedGamesComponent = () => {
               ))}
             </div>
           ) : (
-            <div className="bg-white rounded-xl shadow-md overflow-x-auto" style={{ backgroundColor: "#FFFFFF" }}>
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
@@ -349,20 +362,21 @@ const TopPlayedGamesComponent = () => {
                 <tbody className="divide-y divide-gray-200 bg-white">
                   {paginatedGames.map((game) => (
                     <React.Fragment key={game.appid}>
-                      <tr 
-                        className={`hover:bg-gray-50 transition-colors duration-150 cursor-pointer ${selectedGame && selectedGame.appid === game.appid ? 'bg-teal-50' : ''}`}
+                      <tr
+                        className={`hover:bg-gray-50 transition-colors duration-150 cursor-pointer ${selectedGame && selectedGame.appid === game.appid ? 'bg-[#FFDF00]/5' : ''
+                          }`}
                         onClick={() => handleGameSelect(game)}
                       >
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center justify-center w-8 h-8 rounded-full text-white font-medium text-sm" style={{ backgroundColor: "#EB6440" }}>
+                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-[#FFDF00] text-gray-900 font-medium text-sm">
                             {game.rank}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <div className="flex-shrink-0 h-12 w-20 rounded overflow-hidden">
-                              <img 
-                                className="h-12 w-20 object-cover" 
+                              <img
+                                className="h-12 w-20 object-cover"
                                 src={`https://steamcdn-a.akamaihd.net/steam/apps/${game.appid}/header.jpg`}
                                 alt={game.name}
                                 onError={(e) => {
@@ -380,7 +394,7 @@ const TopPlayedGamesComponent = () => {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <div className="w-full bg-gray-200 rounded-full h-2.5">
-                              <div className="bg-teal-600 h-2.5 rounded-full" style={{ width: `${Math.min(100, game.peak_in_game / 50000 * 100)}%` }}></div>
+                              <div className="bg-[#FFDF00] h-2.5 rounded-full" style={{ width: `${Math.min(100, game.peak_in_game / 50000 * 100)}%` }}></div>
                             </div>
                             <span className="ml-3 text-sm text-gray-700">{game.peak_in_game.toLocaleString()}</span>
                           </div>
@@ -390,14 +404,14 @@ const TopPlayedGamesComponent = () => {
                             href={`https://store.steampowered.com/app/${game.appid}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-teal-600 hover:text-teal-900"
+                            className="text-[#DFBF00] hover:text-[#FFDF00]"
                             onClick={(e) => e.stopPropagation()}
                           >
                             View
                           </a>
                         </td>
                       </tr>
-                      
+
                       {/* Expanded Row */}
                       {selectedGame && selectedGame.appid === game.appid && (
                         <tr className="bg-gray-50">
@@ -408,11 +422,11 @@ const TopPlayedGamesComponent = () => {
                                 <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm">
                                   <div>
                                     <span className="text-gray-500">Peak Players:</span>
-                                    <span className="ml-2 font-medium">{game.peak_in_game.toLocaleString()}</span>
+                                    <span className="ml-2 font-medium text-gray-900">{game.peak_in_game.toLocaleString()}</span>
                                   </div>
                                   <div>
                                     <span className="text-gray-500">Global Rank:</span>
-                                    <span className="ml-2 font-medium">#{game.rank}</span>
+                                    <span className="ml-2 font-medium text-gray-900">#{game.rank}</span>
                                   </div>
                                 </div>
                               </div>
@@ -421,7 +435,7 @@ const TopPlayedGamesComponent = () => {
                                   href={`https://store.steampowered.com/app/${game.appid}`}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+                                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-gray-900 bg-[#FFDF00] hover:bg-[#DFBF00] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FFDF00]"
                                   onClick={(e) => e.stopPropagation()}
                                 >
                                   View on Steam
@@ -440,158 +454,157 @@ const TopPlayedGamesComponent = () => {
               </table>
             </div>
           )}
-          
+
           {/* Empty State */}
           {filteredGames.length === 0 && (
-            <div className="flex flex-col items-center justify-center py-12 bg-white rounded-xl shadow-md">
-              <div className="text-teal-700 bg-teal-100 p-4 rounded-full mb-4">
+            <div className="flex flex-col items-center justify-center py-12 bg-white rounded-lg shadow-sm border border-gray-200">
+              <div className="text-[#DFBF00] bg-[#FFDF00]/10 p-4 rounded-full mb-4">
                 <Search className="h-8 w-8" />
               </div>
               <h3 className="text-lg font-medium text-gray-900 mb-1">No games found</h3>
               <p className="text-gray-500 mb-4">Try adjusting your search term</p>
               <button
-                className="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors duration-200"
+                className="px-4 py-2 bg-[#FFDF00] hover:bg-[#DFBF00] text-gray-900 rounded-md transition-colors duration-200"
                 onClick={() => setSearchTerm("")}
               >
                 Clear search
               </button>
             </div>
           )}
-          
-          {/* Pagination (Optional) - Just showing UI, not functional */}
+
+          {/* Pagination */}
           {totalPages > 1 && (
-  <div className="mt-10 flex justify-center items-center gap-2 flex-wrap">
-    <button
-      onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-      disabled={currentPage === 1}
-      className={`px-3 py-1 rounded-md font-medium ${
-        currentPage === 1 ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-[#EB6440] text-white hover:bg-[#d05a3a]'
-      }`}
-    >
-      Previous
-    </button>
+            <div className="mt-10 flex justify-center items-center gap-2 flex-wrap">
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className={`px-3 py-1 rounded-md font-medium ${currentPage === 1
+                  ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                  : 'bg-[#FFDF00] text-gray-900 hover:bg-[#DFBF00]'
+                  }`}
+              >
+                Previous
+              </button>
 
-    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-      <button
-        key={page}
-        onClick={() => setCurrentPage(page)}
-        className={`px-3 py-1 rounded-md font-medium ${
-          currentPage === page
-            ? 'bg-[#497174] text-white'
-            : 'bg-white text-[#497174] border border-[#D6E4E5] hover:bg-[#EFF5F5]'
-        }`}
-      >
-        {page}
-      </button>
-    ))}
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`px-3 py-1 rounded-md font-medium ${currentPage === page
+                    ? 'bg-[#FFDF00] text-gray-900'
+                    : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
+                    }`}
+                >
+                  {page}
+                </button>
+              ))}
 
-    <button
-      onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-      disabled={currentPage === totalPages}
-      className={`px-3 py-1 rounded-md font-medium ${
-        currentPage === totalPages ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-[#EB6440] text-white hover:bg-[#d05a3a]'
-      }`}
-    >
-      Next
-    </button>
-  </div>
-)}
-
+              <button
+                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className={`px-3 py-1 rounded-md font-medium ${currentPage === totalPages
+                  ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                  : 'bg-[#FFDF00] text-gray-900 hover:bg-[#DFBF00]'
+                  }`}
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
-        
+
         {/* Scroll to top button */}
         {showScrollTop && (
           <button
             onClick={scrollToTop}
-            className="fixed bottom-8 right-8 p-3 rounded-full bg-teal-600 text-white shadow-lg hover:bg-teal-700 transition-all duration-300 z-50"
+            className="fixed bottom-8 right-8 p-3 rounded-full bg-[#FFDF00] text-gray-900 shadow-lg hover:bg-[#DFBF00] transition-all duration-300 z-50"
             aria-label="Scroll to top"
           >
             <ArrowUp className="h-6 w-6" />
           </button>
         )}
-        
-    </div>
-    
-    {/* Game Preview Modal - Only show when a game is selected in certain contexts */}
-    {selectedGame && viewMode === "grid" && (
-      <div className="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true" onClick={() => setSelectedGame(null)}>
-        <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-          <div className="fixed inset-0 bg-gray-900/40 backdrop-blur-md bg-opacity-75 transition-opacity" aria-hidden="true"></div>
-          <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-          <div 
-            className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="relative">
-              <img 
-                src={`https://steamcdn-a.akamaihd.net/steam/apps/${selectedGame.appid}/header.jpg`}
-                alt={selectedGame.name}
-                className="w-full object-cover h-64"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = "/api/placeholder/400/320";
-                }}
-              />
-              <button
-                className="absolute top-4 right-4 rounded-full bg-black bg-opacity-50 p-2 text-white hover:bg-opacity-70 transition-all duration-200"
-                onClick={() => setSelectedGame(null)}
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-              </button>
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent py-8 px-6">
-                <h3 className="text-2xl font-bold text-white">{selectedGame.name}</h3>
-                <div className="flex items-center mt-2">
-                  <div className="bg-teal-600 text-white text-sm px-3 py-1 rounded-full">
-                    Rank #{selectedGame.rank}
-                  </div>
-                  <div className="bg-gray-800 text-white text-sm px-3 py-1 rounded-full ml-2">
-                    {selectedGame.peak_in_game.toLocaleString()} Players
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="bg-white px-6 py-4">
-              <div className="space-y-4">
-                <div>
-                  <h4 className="text-sm font-medium text-gray-500">Player Statistics</h4>
-                  <div className="mt-2 flex items-center">
-                    <div className="w-full bg-gray-200 rounded-full h-2.5">
-                      <div className="bg-teal-600 h-2.5 rounded-full" style={{ width: `${Math.min(100, selectedGame.peak_in_game / 50000 * 100)}%` }}></div>
+      </div>
+
+      {/* Game Preview Modal */}
+      {selectedGame && viewMode === "grid" && (
+        <div className="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true" onClick={() => setSelectedGame(null)}>
+          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div className="fixed inset-0 bg-gray-500/75 backdrop-blur-sm transition-opacity"></div>
+            <span className="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+            <div
+              className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="relative">
+                <img
+                  src={`https://steamcdn-a.akamaihd.net/steam/apps/${selectedGame.appid}/header.jpg`}
+                  alt={selectedGame.name}
+                  className="w-full object-cover h-64"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "/api/placeholder/400/320";
+                  }}
+                />
+                <button
+                  className="absolute top-4 right-4 rounded-full bg-black/50 p-2 text-white hover:bg-black/70 transition-all duration-200"
+                  onClick={() => setSelectedGame(null)}
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent py-8 px-6">
+                  <h3 className="text-2xl font-bold text-white">{selectedGame.name}</h3>
+                  <div className="flex items-center mt-2">
+                    <div className="bg-[#FFDF00] text-gray-900 text-sm px-3 py-1 rounded-full">
+                      Rank #{selectedGame.rank}
                     </div>
-                    <span className="ml-3 text-sm font-medium">{selectedGame.peak_in_game.toLocaleString()} current players</span>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-500">App ID</h4>
-                    <p className="mt-1">{selectedGame.appid}</p>
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-500">Global Rank</h4>
-                    <p className="mt-1">#{selectedGame.rank}</p>
+                    <div className="bg-white/90 text-gray-900 text-sm px-3 py-1 rounded-full ml-2">
+                      {selectedGame.peak_in_game.toLocaleString()} Players
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="bg-gray-50 px-6 py-3 flex justify-end">
-              <a
-                href={`https://store.steampowered.com/app/${selectedGame.appid}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
-              >
-                View on Steam
-                <svg className="ml-2 -mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                </svg>
-              </a>
+              <div className="bg-white px-6 py-4">
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-500">Player Statistics</h4>
+                    <div className="mt-2 flex items-center">
+                      <div className="w-full bg-gray-200 rounded-full h-2.5">
+                        <div className="bg-[#FFDF00] h-2.5 rounded-full" style={{ width: `${Math.min(100, selectedGame.peak_in_game / 50000 * 100)}%` }}></div>
+                      </div>
+                      <span className="ml-3 text-sm font-medium">{selectedGame.peak_in_game.toLocaleString()} current players</span>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <h4 className="text-sm font-medium text-gray-500">App ID</h4>
+                      <p className="mt-1 text-gray-900">{selectedGame.appid}</p>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-medium text-gray-500">Global Rank</h4>
+                      <p className="mt-1 text-gray-900">#{selectedGame.rank}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-gray-50 px-6 py-3 flex justify-end">
+                <a
+                  href={`https://store.steampowered.com/app/${selectedGame.appid}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-gray-900 bg-[#FFDF00] hover:bg-[#DFBF00] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FFDF00]"
+                >
+                  View on Steam
+                  <svg className="ml-2 -mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                  </svg>
+                </a>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    )}
+      )}
     </>
   );
 };

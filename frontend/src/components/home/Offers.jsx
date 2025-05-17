@@ -139,11 +139,44 @@ const Offers = () => {
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-3 bg-clip-text text-transparent" style={{ backgroundImage: COLORS.goldGradient }}>
-              Special Offers
-            </h2>
-            <p className="text-gray-600 text-lg">Discover amazing deals on our featured products</p>
+          <div className="relative mb-16 overflow-hidden">
+            {/* Background Effects */}
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl" style={{ background: 'linear-gradient(135deg, #FFDF00 0%, #DFBF00 100%)', opacity: '0.15' }} />
+              <div className="absolute -bottom-32 -left-32 w-96 h-96 rounded-full blur-3xl" style={{ background: 'linear-gradient(135deg, #DFBF00 0%, #FFDF00 100%)', opacity: '0.1' }} />
+            </div>
+
+            {/* Content Container */}
+            <div className="text-center relative">
+              {/* Decorative Elements */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-[#FFDF00]/0 via-[#FFDF00] to-[#FFDF00]/0"></div>
+
+              {/* Main Title */}
+              <div className="relative inline-block">
+                <h2 className="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight">
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FFDF00] to-[#DFBF00] drop-shadow-[0_0_10px_rgba(255,223,0,0.3)]">
+                    Special Offers
+                  </span>
+                </h2>
+
+                {/* Animated Underline */}
+                <div className="h-1 w-full bg-gradient-to-r from-[#FFDF00]/0 via-[#FFDF00] to-[#FFDF00]/0 group-hover:w-full transition-all duration-300"></div>
+              </div>
+
+              {/* Subtitle with Icon */}
+              <div className="flex items-center justify-center gap-2 mt-4">
+                <div className="w-12 h-[2px] bg-gradient-to-r from-transparent via-[#DFBF00] to-transparent"></div>
+                <p className="text-gray-600 text-lg font-medium">
+                  Discover Amazing Deals on Premium Games
+                </p>
+                <div className="w-12 h-[2px] bg-gradient-to-r from-transparent via-[#DFBF00] to-transparent"></div>
+              </div>
+
+              {/* Additional Description */}
+              <p className="text-gray-500 mt-4 max-w-2xl mx-auto">
+                Limited time offers on top-tier digital experiences. Don't miss out on these exclusive deals!
+              </p>
+            </div>
           </div>
 
           <div className="relative group">
@@ -193,8 +226,8 @@ const Offers = () => {
                       <span className="text-red-600 font-bold text-2xl bg-red-50 px-3 py-1 rounded-full">JD {formatPrice(product.discounted_price || product.price)}</span>
                     </div>
 
-                    <button 
-                      className="relative w-full h-12 rounded-xl bg-gradient-to-r from-[#DFBF00] to-[#C1A811] flex items-center justify-center overflow-hidden transition-all duration-300 hover:from-[#C1A811] hover:to-[#C1A811] group/button shadow-md hover:shadow-lg" 
+                    <button
+                      className="relative w-full h-12 rounded-xl bg-gradient-to-r from-[#DFBF00] to-[#C1A811] flex items-center justify-center overflow-hidden transition-all duration-300 hover:from-[#C1A811] hover:to-[#C1A811] group/button shadow-md hover:shadow-lg"
                       type="button"
                       onClick={(e) => {
                         e.preventDefault();

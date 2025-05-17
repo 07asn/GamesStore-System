@@ -11,7 +11,7 @@ const SuggestionProducts = ({ productId }) => {
       try {
         // Axios GET request to fetch related products
         const response = await axios.get(`http://localhost:5000/api/products/related/${productId}`);
-        
+
         // Check if data is returned and set it
         if (response.status === 200) {
           setRelatedProducts(response.data);
@@ -42,7 +42,11 @@ const SuggestionProducts = ({ productId }) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {relatedProducts.length > 0 ? (
           relatedProducts.map((prod) => (
-            <ProductCard key={prod.product_id} {...prod} />
+            <ProductCard
+              key={prod.product_id}
+              {...prod}
+              productImage={prod.images && prod.images.length > 0 ? prod.images[0] : null}
+            />
           ))
         ) : (
           <p>No related products found</p>
