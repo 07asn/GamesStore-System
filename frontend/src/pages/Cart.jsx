@@ -43,20 +43,17 @@ const Cart = () => {
     };
 
     const handleCheckout = () => {
-        axios.get('http://localhost:5000/api/users/status', { withCredentials: true })
-            .then(response => {
-                if (response.data.loggedIn) {
-                    navigate('/payment');
-                } else {
-                    alert("Please log in to proceed with checkout");
-                }
-            })
-            .catch(error => console.error(error));
+        const token = Cookies.get('token');
+        if (!token) {
+            navigate('/login', { state: { from: '/payment' } });
+            return;
+        }
+        navigate('/payment');
     };
 
     // Calculate subtotal (check for discounted_price if available)
     const subtotal = cartItems.reduce((acc, item) => {
-        const price = item.discounted_price && item.discounted_price > 0 ? parseFloat(item.discounted_price) : parseFloat(item.price.replace('JD', '').trim());
+        const price = item.discounted_price && item.discounted_price > 0 ? parseFloat(item.discounted_price) : parseFloat(item.price.replace('$', '').trim());
         return acc + price * item.quantity;
     }, 0);
 

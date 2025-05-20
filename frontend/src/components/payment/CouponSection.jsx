@@ -47,7 +47,7 @@ const CouponSection = ({ cartItems = [], onCouponApplied }) => {
           value={couponCode}
           onChange={(e) => setCouponCode(e.target.value)}
           className="flex-1 p-3 text-base border border-gray-300 rounded-l-lg outline-none 
-            transition-colors duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+            transition-colors duration-200 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
         />
         <button
           onClick={handleApplyCoupon}

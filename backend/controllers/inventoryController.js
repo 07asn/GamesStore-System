@@ -1,7 +1,7 @@
 const Inventory = require('../models/Inventory');
-const { Op } = require('sequelize'); // Used for more advanced queries (like filtering by status)
+const { Op } = require('sequelize');
 const Product = require('../models/Product');
-const Category = require('../models/Category');  // Assuming Category model is available
+const Category = require('../models/Category');
 
 // Get all inventories
 const getInventories = async (req, res) => {
@@ -26,7 +26,7 @@ const getInventories = async (req, res) => {
                   as: 'category',
                   attributes: ['name'],
               },
-              required: true // Use INNER JOIN to ensure we only get inventories with products
+              required: true
           }
       ];
 
@@ -158,8 +158,8 @@ const addInventory = async (req, res) => {
       const newInventory = await Inventory.create({
         product_id,
         asset_code,
-        status: status || 'available',  // Default status is 'available'
-        assigned_at: assigned_at || null,  // If no assigned_at, set it to null
+        status: status || 'available',  
+        assigned_at: assigned_at || null,  
       });
   
       return res.status(201).json({

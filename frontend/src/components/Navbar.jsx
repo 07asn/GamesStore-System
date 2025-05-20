@@ -72,9 +72,26 @@ const Navbar = () => {
 
   // Listen for custom event to update auth state after login
   useEffect(() => {
-    const handleUserLoggedIn = () => {
+    const handleUserLoggedIn = async () => {
       const token = Cookies.get('token');
       setIsLoggedIn(!!token);
+
+      if (token) {
+        try {
+          const response = await axios.get('http://localhost:5000/api/users/status', { withCredentials: true });
+          if (response.data.loggedIn && response.data.user) {
+            setIsLoggedIn(true);
+            setIsAdmin(response.data.user.role === 'admin');
+          } else {
+            setIsLoggedIn(false);
+            setIsAdmin(false);
+          }
+        } catch (err) {
+          console.error('Error fetching auth status:', err);
+          setIsLoggedIn(false);
+          setIsAdmin(false);
+        }
+      }
     };
     window.addEventListener('userLoggedIn', handleUserLoggedIn);
     return () => window.removeEventListener('userLoggedIn', handleUserLoggedIn);
@@ -82,7 +99,7 @@ const Navbar = () => {
 
   // Fetch categories from API
   useEffect(() => {
-    axios.get('http://localhost:5000/api/categories/all')
+    axios.get('http://localhost:5000/api/categories/active')
       .then((response) => {
         console.log("Fetched categories:", response.data);
         setCategories(response.data);
@@ -113,14 +130,6 @@ const Navbar = () => {
   }, []);
 
   const cartCount = cartItems.length;
-  const cartTotal = cartItems.reduce((sum, item) => {
-    let price = 0;
-    if (item.price) {
-      price = parseFloat(item.price.replace(/[^\d.]/g, '').trim()) || 0;
-    }
-    return sum + price * (item.quantity || 1);
-  }, 0);
-
   // Debounce product search
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -264,11 +273,11 @@ const Navbar = () => {
                         <p className="text-white font-medium group-hover:text-[#FFDF00] transition-colors duration-200">{product.name}</p>
                         <div className="flex items-center mt-1">
                           <span className="text-[#FFDF00] font-semibold">
-                            ${product.discounted_price || product.price}
+                            $ {product.discounted_price || product.price}
                           </span>
                           {product.discounted_price && (
                             <span className="ml-2 text-sm text-gray-500 line-through">
-                              ${product.price}
+                              $ {product.price}
                             </span>
                           )}
                         </div>
@@ -387,7 +396,7 @@ const Navbar = () => {
                             </div>
                             <div className="text-right">
                               <span className="block text-[#1A1A1A] font-bold">
-                                ${displayPrice.toFixed(2)}
+                                $ {displayPrice.toFixed(2)}
                               </span>
                               {discountedPrice && (
                                 <span className="text-xs px-1.5 py-0.5 rounded bg-[#D4AF37]/10 text-[#996515]">
@@ -415,7 +424,7 @@ const Navbar = () => {
                       <span className="text-[#1A1A1A] font-bold">Total:</span>
                       <div className="text-right">
                         <span className="block text-xl font-bold text-[#1A1A1A]">
-                          ${cartItems.reduce((total, item) => {
+                          $ {cartItems.reduce((total, item) => {
                             const price = typeof item.price === 'string'
                               ? parseFloat(item.price.replace(/[^\d.]/g, ''))
                               : Number(item.price);
@@ -576,7 +585,7 @@ const Navbar = () => {
                       <div className="ml-3">
                         <div className="font-medium text-[#514F4F]">{product.name}</div>
                         <div className="text-sm text-[#514F4F]/90">
-                          ${product.discounted_price || product.price}
+                          $ {product.discounted_price || product.price}
                         </div>
                       </div>
                     </Link>

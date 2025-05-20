@@ -13,7 +13,7 @@ const sequelize = require("../config/database");
 async function getAllUsers(req, res) {
   try {
     const users = await User.findAll({
-      where: { is_deleted: false }, // <--- filter out deleted
+      where: { is_deleted: false },
       attributes: {
         exclude: ["password"],
         include: [
@@ -90,7 +90,6 @@ async function createUser(req, res) {
       gender,
       email_verified,
       password: hashed,
-      // is_deleted defaults to false in your model, presumably
     });
 
     return res.status(201).json({

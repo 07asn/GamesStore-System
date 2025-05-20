@@ -1,4 +1,3 @@
-// middleware/adminMiddleware.js
 const authorizeAdmin = (req, res, next) => {
     if (req.user && req.user.role === 'admin') {
       return next();

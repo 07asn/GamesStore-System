@@ -1,4 +1,3 @@
-// controllers/orderController.js
 const Order = require("../models/Order");
 const User = require("../models/User");
 const { Op } = require("sequelize");
@@ -10,11 +9,11 @@ const Coupon = require("../models/Coupon");
 const { uploadImage } = require("../services/imgService");
 const cloudinary = require("cloudinary").v2;
 const multer = require("multer");
-// Configure multer similar to your category implementation
+
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 2 * 1024 * 1024, // 2MB limit
+    fileSize: 2 * 1024 * 1024,
   },
 });
 const { uploadPaymentProof } = require("../services/orderImgService");
@@ -30,7 +29,7 @@ const autoAssignInventory = async (orderId, items) => {
           product_id: item.product_id,
           status: "available",
         },
-        order: [["createdAt", "ASC"]], // First-in-first-out
+        order: [["createdAt", "ASC"]],
       });
 
       if (inventory) {
@@ -76,13 +75,11 @@ const autoDelivery = async (order, createdOrderItems) => {
     });
 
     if (availableInventory) {
-      // Mark the inventory record as assigned
       await availableInventory.update({
         status: "assigned",
         assigned_at: new Date(),
       });
 
-      // Update the order item record with the assigned inventory_id
       await item.update({ inventory_id: availableInventory.inventory_id });
     } else {
       console.warn(`No available inventory for product_id: ${item.product_id}`);
@@ -116,7 +113,6 @@ exports.createOrder = [
       const { userId } = req.user;
       let { payment_method, total_amount, cartItems } = req.body;
 
-      // Validate required fields
       if (!payment_method || !total_amount || !cartItems) {
         return res.status(400).json({
           message:
@@ -124,7 +120,6 @@ exports.createOrder = [
         });
       }
 
-      // Parse cart items
       try {
         cartItems =
           typeof cartItems === "string" ? JSON.parse(cartItems) : cartItems;
@@ -138,7 +133,6 @@ exports.createOrder = [
         });
       }
 
-      // Process payment proof if required
       let proof_img = null;
       const requiresProof = ["bank-transfer", "cliq", "uwallet"].includes(
         payment_method
@@ -181,21 +175,17 @@ exports.createOrder = [
         price_at_purchase: item.price_at_purchase,
       }));
 
-      await Order_Item.bulkCreate(orderItems);
+      const createdOrderItems = await Order_Item.bulkCreate(orderItems);
 
-      // Auto-assign inventory
-      const assignmentResults = await autoAssignInventory(
-        newOrder.order_id,
-        cartItems.map((item) => ({ product_id: item.product_id }))
-      );
-
-      const allAssigned = assignmentResults.every((r) => r.success);
-
-      if (allAssigned) {
-        await newOrder.update({
-          delivery_status: "completed",
-          order_status: "processing",
-        });
+      // Only auto-deliver if payment is not pending verification
+      if (!requiresProof) {
+        const allDelivered = await autoDelivery(newOrder, createdOrderItems);
+        if (allDelivered) {
+          await newOrder.update({
+            delivery_status: "delivered",
+            order_status: "processing",
+          });
+        }
       }
 
       return res.status(201).json({
@@ -204,7 +194,6 @@ exports.createOrder = [
         payment_status: newOrder.payment_status,
         delivery_status: newOrder.delivery_status,
         requires_verification: requiresProof,
-        inventory_assignment: assignmentResults,
       });
     } catch (error) {
       console.error("Order creation failed:", error);
@@ -225,7 +214,7 @@ exports.getSingleOrder = async (req, res) => {
       include: [
         {
           model: User,
-          as: "user", // Association defined on Order
+          as: "user",
           attributes: ["user_id", "name", "email", "phone", "country"],
         },
         {
@@ -244,7 +233,7 @@ exports.getSingleOrder = async (req, res) => {
             },
             {
               model: Inventory,
-              as: "inventory", // Include the Inventory association to get asset_code
+              as: "inventory",
             },
           ],
         },
@@ -342,7 +331,6 @@ exports.getOrders = async (req, res) => {
   }
 };
 
-// Update the status of an order (for example, mark it as "completed")
 exports.updateOrderStatus = async (req, res) => {
   try {
     const { id } = req.params;
@@ -356,7 +344,6 @@ exports.updateOrderStatus = async (req, res) => {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    // Update the status
     order.order_status = order_status || order.order_status;
     order.payment_status = payment_status || order.payment_status;
     order.delivery_status = delivery_status || order.delivery_status;
@@ -404,12 +391,10 @@ exports.assignInventoryToOrderItem = async (req, res) => {
       assigned_at: new Date(),
     });
 
-    return res
-      .status(200)
-      .json({
-        message: "Inventory assigned to order item successfully",
-        orderItem,
-      });
+    return res.status(200).json({
+      message: "Inventory assigned to order item successfully",
+      orderItem,
+    });
   } catch (error) {
     console.error("Error assigning inventory to order item:", error);
     return res.status(500).json({ message: "Server error" });

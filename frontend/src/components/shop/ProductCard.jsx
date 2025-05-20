@@ -10,7 +10,7 @@ const ProductCard = ({ name, price, discounted_price, productImage, product_id }
   const [isHovered, setIsHovered] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const cardRef = useRef(null);
-  
+
   // Enhanced Luxury Color Palette
   const colors = {
     primary: '#D4AF37',       // Royal Gold
@@ -29,7 +29,7 @@ const ProductCard = ({ name, price, discounted_price, productImage, product_id }
   };
 
   // Calculate discount percentage
-  const discountPercentage = discounted_price ? Math.round((1 - finalPrice/parseFloat(price))*100) : 0;
+  const discountPercentage = discounted_price ? Math.round((1 - finalPrice / parseFloat(price)) * 100) : 0;
 
   // Check wishlist status
   useEffect(() => {
@@ -57,10 +57,10 @@ const ProductCard = ({ name, price, discounted_price, productImage, product_id }
     triggerAnimation();
     const product = { product_id, name, price, discounted_price, productImage, finalPrice };
     let existingWishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-    
+
     if (isWishlisted) {
       existingWishlist = existingWishlist.filter(item => item.product_id !== product_id);
-      toast.success('Removed from Collection', { 
+      toast.success('Removed from Collection', {
         style: {
           background: colors.light,
           color: colors.dark,
@@ -119,7 +119,7 @@ const ProductCard = ({ name, price, discounted_price, productImage, product_id }
   };
 
   return (
-    <div 
+    <div
       ref={cardRef}
       className="relative transition-all duration-300 group h-full flex flex-col"
       onMouseEnter={() => setIsHovered(true)}
@@ -136,7 +136,7 @@ const ProductCard = ({ name, price, discounted_price, productImage, product_id }
     >
       {/* Discount Badge - Enhanced with animation */}
       {discounted_price && (
-        <div 
+        <div
           className="absolute top-4 left-4 z-10"
           style={{
             transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
@@ -154,7 +154,7 @@ const ProductCard = ({ name, price, discounted_price, productImage, product_id }
             position: 'relative',
             overflow: 'hidden'
           }}>
-            <div 
+            <div
               style={{
                 position: 'absolute',
                 inset: 0,
@@ -163,8 +163,8 @@ const ProductCard = ({ name, price, discounted_price, productImage, product_id }
                 transition: 'opacity 0.4s ease'
               }}
             ></div>
-            <span style={{ 
-              fontSize: '11px', 
+            <span style={{
+              fontSize: '11px',
               color: colors.dark,
               fontWeight: 'bold',
               textTransform: 'uppercase',
@@ -174,8 +174,8 @@ const ProductCard = ({ name, price, discounted_price, productImage, product_id }
             }}>
               Royal Deal
             </span>
-            <span style={{ 
-              fontSize: '20px', 
+            <span style={{
+              fontSize: '20px',
               color: colors.dark,
               fontWeight: 'bold',
               letterSpacing: '0.5px',
@@ -202,9 +202,9 @@ const ProductCard = ({ name, price, discounted_price, productImage, product_id }
               filter: isHovered ? 'brightness(1.05) contrast(1.05)' : 'brightness(1) contrast(1)'
             }}
           />
-          
+
           {/* Enhanced Gradient Overlay */}
-          <div 
+          <div
             className="absolute inset-0 transition-all duration-500"
             style={{
               background: `linear-gradient(to top, ${colors.light} 0%, transparent 50%)`,
@@ -213,7 +213,7 @@ const ProductCard = ({ name, price, discounted_price, productImage, product_id }
           ></div>
 
           {/* Quick View Button - Appears on hover */}
-          <div 
+          <div
             className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300"
             style={{
               opacity: isHovered ? 1 : 0,
@@ -237,7 +237,7 @@ const ProductCard = ({ name, price, discounted_price, productImage, product_id }
         </Link>
 
         {/* Action Buttons - Enhanced with staggered animation */}
-        <div 
+        <div
           className="absolute top-4 right-4 flex flex-col space-y-3"
           style={{
             transform: isHovered ? 'translateX(0)' : 'translateX(10px)',
@@ -258,13 +258,13 @@ const ProductCard = ({ name, price, discounted_price, productImage, product_id }
               boxShadow: '0 3px 8px rgba(0,0,0,0.12)'
             }}
           >
-            <FaHeart 
+            <FaHeart
               className={isWishlisted ? 'animate-pulse' : ''}
               size={18}
             />
           </button>
-          
-          <button 
+
+          <button
             className="flex items-center justify-center transition-all duration-300 transform hover:scale-110"
             style={{
               width: '40px',
@@ -282,15 +282,15 @@ const ProductCard = ({ name, price, discounted_price, productImage, product_id }
       </div>
 
       {/* Product Info - Refined with better spacing */}
-      <div className="p-6 flex-1 flex flex-col" style={{ 
+      <div className="p-6 flex-1 flex flex-col" style={{
         borderTop: `1px solid ${colors.lightGray}`,
         transition: 'background-color 0.3s ease',
         backgroundColor: isHovered ? 'rgba(245, 245, 245, 0.5)' : 'transparent'
       }}>
         {/* Product Name */}
-        <h3 
+        <h3
           className="font-bold text-xl mb-3 transition-all duration-300"
-          style={{ 
+          style={{
             color: colors.dark,
             fontFamily: "'Cinzel', serif",
             letterSpacing: '0.3px',
@@ -304,9 +304,9 @@ const ProductCard = ({ name, price, discounted_price, productImage, product_id }
         </h3>
 
         {/* Animated Divider */}
-        <div 
+        <div
           className="h-px w-full mb-5 transition-all duration-700"
-          style={{ 
+          style={{
             background: isHovered ? colors.goldGradient : `linear-gradient(to right, ${colors.primary}, ${colors.primaryLight}20)`,
             width: isHovered ? '100%' : '40%',
             height: isHovered ? '2px' : '1px'
@@ -318,9 +318,9 @@ const ProductCard = ({ name, price, discounted_price, productImage, product_id }
           {discounted_price ? (
             <div className="flex flex-col">
               <div className="flex items-baseline">
-                <span 
+                <span
                   className="text-2xl font-bold"
-                  style={{ 
+                  style={{
                     color: colors.dark,
                     fontFamily: "'Cinzel', serif",
                     transition: 'all 0.3s ease',
@@ -329,18 +329,18 @@ const ProductCard = ({ name, price, discounted_price, productImage, product_id }
                 >
                   ${finalPrice.toFixed(2)}
                 </span>
-                <span 
+                <span
                   className="ml-2 text-sm line-through"
-                  style={{ 
+                  style={{
                     color: colors.mediumGray,
-                    opacity: 0.7 
+                    opacity: 0.7
                   }}
                 >
                   ${parseFloat(price).toFixed(2)}
                 </span>
               </div>
-              <span 
-                style={{ 
+              <span
+                style={{
                   fontSize: '13px',
                   color: colors.primaryDark,
                   marginTop: '3px',
@@ -351,9 +351,9 @@ const ProductCard = ({ name, price, discounted_price, productImage, product_id }
               </span>
             </div>
           ) : (
-            <span 
+            <span
               className="text-2xl font-bold"
-              style={{ 
+              style={{
                 color: colors.dark,
                 fontFamily: "'Cinzel', serif",
                 transition: 'all 0.3s ease',
@@ -383,7 +383,7 @@ const ProductCard = ({ name, price, discounted_price, productImage, product_id }
           }}
         >
           {/* Animated shine effect overlay */}
-          <div 
+          <div
             className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none"
             style={{
               background: 'linear-gradient(45deg, transparent 0%, rgba(255,255,255,0.8) 50%, transparent 100%)',
@@ -391,24 +391,24 @@ const ProductCard = ({ name, price, discounted_price, productImage, product_id }
               animation: isHovered ? 'shine 1.5s ease infinite' : 'none',
             }}
           ></div>
-          
+
           {/* Cart icon with animation */}
-          <FaShoppingCart 
-            className="mr-2 transition-transform duration-300" 
-            size={17} 
+          <FaShoppingCart
+            className="mr-2 transition-transform duration-300"
+            size={17}
             style={{
               transform: isHovered ? 'scale(1.2) translateX(-2px)' : 'scale(1)',
             }}
           />
-          
+
           {/* Text with expanding effect */}
-          <span 
+          <span
             className="text-sm tracking-wider overflow-hidden flex items-center"
             style={{
               transition: 'max-width 0.4s ease',
             }}
           >
-            <span style={{ 
+            <span style={{
               display: 'inline-block',
               transform: isHovered ? 'translateY(0)' : 'translateY(0)',
               transition: 'transform 0.3s ease',
@@ -423,7 +423,7 @@ const ProductCard = ({ name, price, discounted_price, productImage, product_id }
 
       {/* Enhanced Premium Badge - With animation */}
       {isHovered && (
-        <div 
+        <div
           className="absolute bottom-1 right-1 px-4 py-1.1 rounded-full text-xs font-medium flex items-center gap-1.5"
           style={{
             background: `linear-gradient(135deg, ${colors.light} 0%, ${colors.primaryLight} 100%)`,

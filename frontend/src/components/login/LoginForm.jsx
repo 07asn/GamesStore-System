@@ -4,7 +4,6 @@ import axios from 'axios';
 import Cookie from 'js-cookie';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import GoogleSignInButton from './GoogleSignInButton';
 import ForgotPasswordLink from './ForgotPasswordLink';
 import { Link, useNavigate, useLocation  } from 'react-router-dom';
 import swal from 'sweetalert';
@@ -187,13 +186,8 @@ const LoginForm = () => {
                 <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-gray-200"></div>
                 </div>
-                <div className="relative px-4 bg-white text-sm text-[#818181]">
-                    Or continue with
-                </div>
-            </div>
 
-            {/* Google Sign In Button */}
-            <GoogleSignInButton />
+            </div>
 
             {/* Registration Link */}
             <div className="mt-8 text-center">

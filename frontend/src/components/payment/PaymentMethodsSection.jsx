@@ -119,12 +119,12 @@ const PaymentMethodsSection = forwardRef(({
 
         return (
             <div className="space-y-4">
-                <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
                     <div className="flex items-start mb-2">
-                        <FaInfoCircle className="text-blue-500 mt-1 mr-2 flex-shrink-0" />
-                        <p className="text-blue-800">{details.instructions}</p>
+                        <FaInfoCircle className="text-yellow-500 mt-1 mr-2 flex-shrink-0" />
+                        <p className="text-yellow-800">{details.instructions}</p>
                     </div>
-                    <div className="bg-white p-3 rounded-md border border-blue-200">
+                    <div className="bg-white p-3 rounded-md border border-yellow-200">
                         {paymentMethod === 'bank-transfer' ? (
                             <>
                                 <p className="mb-1">
@@ -156,7 +156,7 @@ const PaymentMethodsSection = forwardRef(({
                     <label className="block font-medium mb-2 text-gray-700">
                         Upload Payment Proof {['cliq', 'uwallet', 'orangeMoney', 'bank-transfer'].includes(paymentMethod) && '(Required)'}
                     </label>
-                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors">
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-yellow-400 transition-colors">
                         {previewImage ? (
                             <div className="mb-3">
                                 <div className="relative">
@@ -174,7 +174,7 @@ const PaymentMethodsSection = forwardRef(({
                                 </div>
                                 <button 
                                     onClick={triggerFileInput}
-                                    className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 transition-colors"
+                                    className="px-4 py-2 bg-yellow-400 text-gray-800 rounded-md text-sm hover:bg-yellow-500 transition-colors"
                                 >
                                     Change Image
                                 </button>
@@ -191,14 +191,14 @@ const PaymentMethodsSection = forwardRef(({
                                 className="flex flex-col items-center justify-center py-4 cursor-pointer"
                                 onClick={triggerFileInput}
                             >
-                                <div className="bg-blue-100 p-3 rounded-full mb-3">
-                                    <FaUpload className="text-xl text-blue-500" />
+                                <div className="bg-yellow-100 p-3 rounded-full mb-3">
+                                    <FaUpload className="text-xl text-yellow-500" />
                                 </div>
                                 <p className="text-gray-600">Click to upload payment receipt</p>
                                 <p className="text-sm text-gray-400 mt-1">PNG, JPG (Max 2MB)</p>
                                 <button 
                                     type="button"
-                                    className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 transition-colors"
+                                    className="mt-3 px-4 py-2 bg-yellow-400 text-gray-800 rounded-md text-sm hover:bg-yellow-500 transition-colors"
                                 >
                                     Select File
                                 </button>
@@ -240,8 +240,8 @@ const PaymentMethodsSection = forwardRef(({
                         key={method.id}
                         className={`flex flex-col items-center p-3 border-2 rounded-xl text-center cursor-pointer transition-all duration-200 ${
                             selectedMethod === method.id 
-                                ? 'border-blue-500 bg-blue-50 shadow-sm' 
-                                : 'border-gray-200 hover:border-blue-300'
+                                ? 'border-yellow-500 bg-yellow-50 shadow-sm' 
+                                : 'border-gray-200 hover:border-yellow-300'
                         }`}
                     >
                         <input

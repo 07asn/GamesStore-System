@@ -8,16 +8,16 @@ import ProductsTable from './products/ProductsTable';
 
 const AdminProducts = () => {
   // ─── State ─────────────────────────────────────────────────────────────
-  const [products, setProducts]             = useState([]);
+  const [products, setProducts] = useState([]);
   const [deletedProducts, setDeletedProducts] = useState([]);
-  const [categories, setCategories]         = useState([]);
-  const [isLoading, setIsLoading]           = useState(false);
-  const [isEditing, setIsEditing]           = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [activeTab, setActiveTab]           = useState('active'); // 'active'|'outOfStock'|'deleted'
-  const [isFormOpen, setIsFormOpen]         = useState(false);
-  const [searchQuery, setSearchQuery]       = useState('');
-  const [newProduct, setNewProduct]         = useState({
+  const [activeTab, setActiveTab] = useState('active'); // 'active'|'outOfStock'|'deleted'
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [newProduct, setNewProduct] = useState({
     name: '', description: '', price: '',
     discounted_price: '', stock: '',
     delivery_type: '', platform: '',
@@ -137,11 +137,15 @@ const AdminProducts = () => {
   const removeImage = () => setNewProduct(prev => ({ ...prev, image: null, previewImage: '' }));
 
   const prepareFormData = data => {
-    const fd = new FormData();
-    Object.entries(data).forEach(([k, v]) => {
-      if (v !== null && v !== undefined && v !== '') fd.append(k, v);
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, value]) => {
+      if (key === 'image' && value) {
+        formData.append('image', value);
+      } else if (key !== 'previewImage' && value !== null && value !== undefined && value !== '') {
+        formData.append(key, value);
+      }
     });
-    return fd;
+    return formData;
   };
 
   const handleCreateProduct = async e => {
@@ -149,16 +153,23 @@ const AdminProducts = () => {
     if (!validateProductForm()) return;
     setIsLoading(true);
     try {
+      const formData = prepareFormData(newProduct);
       const { data } = await axios.post(
         'http://localhost:5000/api/products',
-        prepareFormData(newProduct),
-        { headers: { 'Content-Type': 'multipart/form-data' } }
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
       );
+
       setProducts(prev => [data.product, ...prev]);
       resetForm();
       showSuccess('Product Created');
       await fetchProducts();
     } catch (err) {
+      console.error('Creation error:', err);
       showError('Creation Error', err.response?.data?.message || 'Unable to create product.');
     } finally {
       setIsLoading(false);
@@ -170,11 +181,17 @@ const AdminProducts = () => {
     if (!validateProductForm()) return;
     setIsLoading(true);
     try {
+      const formData = prepareFormData(newProduct);
       const { data } = await axios.put(
         `http://localhost:5000/api/products/${selectedProduct.product_id}`,
-        prepareFormData(newProduct),
-        { headers: { 'Content-Type': 'multipart/form‑data' } }
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
       );
+
       setProducts(prev =>
         prev.map(p => p.product_id === data.product.product_id ? data.product : p)
       );
@@ -182,6 +199,7 @@ const AdminProducts = () => {
       showSuccess('Product Updated');
       await fetchProducts();
     } catch (err) {
+      console.error('Update error:', err);
       showError('Update Error', err.response?.data?.message || 'Unable to update product.');
     } finally {
       setIsLoading(false);
@@ -326,9 +344,8 @@ const AdminProducts = () => {
         </div>
 
         {/* Collapsible Form */}
-        <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
-          isFormOpen ? 'max-h-[2000px] mb-6' : 'max-h-0 mb-0'
-        }`}>
+        <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isFormOpen ? 'max-h-[2000px] mb-6' : 'max-h-0 mb-0'
+          }`}>
           {isFormOpen && (
             <ProductForm
               newProduct={newProduct}

@@ -338,18 +338,7 @@ const RegisterForm = () => {
                         <div className="absolute inset-0 flex items-center">
                             <div className="w-full border-t border-gray-200"></div>
                         </div>
-                        <div className="relative px-4 bg-white text-sm text-gray-500">
-                            Or continue with
-                        </div>
                     </div>
-
-                    {/* Google Sign In Button */}
-                    <button
-                        type="button"
-                        className="w-full py-3.5 px-4 bg-white border border-gray-300 text-gray-700 font-medium rounded-xl transition-all duration-300 hover:bg-gray-50 flex items-center justify-center"
-                    >
-                        <FaGoogle className="mr-2 text-red-500" /> Continue with Google
-                    </button>
                 </form>
 
                 <div className="mt-8 text-center">

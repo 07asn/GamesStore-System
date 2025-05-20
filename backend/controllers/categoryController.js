@@ -1,4 +1,3 @@
-//controller/categoryController.js
 const Category = require("../models/Category");
 const { uploadImage } = require("../services/imgService");
 const cloudinary = require("cloudinary").v2;

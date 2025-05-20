@@ -40,11 +40,10 @@ const ProductsTable = ({
           <nav className="flex -mb-px">
             <button
               onClick={() => setActiveTab('active')}
-              className={`flex items-center py-4 px-6 border-b-2 font-medium text-sm ${
-                activeTab === 'active'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
+              className={`flex items-center py-4 px-6 border-b-2 font-medium text-sm ${activeTab === 'active'
+                ? 'border-blue-500 text-blue-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
             >
               <PackageCheckIcon className="w-5 h-5 mr-2" />
               Active Products
@@ -54,11 +53,10 @@ const ProductsTable = ({
             </button>
             <button
               onClick={() => setActiveTab('outOfStock')}
-              className={`flex items-center py-4 px-6 border-b-2 font-medium text-sm ${
-                activeTab === 'outOfStock'
-                  ? 'border-yellow-500 text-yellow-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
+              className={`flex items-center py-4 px-6 border-b-2 font-medium text-sm ${activeTab === 'outOfStock'
+                ? 'border-yellow-500 text-yellow-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
             >
               <PackageXIcon className="w-5 h-5 mr-2" />
               Out of Stock
@@ -68,11 +66,10 @@ const ProductsTable = ({
             </button>
             <button
               onClick={() => setActiveTab('deleted')}
-              className={`flex items-center py-4 px-6 border-b-2 font-medium text-sm ${
-                activeTab === 'deleted'
-                  ? 'border-red-500 text-red-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
+              className={`flex items-center py-4 px-6 border-b-2 font-medium text-sm ${activeTab === 'deleted'
+                ? 'border-red-500 text-red-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
             >
               <PackageIcon className="w-5 h-5 mr-2" />
               Archived
@@ -111,7 +108,10 @@ const ProductsTable = ({
                     Stock
                   </th>
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
+                    Delivery Type
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Platform
                   </th>
                   <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
@@ -125,7 +125,7 @@ const ProductsTable = ({
                     className="hover:bg-gray-50 transition cursor-pointer"
                     onClick={() => handleRowClick(product)}
                   >
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4">
                       <div className="flex items-center">
                         {product.images && product.images[0] && (
                           <div className="flex-shrink-0 h-10 w-10 mr-3">
@@ -136,19 +136,19 @@ const ProductsTable = ({
                             />
                           </div>
                         )}
-                        <div>
+                        <div className="min-w-0 flex-1">
                           <div className="text-sm font-medium text-gray-900 flex items-center">
-                            {product.name}
-                            <EyeIcon className="w-4 h-4 ml-2 text-gray-400" />
+                            <span className="truncate">{product.name}</span>
+                            <EyeIcon className="w-4 h-4 ml-2 flex-shrink-0 text-gray-400" />
                           </div>
-                          <div className="text-sm text-gray-500 line-clamp-1">
+                          <div className="text-sm text-gray-500 line-clamp-2">
                             {product.description}
                           </div>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">
+                    <td className="px-6 py-4">
+                      <div className="text-sm text-gray-900 max-w-[200px] truncate">
                         {product.category_name || 'Uncategorized'}
                       </div>
                     </td>
@@ -156,91 +156,49 @@ const ProductsTable = ({
                       <div className="text-sm text-gray-900">
                         ${product.price}
                         {product.discounted_price && (
-                          <span className="ml-2 text-xs text-red-600 line-through">
+                          <span className="ml-2 text-red-600">
                             ${product.discounted_price}
                           </span>
                         )}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span
-                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          product.stock > 10
-                            ? 'bg-green-100 text-green-800'
-                            : product.stock > 0
-                            ? 'bg-yellow-100 text-yellow-800'
-                            : 'bg-red-100 text-red-800'
-                        }`}
-                      >
-                        {product.stock} in stock
-                      </span>
+                      <div className="text-sm text-gray-900">
+                        {product.stock}
+                      </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {product.featured ? (
-                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
-                          Featured
-                        </span>
-                      ) : (
-                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-                          Standard
-                        </span>
-                      )}
+                    <td className="px-6 py-4">
+                      <div className="text-sm text-gray-900 max-w-[150px] truncate">
+                        {product.delivery_type}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-sm text-gray-900 max-w-[150px] truncate">
+                        {product.platform}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div className="flex justify-end space-x-3" onClick={(e) => e.stopPropagation()}>
-                        {activeTab === 'active' && (
-                          <>
-                            <button
-                              onClick={() => {
-                                setSelectedProduct(product);
-                                setIsEditing(true);
-                                window.scrollTo({ top: 0, behavior: 'smooth' });
-                              }}
-                              className="text-blue-600 hover:text-blue-900"
-                              title="Edit"
-                            >
-                              <EditIcon className="w-5 h-5" />
-                            </button>
-                            <button
-                              onClick={() => handleDeleteProduct(product.product_id)}
-                              className="text-red-600 hover:text-red-900"
-                              title="Archive"
-                            >
-                              <TrashIcon className="w-5 h-5" />
-                            </button>
-                          </>
-                        )}
-                        {activeTab === 'outOfStock' && (
-                          <button
-                            onClick={() => {
-                              setSelectedProduct(product);
-                              setIsEditing(true);
-                              window.scrollTo({ top: 0, behavior: 'smooth' });
-                            }}
-                            className="text-blue-600 hover:text-blue-900"
-                            title="Edit"
-                          >
-                            <EditIcon className="w-5 h-5" />
-                          </button>
-                        )}
-                        {activeTab === 'deleted' && (
-                          <>
-                            <button
-                              onClick={() => handleRestoreProduct(product.product_id)}
-                              className="text-green-600 hover:text-green-900"
-                              title="Restore"
-                            >
-                              <ArchiveIcon className="w-5 h-5" />
-                            </button>
-                            <button
-                              onClick={() => handlePermanentDelete(product.product_id)}
-                              className="text-red-600 hover:text-red-900"
-                              title="Delete Permanently"
-                            >
-                              <TrashIcon className="w-5 h-5" />
-                            </button>
-                          </>
-                        )}
+                      <div className="flex justify-end space-x-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedProduct(product);
+                            setIsEditing(true);
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
+                          className="text-blue-600 hover:text-blue-900"
+                        >
+                          <EditIcon className="w-5 h-5" />
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteProduct(product.product_id);
+                          }}
+                          className="text-red-600 hover:text-red-900"
+                        >
+                          <TrashIcon className="w-5 h-5" />
+                        </button>
                       </div>
                     </td>
                   </tr>

@@ -35,7 +35,7 @@ const OrderDetailsSection = ({
             <div className="space-y-3">
                 <div className="flex justify-between text-base text-gray-600">
                     <span>Base Subtotal</span>
-                    <span>{baseSubtotal.toFixed(2)} JD</span>
+                    <span>{baseSubtotal.toFixed(2)} $</span>
                 </div>
 
                 {itemDiscount > 0 && (
@@ -46,14 +46,14 @@ const OrderDetailsSection = ({
                                 <span className="ml-2 bg-red-100 text-red-600 text-xs px-2 py-1 rounded-full">Save {((itemDiscount / baseSubtotal) * 100).toFixed(0)}%</span>
                             )}
                         </span>
-                        <span className="text-red-500">-{itemDiscount.toFixed(2)} JD</span>
+                        <span className="text-red-500">-{itemDiscount.toFixed(2)} $</span>
                     </div>
                 )}
 
                 {itemDiscount > 0 && (
                     <div className="flex justify-between text-base text-gray-600">
                         <span>Subtotal After Discounts</span>
-                        <span>{itemsTotal.toFixed(2)} JD</span>
+                        <span>{itemsTotal.toFixed(2)} $</span>
                     </div>
                 )}
 
@@ -63,7 +63,7 @@ const OrderDetailsSection = ({
                             <span>Coupon Applied</span>
                             <span className="ml-2 bg-orange-100 text-orange-600 text-xs px-2 py-1 rounded-full">Coupon</span>
                         </span>
-                        <span className="text-red-500">-{couponDiscount.toFixed(2)} JD</span>
+                        <span className="text-red-500">-{couponDiscount.toFixed(2)} $</span>
                     </div>
                 )}
 
@@ -71,13 +71,13 @@ const OrderDetailsSection = ({
                     <div className="flex justify-between font-bold text-lg">
                         <span>Final Total</span>
                         <span className={hasDiscounts ? "text-green-600" : ""}>
-                            {finalTotal.toFixed(2)} JD
+                            {finalTotal.toFixed(2)} $
                         </span>
                     </div>
 
                     {hasDiscounts && (
                         <div className="mt-2 bg-green-50 p-2 rounded-lg text-center text-sm text-green-700">
-                            You saved {(itemDiscount + couponDiscount).toFixed(2)} JD on this order!
+                            You saved {(itemDiscount + couponDiscount).toFixed(2)} $ on this order!
                         </div>
                     )}
                 </div>

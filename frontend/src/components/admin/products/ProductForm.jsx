@@ -17,7 +17,7 @@ const ProductForm = ({
       <h2 className="text-xl font-semibold text-gray-800 mb-4">
         {isEditing ? 'Edit Product' : 'Create New Product'}
       </h2>
-      
+
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Product Name */}
@@ -70,7 +70,7 @@ const ProductForm = ({
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">Price *</label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+              <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
               <input
                 type="number"
                 name="price"
@@ -89,7 +89,7 @@ const ProductForm = ({
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">Discounted Price</label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+              <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
               <input
                 type="number"
                 name="discounted_price"
@@ -127,8 +127,8 @@ const ProductForm = ({
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
             >
               <option value="">Select Delivery Type</option>
-              <option value="digital">Digital</option>
-              <option value="physical">Physical</option>
+              <option value="digital">Digital Code</option>
+              <option value="physical">Game Account</option>
               <option value="both">Both</option>
             </select>
           </div>

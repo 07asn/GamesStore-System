@@ -5,12 +5,8 @@ async function sendEmail({ to, subject, text, html }) {
     service: 'gmail',
     auth: {
       user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASSWORD, // This should be your app-specific password
+      pass: process.env.EMAIL_PASSWORD,
     },
-    // Optional: if you encounter TLS issues, uncomment the following:
-    // tls: {
-    //   rejectUnauthorized: false,
-    // },
   });
 
   return transporter.sendMail({

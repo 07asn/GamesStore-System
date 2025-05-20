@@ -1,4 +1,3 @@
-// controllers/productController.js
 const Product = require("../models/Product");
 const Product_Image = require("../models/Product_Image");
 const Review = require("../models/Review");
@@ -8,7 +7,6 @@ const fs = require("fs");
 const sequelize = require("../config/database");
 const cloudinary = require("cloudinary").v2;
 const { uploadImage } = require("../services/imgService"); // Import the upload image function
-
 
 async function getProducts(req, res) {
   try {
@@ -42,7 +40,6 @@ async function getProducts(req, res) {
       return res.status(404).json({ message: "No products found" });
     }
 
-    // Format the product data to include images
     const productData = products.map((product) => {
       const images = product.images.map((image) => image.image_url);
       return {
@@ -257,9 +254,17 @@ async function addProduct(req, res) {
     // Handle image upload if present
     if (req.file) {
       try {
-        // Upload to Cloudinary
-        const result = await cloudinary.uploader.upload(req.file.path, {
-          folder: "products",
+        const fileBuffer = req.file.buffer;
+        const result = await new Promise((resolve, reject) => {
+          cloudinary.uploader
+            .upload_stream({ folder: "products" }, (error, result) => {
+              if (error) {
+                reject(error);
+              } else {
+                resolve(result);
+              }
+            })
+            .end(fileBuffer);
         });
 
         // Create image record in Product_Image table
@@ -268,9 +273,6 @@ async function addProduct(req, res) {
           image_url: result.secure_url,
           image_type: req.file.mimetype,
         });
-
-        // Delete the temporary file
-        fs.unlinkSync(req.file.path);
       } catch (uploadError) {
         console.error("Error uploading image:", uploadError);
         // If image upload fails, delete the product we just created
@@ -303,12 +305,6 @@ async function addProduct(req, res) {
     });
   } catch (error) {
     console.error("Error adding product:", error);
-
-    // Clean up any temporary files if they exist
-    if (req.file && fs.existsSync(req.file.path)) {
-      fs.unlinkSync(req.file.path);
-    }
-
     res.status(500).json({
       message: "Server error",
       error: error.message,
@@ -324,7 +320,6 @@ async function updateProduct(req, res) {
       return res.status(400).json({ message: "Invalid product ID format" });
     }
 
-    // Find the product by ID
     const product = await Product.findByPk(id);
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
@@ -333,27 +328,19 @@ async function updateProduct(req, res) {
       return res.status(410).json({ message: "Product is archived" });
     }
 
-    // Handle image upload if a new image is provided
     let newImageUrl = null;
     if (req.file) {
       try {
-        // Call the uploadImage function to handle the image upload to Cloudinary
         const result = await uploadImage(req);
-
-        // Store the Cloudinary image URL
         newImageUrl = result.secure_url;
-
-        // Check if image already exists for this product
         const existingImage = await Product_Image.findOne({
           where: { product_id: id },
         });
 
         if (existingImage) {
-          // Update existing image record
           existingImage.image_url = newImageUrl;
           await existingImage.save();
         } else {
-          // Create a new image record if no image exists
           await Product_Image.create({
             product_id: id,
             image_url: newImageUrl,
@@ -361,7 +348,6 @@ async function updateProduct(req, res) {
           });
         }
 
-        // Clean up temporary file if it exists
         if (req.file && fs.existsSync(req.file.path)) {
           fs.unlinkSync(req.file.path);
         }
@@ -376,7 +362,6 @@ async function updateProduct(req, res) {
       }
     }
 
-    // Update product fields (other fields)
     const updatableFields = [
       "name",
       "description",
@@ -391,7 +376,6 @@ async function updateProduct(req, res) {
 
     updatableFields.forEach((field) => {
       if (req.body[field] !== undefined) {
-        // Special handling for boolean fields (e.g., 'featured')
         if (field === "featured") {
           product[field] =
             req.body[field] === "true" || req.body[field] === true;
@@ -401,14 +385,12 @@ async function updateProduct(req, res) {
       }
     });
 
-    // If an image was updated, save the new URL to the product
     if (newImageUrl) {
       product.image_url = newImageUrl;
     }
 
     await product.save();
 
-    // Fetch the complete updated product with images
     const updatedProduct = await Product.findOne({
       where: { product_id: id },
       include: [
@@ -420,13 +402,11 @@ async function updateProduct(req, res) {
       ],
     });
 
-    // Format the response with updated image URLs
     const responseData = {
       ...updatedProduct.toJSON(),
       images: updatedProduct.images.map((img) => img.image_url),
     };
 
-    // Return the success response
     res.status(200).json({
       message: "Product updated successfully",
       product: responseData,
@@ -461,7 +441,6 @@ async function deleteProduct(req, res) {
 
 async function getDeletedProducts(req, res) {
   try {
-    // Fetch all deleted products with their images
     const deletedProducts = await Product.findAll({
       where: {
         is_deleted: true,
@@ -471,10 +450,10 @@ async function getDeletedProducts(req, res) {
           model: Product_Image,
           as: "images",
           attributes: ["image_url"],
-          required: false, // Use left join to include products even without images
+          required: false,
         },
       ],
-      order: [["updated_at", "DESC"]], // Show most recently deleted first
+      order: [["updated_at", "DESC"]],
     });
 
     if (!deletedProducts || deletedProducts.length === 0) {
@@ -484,7 +463,6 @@ async function getDeletedProducts(req, res) {
       });
     }
 
-    // Format the products data
     const formattedProducts = deletedProducts.map((product) => ({
       product_id: product.product_id,
       name: product.name,
@@ -558,7 +536,6 @@ const searchProducts = async (req, res) => {
           model: Product_Image,
           as: "images",
           attributes: ["image_url"],
-          // If you want just the first image, you might later pick product.images[0].image_url in your client.
           required: false,
         },
       ],
@@ -581,13 +558,11 @@ const searchProductsAdmin = async (req, res) => {
         .json({ message: 'Query parameter "q" is required.' });
     }
 
-    // Base filter: name ilike %q% and not deleted
     const where = {
       name: { [Op.iLike]: `%${q}%` },
       is_deleted: false,
     };
 
-    // Tab‐specific
     if (tab === "active") {
       where.stock = { [Op.gt]: 0 };
     } else if (tab === "outOfStock") {
@@ -613,7 +588,6 @@ const searchProductsAdmin = async (req, res) => {
       limit: 50,
     });
 
-    // Flatten out the JSON for frontend
     const formatted = products.map((p) => {
       const plain = p.get({ plain: true });
       return {

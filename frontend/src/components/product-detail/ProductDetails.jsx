@@ -255,10 +255,10 @@ const ProductDetails = ({ product }) => {
       </div>
 
       <div className={styles.priceContainer}>
-        <span className={styles.currentPrice}>JD {finalPrice.toFixed(2)}</span>
+        <span className={styles.currentPrice}>$ {finalPrice.toFixed(2)}</span>
         {discounted_price && (
           <>
-            <span className={styles.originalPrice}>JD {parseFloat(price).toFixed(2)}</span>
+            <span className={styles.originalPrice}>$ {parseFloat(price).toFixed(2)}</span>
             <span className={styles.discountBadge}>-{discount}%</span>
           </>
         )}

@@ -34,15 +34,15 @@ const CartSummary = ({ cartItems, subtotal, discount, total, onCheckout }) => {
       <div className="space-y-4 mb-6">
         <div className="flex justify-between pb-4 border-b border-gray-100">
           <span className="text-gray-600">Subtotal</span>
-          <span className="font-medium">JD {validSubtotal.toFixed(2)}</span>
+          <span className="font-medium">$ {validSubtotal.toFixed(2)}</span>
         </div>
         <div className="flex justify-between pb-4 border-b border-gray-100">
           <span className="text-gray-600">Discount</span>
-          <span className="font-medium">JD {validDiscount.toFixed(2)}</span>
+          <span className="font-medium">$ {validDiscount.toFixed(2)}</span>
         </div>
         <div className="flex justify-between">
           <span className="text-gray-800 font-bold">Total</span>
-          <span className="text-xl font-bold">JD {validTotal.toFixed(2)}</span>
+          <span className="text-xl font-bold">$ {validTotal.toFixed(2)}</span>
         </div>
       </div>
 

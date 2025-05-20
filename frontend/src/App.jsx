@@ -31,14 +31,15 @@ import About from './pages/About';
 
 const Layout = ({ children }) => {
   const location = useLocation();
-  // Check if the path starts with "/admin"
+  // Check if the path starts with "/admin" or is the reset password page
   const isAdminRoute = location.pathname.startsWith('/admin');
-  
+  const isResetPasswordPage = location.pathname === '/reset-password';
+
   return (
     <>
-      {!isAdminRoute && <Navbar />}
+      {!isAdminRoute && !isResetPasswordPage && <Navbar />}
       {children}
-      {!isAdminRoute && <Footer />}
+      {!isAdminRoute && !isResetPasswordPage && <Footer />}
     </>
   );
 };
