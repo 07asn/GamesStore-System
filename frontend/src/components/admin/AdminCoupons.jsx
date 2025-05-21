@@ -129,7 +129,7 @@ const AdminCoupons = () => {
 
         setIsLoading(true);
         try {
-            const response = await axios.post('http://localhost:5000/api/coupons', newCoupon, {withCredentials: true});
+            const response = await axios.post('http://localhost:5000/api/coupons', newCoupon, { withCredentials: true });
             setCoupons((prevCoupons) => [response.data.coupon, ...prevCoupons]);
             resetForm();
             showSuccess('Coupon Created Successfully');
@@ -184,11 +184,11 @@ const AdminCoupons = () => {
 
         if (result.isConfirmed) {
             try {
-              await axios.patch(
-                `http://localhost:5000/api/coupons/${couponId}/delete`,
-                {},
-                { withCredentials: true }
-              );
+                await axios.patch(
+                    `http://localhost:5000/api/coupons/${couponId}/delete`,
+                    {},
+                    { withCredentials: true }
+                );
                 const couponToMove = coupons.find((coupon) => coupon.coupon_id === couponId);
                 const updatedCoupons = coupons.filter((coupon) => coupon.coupon_id !== couponId);
                 setCoupons(updatedCoupons);
@@ -202,7 +202,7 @@ const AdminCoupons = () => {
 
     const handleRestoreCoupon = async (couponId) => {
         try {
-            await axios.patch(`http://localhost:5000/api/coupons/${couponId}/restore`,{}, { withCredentials: true });
+            await axios.patch(`http://localhost:5000/api/coupons/${couponId}/restore`, {}, { withCredentials: true });
             const couponToRestore = deletedCoupons.find((coupon) => coupon.coupon_id === couponId);
             const updatedDeletedCoupons = deletedCoupons.filter((coupon) => coupon.coupon_id !== couponId);
             setDeletedCoupons(updatedDeletedCoupons);
@@ -224,9 +224,9 @@ const AdminCoupons = () => {
         const now = new Date();
         const from = new Date(validFrom);
         const to = new Date(validTo);
-        
+
         if (!validFrom || !validTo) return 'Inactive';
-        
+
         if (now < from) {
             return 'Upcoming';
         } else if (now >= from && now <= to) {
@@ -246,42 +246,42 @@ const AdminCoupons = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-2 sm:p-4 md:p-8">
             <div className="max-w-7xl mx-auto">
                 {/* Header Section */}
-                <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div className="mb-4 sm:mb-6 md:mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
                     <div>
-                        <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
+                        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">
                             Coupon Management
                         </h1>
-                        <p className="text-gray-600 mt-2">
+                        <p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2">
                             Create, manage, and track your promotional coupons
                         </p>
                     </div>
-                    <div className="flex gap-3">
+                    <div className="flex gap-2 sm:gap-3 w-full sm:w-auto">
                         <button
                             onClick={() => setShowDeletedCoupons(!showDeletedCoupons)}
-                            className={`flex items-center px-4 py-2 rounded-lg transition ${showDeletedCoupons ? 'bg-gray-200 text-gray-800' : 'bg-gray-800 text-white hover:bg-gray-700'}`}
+                            className={`flex items-center px-3 sm:px-4 py-2 rounded-lg transition text-sm sm:text-base w-full sm:w-auto justify-center ${showDeletedCoupons ? 'bg-gray-200 text-gray-800' : 'bg-gray-800 text-white hover:bg-gray-700'}`}
                         >
-                            <ArchiveIcon className="mr-2 w-5 h-5" />
+                            <ArchiveIcon className="mr-2 w-4 h-4 sm:w-5 sm:h-5" />
                             {showDeletedCoupons ? 'Hide' : 'Show'} Archived
                         </button>
                     </div>
                 </div>
 
                 {/* Form Section */}
-                <div className="bg-white shadow-lg rounded-xl overflow-hidden mb-8 border border-gray-200">
-                    <div className="p-6">
-                        <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-xl font-semibold text-gray-800 flex items-center">
+                <div className="bg-white shadow-lg rounded-xl overflow-hidden mb-4 sm:mb-6 md:mb-8 border border-gray-200">
+                    <div className="p-3 sm:p-4 md:p-6">
+                        <div className="flex items-center justify-between mb-4 sm:mb-6">
+                            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 flex items-center">
                                 {isEditing ? (
                                     <>
-                                        <EditIcon className="mr-3 text-yellow-500" />
+                                        <EditIcon className="mr-2 sm:mr-3 w-4 h-4 sm:w-5 sm:h-5 text-yellow-500" />
                                         Edit Coupon
                                     </>
                                 ) : (
                                     <>
-                                        <PlusIcon className="mr-3 text-blue-500" />
+                                        <PlusIcon className="mr-2 sm:mr-3 w-4 h-4 sm:w-5 sm:h-5 text-blue-500" />
                                         Create New Coupon
                                     </>
                                 )}
@@ -291,13 +291,13 @@ const AdminCoupons = () => {
                                     onClick={resetForm}
                                     className="text-gray-500 hover:text-gray-700 transition"
                                 >
-                                    <XIcon className="w-5 h-5" />
+                                    <XIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                                 </button>
                             )}
                         </div>
-                        
-                        <form onSubmit={isEditing ? handleUpdateCoupon : handleCreateCoupon} className="space-y-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                        <form onSubmit={isEditing ? handleUpdateCoupon : handleCreateCoupon} className="space-y-4 sm:space-y-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                                 {/* Coupon Code */}
                                 <div className="space-y-2">
                                     <label className="block text-sm font-medium text-gray-700 flex items-center">
@@ -435,17 +435,17 @@ const AdminCoupons = () => {
                                 </div>
                             </div>
 
-                            <div className="flex justify-end pt-4">
+                            <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-4 pt-4">
                                 <button
                                     type="button"
                                     onClick={resetForm}
-                                    className="mr-4 px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition"
+                                    className="w-full sm:w-auto px-4 sm:px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition text-sm sm:text-base"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
-                                    className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:opacity-90 transition flex items-center justify-center shadow-md"
+                                    className="w-full sm:w-auto px-4 sm:px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:opacity-90 transition flex items-center justify-center shadow-md text-sm sm:text-base"
                                     disabled={isLoading}
                                 >
                                     {isLoading ? (
@@ -476,95 +476,95 @@ const AdminCoupons = () => {
                         <div className="flex overflow-x-auto">
                             <button
                                 onClick={() => setActiveTab('active')}
-                                className={`px-6 py-4 font-medium text-sm border-b-2 transition ${activeTab === 'active' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                                className={`px-4 sm:px-6 py-3 sm:py-4 font-medium text-xs sm:text-sm border-b-2 transition whitespace-nowrap ${activeTab === 'active' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
                             >
                                 Active Coupons ({coupons.length})
                             </button>
                             <button
                                 onClick={() => setActiveTab('archived')}
-                                className={`px-6 py-4 font-medium text-sm border-b-2 transition ${activeTab === 'archived' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                                className={`px-4 sm:px-6 py-3 sm:py-4 font-medium text-xs sm:text-sm border-b-2 transition whitespace-nowrap ${activeTab === 'archived' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
                             >
                                 Archived Coupons ({deletedCoupons.length})
                             </button>
                         </div>
                     </div>
 
-                    <div className="p-6">
+                    <div className="p-3 sm:p-4 md:p-6">
                         {activeTab === 'active' ? (
                             <>
                                 {coupons.length === 0 ? (
-                                    <div className="text-center py-12">
-                                        <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                                            <TagIcon className="w-10 h-10 text-gray-400" />
+                                    <div className="text-center py-8 sm:py-12">
+                                        <div className="mx-auto w-16 h-16 sm:w-24 sm:h-24 bg-gray-100 rounded-full flex items-center justify-center mb-3 sm:mb-4">
+                                            <TagIcon className="w-8 h-8 sm:w-10 sm:h-10 text-gray-400" />
                                         </div>
-                                        <h3 className="text-lg font-medium text-gray-900">No active coupons</h3>
-                                        <p className="mt-2 text-gray-500">
+                                        <h3 className="text-base sm:text-lg font-medium text-gray-900">No active coupons</h3>
+                                        <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-500">
                                             Create your first coupon to start offering discounts
                                         </p>
                                     </div>
                                 ) : (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                                         {coupons.map((coupon) => (
                                             <div key={coupon.coupon_id} className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition">
-                                                <div className="p-5">
-                                                    <div className="flex justify-between items-start mb-3">
+                                                <div className="p-3 sm:p-4 md:p-5">
+                                                    <div className="flex justify-between items-start mb-2 sm:mb-3">
                                                         <div>
-                                                            <h3 className="text-lg font-bold text-gray-800">{coupon.code}</h3>
+                                                            <h3 className="text-base sm:text-lg font-bold text-gray-800">{coupon.code}</h3>
                                                             {coupon.category_id && (
-                                                                <span className="inline-block mt-1 px-2 py-1 text-xs font-medium bg-indigo-100 text-indigo-800 rounded-full">
+                                                                <span className="inline-block mt-1 px-2 py-0.5 sm:py-1 text-xs font-medium bg-indigo-100 text-indigo-800 rounded-full">
                                                                     {categories.find(c => c.category_id === coupon.category_id)?.name || 'Category'}
                                                                 </span>
                                                             )}
                                                         </div>
-                                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(getStatusBadge(coupon.valid_from, coupon.valid_to))}`}>
+                                                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${getStatusColor(getStatusBadge(coupon.valid_from, coupon.valid_to))}`}>
                                                             {getStatusBadge(coupon.valid_from, coupon.valid_to)}
                                                         </span>
                                                     </div>
-                                                    
+
                                                     {coupon.description && (
-                                                        <p className="text-gray-600 text-sm mb-4">{coupon.description}</p>
+                                                        <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4">{coupon.description}</p>
                                                     )}
-                                                    
-                                                    <div className="grid grid-cols-2 gap-2 mb-4">
+
+                                                    <div className="grid grid-cols-2 gap-2 mb-3 sm:mb-4">
                                                         <div>
                                                             <p className="text-xs text-gray-500">Discount</p>
-                                                            <p className="font-medium">
+                                                            <p className="text-sm sm:text-base font-medium">
                                                                 {coupon.discount_percentage ? `${coupon.discount_percentage}%` : `$${coupon.discount_value}`}
                                                             </p>
                                                         </div>
                                                         <div>
                                                             <p className="text-xs text-gray-500">Usage Limit</p>
-                                                            <p className="font-medium">
+                                                            <p className="text-sm sm:text-base font-medium">
                                                                 {coupon.usage_limit || '∞'}
                                                             </p>
                                                         </div>
                                                         <div>
                                                             <p className="text-xs text-gray-500">Valid From</p>
-                                                            <p className="font-medium text-sm">
+                                                            <p className="text-xs sm:text-sm font-medium">
                                                                 {formatDate(coupon.valid_from)}
                                                             </p>
                                                         </div>
                                                         <div>
                                                             <p className="text-xs text-gray-500">Valid To</p>
-                                                            <p className="font-medium text-sm">
+                                                            <p className="text-xs sm:text-sm font-medium">
                                                                 {formatDate(coupon.valid_to)}
                                                             </p>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div className="flex space-x-2">
                                                         <button
                                                             onClick={() => prepareEditForm(coupon)}
-                                                            className="flex-1 bg-blue-50 text-blue-600 py-2 rounded-lg hover:bg-blue-100 transition flex items-center justify-center text-sm font-medium"
+                                                            className="flex-1 bg-blue-50 text-blue-600 py-1.5 sm:py-2 rounded-lg hover:bg-blue-100 transition flex items-center justify-center text-xs sm:text-sm font-medium"
                                                         >
-                                                            <EditIcon className="mr-2 w-4 h-4" />
+                                                            <EditIcon className="mr-1 sm:mr-2 w-3 h-3 sm:w-4 sm:h-4" />
                                                             Edit
                                                         </button>
                                                         <button
                                                             onClick={() => handleDeleteCoupon(coupon.coupon_id)}
-                                                            className="flex-1 bg-red-50 text-red-600 py-2 rounded-lg hover:bg-red-100 transition flex items-center justify-center text-sm font-medium"
+                                                            className="flex-1 bg-red-50 text-red-600 py-1.5 sm:py-2 rounded-lg hover:bg-red-100 transition flex items-center justify-center text-xs sm:text-sm font-medium"
                                                         >
-                                                            <TrashIcon className="mr-2 w-4 h-4" />
+                                                            <TrashIcon className="mr-1 sm:mr-2 w-3 h-3 sm:w-4 sm:h-4" />
                                                             Archive
                                                         </button>
                                                     </div>
@@ -577,70 +577,70 @@ const AdminCoupons = () => {
                         ) : (
                             <>
                                 {deletedCoupons.length === 0 ? (
-                                    <div className="text-center py-12">
-                                        <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                                            <ArchiveIcon className="w-10 h-10 text-gray-400" />
+                                    <div className="text-center py-8 sm:py-12">
+                                        <div className="mx-auto w-16 h-16 sm:w-24 sm:h-24 bg-gray-100 rounded-full flex items-center justify-center mb-3 sm:mb-4">
+                                            <ArchiveIcon className="w-8 h-8 sm:w-10 sm:h-10 text-gray-400" />
                                         </div>
-                                        <h3 className="text-lg font-medium text-gray-900">No archived coupons</h3>
-                                        <p className="mt-2 text-gray-500">
+                                        <h3 className="text-base sm:text-lg font-medium text-gray-900">No archived coupons</h3>
+                                        <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-500">
                                             Archived coupons will appear here
                                         </p>
                                     </div>
                                 ) : (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                                         {deletedCoupons.map((coupon) => (
                                             <div key={coupon.coupon_id} className="border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
-                                                <div className="p-5">
-                                                    <div className="flex justify-between items-start mb-3">
+                                                <div className="p-3 sm:p-4 md:p-5">
+                                                    <div className="flex justify-between items-start mb-2 sm:mb-3">
                                                         <div>
-                                                            <h3 className="text-lg font-bold text-gray-500 line-through">{coupon.code}</h3>
+                                                            <h3 className="text-base sm:text-lg font-bold text-gray-500 line-through">{coupon.code}</h3>
                                                             {coupon.category_id && (
-                                                                <span className="inline-block mt-1 px-2 py-1 text-xs font-medium bg-gray-200 text-gray-600 rounded-full">
+                                                                <span className="inline-block mt-1 px-2 py-0.5 sm:py-1 text-xs font-medium bg-gray-200 text-gray-600 rounded-full">
                                                                     {categories.find(c => c.category_id === coupon.category_id)?.name || 'Category'}
                                                                 </span>
                                                             )}
                                                         </div>
-                                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-200 text-gray-800">
+                                                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-200 text-gray-800">
                                                             Archived
                                                         </span>
                                                     </div>
-                                                    
+
                                                     {coupon.description && (
-                                                        <p className="text-gray-500 text-sm mb-4">{coupon.description}</p>
+                                                        <p className="text-gray-500 text-xs sm:text-sm mb-3 sm:mb-4">{coupon.description}</p>
                                                     )}
-                                                    
-                                                    <div className="grid grid-cols-2 gap-2 mb-4">
+
+                                                    <div className="grid grid-cols-2 gap-2 mb-3 sm:mb-4">
                                                         <div>
                                                             <p className="text-xs text-gray-400">Discount</p>
-                                                            <p className="font-medium text-gray-500">
+                                                            <p className="text-sm sm:text-base font-medium text-gray-500">
                                                                 {coupon.discount_percentage ? `${coupon.discount_percentage}%` : `$${coupon.discount_value}`}
                                                             </p>
                                                         </div>
                                                         <div>
                                                             <p className="text-xs text-gray-400">Usage Limit</p>
-                                                            <p className="font-medium text-gray-500">
+                                                            <p className="text-sm sm:text-base font-medium text-gray-500">
                                                                 {coupon.usage_limit || '∞'}
                                                             </p>
                                                         </div>
                                                         <div>
                                                             <p className="text-xs text-gray-400">Valid From</p>
-                                                            <p className="font-medium text-sm text-gray-500">
+                                                            <p className="text-xs sm:text-sm font-medium text-gray-500">
                                                                 {formatDate(coupon.valid_from)}
                                                             </p>
                                                         </div>
                                                         <div>
                                                             <p className="text-xs text-gray-400">Valid To</p>
-                                                            <p className="font-medium text-sm text-gray-500">
+                                                            <p className="text-xs sm:text-sm font-medium text-gray-500">
                                                                 {formatDate(coupon.valid_to)}
                                                             </p>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <button
                                                         onClick={() => handleRestoreCoupon(coupon.coupon_id)}
-                                                        className="w-full bg-gray-200 text-gray-800 py-2 rounded-lg hover:bg-gray-300 transition flex items-center justify-center text-sm font-medium"
+                                                        className="w-full bg-gray-200 text-gray-800 py-1.5 sm:py-2 rounded-lg hover:bg-gray-300 transition flex items-center justify-center text-xs sm:text-sm font-medium"
                                                     >
-                                                        <ArchiveIcon className="mr-2 w-4 h-4" />
+                                                        <ArchiveIcon className="mr-1 sm:mr-2 w-3 h-3 sm:w-4 sm:h-4" />
                                                         Restore Coupon
                                                     </button>
                                                 </div>

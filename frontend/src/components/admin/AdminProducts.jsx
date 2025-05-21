@@ -314,13 +314,13 @@ const AdminProducts = () => {
 
   // ─── Render ─────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
+    <div className="min-h-screen bg-gray-50 p-2 sm:p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header + Search + Add Button */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-3 sm:mb-4 md:mb-6 gap-3 sm:gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Product Management</h1>
-            <p className="text-gray-600">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Product Management</h1>
+            <p className="text-sm sm:text-base text-gray-600 mt-1">
               {isEditing ? 'Edit existing product' : 'Add and manage your products'}
             </p>
           </div>
@@ -330,22 +330,21 @@ const AdminProducts = () => {
               placeholder="Search products…"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+              className="w-full sm:w-64 px-3 sm:px-4 py-2 text-sm sm:text-base border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
             />
             <button
               onClick={toggleForm}
-              className="flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition shadow-sm"
+              className="w-full sm:w-auto flex items-center justify-center px-3 sm:px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition shadow-sm text-sm sm:text-base"
             >
               {isFormOpen
-                ? <><ChevronUp className="w-5 h-5 mr-2" /> Hide Form</>
-                : <><PlusIcon className="w-5 h-5 mr-2" /> Add New Product</>}
+                ? <><ChevronUp className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" /> Hide Form</>
+                : <><PlusIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" /> Add New Product</>}
             </button>
           </div>
         </div>
 
         {/* Collapsible Form */}
-        <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isFormOpen ? 'max-h-[2000px] mb-6' : 'max-h-0 mb-0'
-          }`}>
+        <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isFormOpen ? 'max-h-[2000px] mb-4 sm:mb-6' : 'max-h-0 mb-0'}`}>
           {isFormOpen && (
             <ProductForm
               newProduct={newProduct}
@@ -362,18 +361,20 @@ const AdminProducts = () => {
         </div>
 
         {/* Products Table */}
-        <ProductsTable
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          isLoading={isLoading}
-          products={getProductsToDisplay()}
-          getTabCount={getTabCount}
-          setSelectedProduct={setSelectedProduct}
-          setIsEditing={setIsEditing}
-          handleDeleteProduct={handleDeleteProduct}
-          handleRestoreProduct={handleRestoreProduct}
-          handlePermanentDelete={handlePermanentDelete}
-        />
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+          <ProductsTable
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            isLoading={isLoading}
+            products={getProductsToDisplay()}
+            getTabCount={getTabCount}
+            setSelectedProduct={setSelectedProduct}
+            setIsEditing={setIsEditing}
+            handleDeleteProduct={handleDeleteProduct}
+            handleRestoreProduct={handleRestoreProduct}
+            handlePermanentDelete={handlePermanentDelete}
+          />
+        </div>
       </div>
     </div>
   );

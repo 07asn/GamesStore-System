@@ -188,14 +188,14 @@ export default function Admin() {
             />
 
             {/* Main Content Area */}
-            <div className={`flex-1 p-3 md:p-6 transition-all duration-300 mt-16 md:mt-0 overflow-auto`}>
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                    <div className="flex items-center">
-                        <div className="w-2 h-10 rounded-full mr-3" style={{
+            <div className={`flex-1 p-2 sm:p-3 md:p-6 transition-all duration-300 mt-16 md:mt-0 overflow-auto`}>
+                <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-4 md:mb-6 gap-4">
+                    <div className="flex items-center w-full lg:w-auto">
+                        <div className="w-2 h-8 md:h-10 rounded-full mr-3" style={{
                             background: colors.goldGradient,
                             boxShadow: colors.subtleGlow
                         }}></div>
-                        <h1 className="text-3xl font-bold tracking-wide" style={{
+                        <h1 className="text-2xl md:text-3xl font-bold tracking-wide" style={{
                             color: colors.brightGold,
                             fontFamily: "'Cinzel', serif",
                             textShadow: colors.goldTextShadow,
@@ -206,20 +206,20 @@ export default function Admin() {
                     </div>
 
                     {/* Global Search Bar */}
-                    <div className="search-container w-full md:w-1/3 relative">
+                    <div className="search-container w-full lg:w-1/3 relative">
                         <div className="relative">
                             <input
                                 type="text"
                                 placeholder="Search across admin panel..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full px-4 py-2 bg-opacity-20 bg-white backdrop-blur-sm rounded-lg border border-gray-600 focus:border-gray-400 focus:ring-2 focus:ring-gray-400 text-gray-200 placeholder-gray-400"
+                                className="w-full px-3 md:px-4 py-2 bg-opacity-20 bg-white backdrop-blur-sm rounded-lg border border-gray-600 focus:border-gray-400 focus:ring-2 focus:ring-gray-400 text-gray-200 placeholder-gray-400 text-sm md:text-base"
                                 style={{
                                     boxShadow: colors.subtleGlow
                                 }}
                             />
                             <svg
-                                className="absolute right-3 top-2.5 h-5 w-5 text-gray-400"
+                                className="absolute right-3 top-2.5 h-4 w-4 md:h-5 md:w-5 text-gray-400"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -239,7 +239,7 @@ export default function Admin() {
                                 {searchResults.map((result, index) => (
                                     <div
                                         key={index}
-                                        className="p-3 hover:bg-gray-800 cursor-pointer border-b border-gray-700 last:border-0"
+                                        className="p-2 md:p-3 hover:bg-gray-800 cursor-pointer border-b border-gray-700 last:border-0"
                                         onClick={() => {
                                             setSelectedTab(result.type);
                                             setShowSearchResults(false);
@@ -250,10 +250,10 @@ export default function Admin() {
                                             <span className="text-xs px-2 py-1 rounded bg-gray-700 text-gray-300 mr-2">
                                                 {result.type}
                                             </span>
-                                            <span className="text-gray-200">{result.title}</span>
+                                            <span className="text-sm md:text-base text-gray-200">{result.title}</span>
                                         </div>
                                         {result.description && (
-                                            <p className="text-sm text-gray-400 mt-1">{result.description}</p>
+                                            <p className="text-xs md:text-sm text-gray-400 mt-1">{result.description}</p>
                                         )}
                                     </div>
                                 ))}
@@ -262,11 +262,11 @@ export default function Admin() {
                     </div>
 
                     {/* Stats Section */}
-                    <div className="hidden md:flex items-center space-x-4" style={{
+                    <div className="hidden lg:flex items-center space-x-2 md:space-x-4" style={{
                         color: colors.platinum,
                     }}>
                         {/* Total Users Indicator */}
-                        <div className="text-sm flex items-center px-4 py-2 rounded-lg" style={{
+                        <div className="text-xs md:text-sm flex items-center px-2 md:px-4 py-2 rounded-lg" style={{
                             backgroundColor: 'rgba(15, 15, 15, 0.8)',
                             border: colors.royalBorder,
                             boxShadow: colors.deepShadow
@@ -282,7 +282,7 @@ export default function Admin() {
                         {/* Pending Orders Notifications */}
                         <div
                             onClick={() => setSelectedTab('Orders')}
-                            className="text-sm flex items-center px-4 py-2 rounded-lg cursor-pointer hover:bg-opacity-80 transition-all"
+                            className="text-xs md:text-sm flex items-center px-2 md:px-4 py-2 rounded-lg cursor-pointer hover:bg-opacity-80 transition-all"
                             style={{
                                 backgroundColor: 'rgba(15, 15, 15, 0.8)',
                                 border: colors.royalBorder,
@@ -290,11 +290,11 @@ export default function Admin() {
                             }}
                             title="Click to view orders"
                         >
-                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-4 h-4 md:w-5 md:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                             </svg>
                             {dashboardStats.pendingOrders > 0 && (
-                                <span className="bg-red-500 text-white text-xs rounded-full px-2 py-0.5 mr-1">
+                                <span className="bg-red-500 text-white text-xs rounded-full px-1.5 md:px-2 py-0.5 mr-1">
                                     {dashboardStats.pendingOrders}
                                 </span>
                             )}
@@ -302,7 +302,7 @@ export default function Admin() {
                         </div>
 
                         {/* Clock */}
-                        <div className="text-sm flex items-center px-4 py-2 rounded-lg" style={{
+                        <div className="text-xs md:text-sm flex items-center px-2 md:px-4 py-2 rounded-lg" style={{
                             backgroundColor: 'rgba(15, 15, 15, 0.8)',
                             border: colors.royalBorder,
                             boxShadow: colors.deepShadow
@@ -327,8 +327,8 @@ export default function Admin() {
                         position: 'absolute',
                         top: 0,
                         right: 0,
-                        width: '60px',
-                        height: '60px',
+                        width: '40px',
+                        height: '40px',
                         background: colors.goldGradient,
                         clipPath: 'polygon(100% 0, 0 0, 100% 100%)',
                         opacity: 0.9
@@ -338,25 +338,25 @@ export default function Admin() {
                         position: 'absolute',
                         bottom: 0,
                         left: 0,
-                        width: '40px',
-                        height: '40px',
+                        width: '30px',
+                        height: '30px',
                         background: colors.goldGradient,
                         clipPath: 'polygon(0 100%, 0 60%, 100% 100%)',
                         opacity: 0.6
                     }}></div>
 
                     {/* Content Header with Enhanced Royal Styling */}
-                    <div className="flex items-center border-b p-6" style={{
+                    <div className="flex items-center border-b p-3 md:p-6" style={{
                         borderColor: 'rgba(212, 175, 55, 0.2)',
                         background: 'rgba(10, 10, 10, 0.7)',
                         backdropFilter: 'blur(10px)'
                     }}>
                         <div className="flex items-center">
-                            <div className="w-1 h-8 rounded-full mr-3" style={{
+                            <div className="w-1 h-6 md:h-8 rounded-full mr-3" style={{
                                 background: colors.goldGradient,
                                 boxShadow: colors.subtleGlow
                             }}></div>
-                            <h2 className="text-2xl font-bold tracking-wide" style={{
+                            <h2 className="text-xl md:text-2xl font-bold tracking-wide" style={{
                                 color: colors.brightGold,
                                 fontFamily: "'Cinzel', serif",
                                 textShadow: colors.goldTextShadow,
@@ -365,7 +365,7 @@ export default function Admin() {
                                 {selectedTab}
                             </h2>
                         </div>
-                        <div className="ml-auto text-sm md:hidden flex items-center" style={{
+                        <div className="ml-auto text-xs md:text-sm lg:hidden flex items-center" style={{
                             color: colors.platinum,
                             backgroundColor: 'rgba(15, 15, 15, 0.8)',
                             padding: '4px 8px',
@@ -381,7 +381,7 @@ export default function Admin() {
                     </div>
 
                     {/* Content Container */}
-                    <div className="p-6" style={{
+                    <div className="p-3 md:p-6" style={{
                         background: 'rgba(10, 10, 10, 0.6)',
                         borderTop: colors.royalBorderHighlight,
                         boxShadow: 'inset 0 0 20px rgba(0, 0, 0, 0.5)',
@@ -392,7 +392,7 @@ export default function Admin() {
                 </div>
 
                 {/* Decorative footer element */}
-                <div className="mt-6 mx-auto w-1/2 h-1 rounded-full opacity-40" style={{
+                <div className="mt-4 md:mt-6 mx-auto w-3/4 md:w-1/2 h-1 rounded-full opacity-40" style={{
                     background: colors.subtleGoldGradient
                 }}></div>
             </div>
